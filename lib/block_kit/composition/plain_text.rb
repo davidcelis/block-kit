@@ -1,12 +1,11 @@
 # frozen_string_literal: true
 
+require_relative "../block"
+
 module BlockKit
   module Composition
-    class PlainText
+    class PlainText < Block
       TYPE = "plain_text"
-
-      include ActiveModel::Model
-      include ActiveModel::Attributes
 
       attribute :text, :string
       attribute :emoji, :boolean
@@ -14,11 +13,7 @@ module BlockKit
       delegate :length, :blank?, to: :text
 
       def as_json(*)
-        {
-          type: TYPE,
-          text: text,
-          emoji: emoji
-        }.compact
+        super.merge(text: text, emoji: emoji).compact
       end
     end
   end
