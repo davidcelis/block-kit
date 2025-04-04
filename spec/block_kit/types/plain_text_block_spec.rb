@@ -3,7 +3,7 @@
 require "spec_helper"
 
 RSpec.describe BlockKit::Types::PlainTextBlock do
-  subject(:type) { described_class.new }
+  subject(:type) { described_class.instance }
 
   it "has a type" do
     expect(subject.type).to eq(:plain_text_block)

@@ -6,10 +6,10 @@ require_relative "../types/text_block"
 module BlockKit
   module Composition
     class Dialog < Block
-      attribute :title, Types::PlainTextBlock.new
-      attribute :text, Types::PlainTextBlock.new
-      attribute :confirm, Types::PlainTextBlock.new
-      attribute :deny, Types::PlainTextBlock.new
+      attribute :title, Types::PlainTextBlock.instance
+      attribute :text, Types::PlainTextBlock.instance
+      attribute :confirm, Types::PlainTextBlock.instance
+      attribute :deny, Types::PlainTextBlock.instance
       attribute :style, :string
 
       validates :title, presence: true, length: {maximum: 100, allow_blank: true}

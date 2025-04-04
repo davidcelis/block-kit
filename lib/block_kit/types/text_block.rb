@@ -3,6 +3,8 @@
 module BlockKit
   module Types
     class TextBlock < ActiveModel::Type::Value
+      include Singleton
+
       def type
         :text_block
       end
@@ -12,14 +14,14 @@ module BlockKit
         when Composition::PlainText, Composition::Mrkdwn
           value
         when String, NilClass
-          MrkdwnBlock.new.cast(value)
+          MrkdwnBlock.instance.cast(value)
         when Hash
           if value.key?(:emoji) && value.key?(:verbatim)
             raise ArgumentError, "Cannot cast `#{value.inspect}' to BlockKit::Composition::Text with both `emoji` and `verbatim` keys. This is too ambiguous."
           elsif value.key?(:emoji)
-            PlainTextBlock.new.cast(value)
+            PlainTextBlock.instance.cast(value)
           else
-            MrkdwnBlock.new.cast(value)
+            MrkdwnBlock.instance.cast(value)
           end
         else
           raise ArgumentError, "Cannot cast `#{value.inspect}' to BlockKit::Composition::Text"

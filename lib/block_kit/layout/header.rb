@@ -9,7 +9,7 @@ module BlockKit
     class Header < Base
       TYPE = "header"
 
-      attribute :text, Types::PlainTextBlock.new
+      attribute :text, Types::PlainTextBlock.instance
 
       validates :text, presence: true, length: {maximum: 150, allow_blank: true}
 
