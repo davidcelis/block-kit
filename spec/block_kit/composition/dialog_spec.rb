@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "block_kit/composition/dialog" # TODO: remove this
 
 RSpec.describe BlockKit::Composition::Dialog, type: :model do
   subject(:dialog) { described_class.new(attributes) }

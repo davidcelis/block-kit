@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require_relative "../../../lib/block_kit/composition/mrkdwn" # TODO: remove this
 
 RSpec.describe BlockKit::Composition::Mrkdwn do
   subject(:mrkdwn_block) { described_class.new }

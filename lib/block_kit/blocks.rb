@@ -1,6 +1,3 @@
-require_relative "layout/divider"
-require_relative "layout/header"
-
 module BlockKit
   class Blocks
     attr_reader :blocks

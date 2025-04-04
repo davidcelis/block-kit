@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-require "active_model"
-require_relative "base"
-require_relative "../composition/plain_text"
-
 module BlockKit
   module Layout
     class Header < Base

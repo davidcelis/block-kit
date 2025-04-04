@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative "../block"
-
 module BlockKit
   module Layout
     class Base < Block

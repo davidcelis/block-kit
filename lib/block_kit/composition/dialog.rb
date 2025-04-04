@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require_relative "../block"
-require_relative "../types/text_block"
-
 module BlockKit
   module Composition
     class Dialog < Block

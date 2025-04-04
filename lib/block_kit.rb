@@ -1,7 +1,12 @@
 # frozen_string_literal: true
 
-require_relative "block_kit/blocks"
-require_relative "block_kit/version"
-
 module BlockKit
+  autoload :Block, "block_kit/block"
+  autoload :Blocks, "block_kit/blocks"
+
+  autoload :Composition, "block_kit/composition"
+  autoload :Layout, "block_kit/layout"
+  autoload :Types, "block_kit/types"
+
+  autoload :VERSION, "block_kit/version"
 end

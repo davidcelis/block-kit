@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "active_model"
+
 module BlockKit
   module Types
     class TextBlock < ActiveModel::Type::Value
