@@ -1,33 +1,39 @@
 # frozen_string_literal: true
 
-require_relative "../block"
+require_relative "text"
+require_relative "mrkdwn"
 
 module BlockKit
   module Composition
-    class PlainText < Block
+    class PlainText < Text
       TYPE = "plain_text"
 
-      attribute :text, :string
       attribute :emoji, :boolean
 
-      delegate :length, :blank?, to: :text
-
       def as_json(*)
-        super.merge(text: text, emoji: emoji).compact
+        super.merge(emoji: emoji).compact
       end
     end
   end
 
   module Types
-    class PlainTextBlock < ActiveModel::Type::Value
-      def cast(value)
-        return value if value.is_a?(Composition::PlainText)
+    class PlainTextBlock < TextBlock
+      def type
+        Composition::PlainText::TYPE
+      end
 
+      def cast(value)
         case value
+        when Composition::PlainText
+          value
+        when Composition::Mrkdwn
+          Composition::PlainText.new(text: value.text)
+        when String, NilClass
+          Composition::PlainText.new(text: value)
         when Hash
-          Composition::PlainText.new(**value.symbolize_keys)
+          Composition::PlainText.new(value.with_indifferent_access.slice(*Composition::PlainText.attribute_names))
         else
-          Composition::PlainText.new(text: value.to_s)
+          raise ArgumentError, "Cannot cast `#{value.inspect}' to BlockKit::Composition::PlainText"
         end
       end
     end

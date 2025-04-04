@@ -10,7 +10,7 @@ module BlockKit
       TYPE = "header"
 
       attribute :text, Types::PlainTextBlock.new
-      validates :text, presence: true, length: {maximum: 150}
+      validates :text, presence: true, length: {maximum: 150, allow_blank: true}
 
       def initialize(emoji: nil, **attributes)
         super(**attributes)

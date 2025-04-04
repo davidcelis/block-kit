@@ -17,18 +17,51 @@ RSpec.describe BlockKit::Layout::Header do
     })
   end
 
-  it { is_expected.to be_valid }
+  describe "#text" do
+    it "casts a string to a PlainText block" do
+      header.text = "Header text"
+      expect(header.text).to be_a(BlockKit::Composition::PlainText)
+      expect(header.text.text).to eq("Header text")
+      expect(header.text.emoji).to be_nil
+    end
 
-  it "validates the length of text" do
-    expect(header).to be_valid
+    it "accepts a PlainText block" do
+      header.text = BlockKit::Composition::PlainText.new(text: "Header text", emoji: false)
+      expect(header.text).to be_a(BlockKit::Composition::PlainText)
+      expect(header.text.text).to eq("Header text")
+      expect(header.text.emoji).to be(false)
+    end
 
-    header.text = "a" * 151
-    expect(header).not_to be_valid
-    expect(header.errors[:text]).to include("is too long (maximum is 150 characters)")
+    it "casts a Mrkdwn block to a PlainText block" do
+      header.text = BlockKit::Composition::Mrkdwn.new(text: "Header text", verbatim: true)
+      expect(header.text).to be_a(BlockKit::Composition::PlainText)
+      expect(header.text.text).to eq("Header text")
+      expect(header.text.emoji).to be_nil
+      expect(header.text).not_to respond_to(:verbatim)
+    end
 
-    header.text = nil
-    expect(header).not_to be_valid
-    expect(header.errors[:text]).to include("can't be blank")
+    it "casts a Hash to a PlainText block" do
+      header.text = {text: "Header text", emoji: false}
+      expect(header.text).to be_a(BlockKit::Composition::PlainText)
+      expect(header.text.text).to eq("Header text")
+      expect(header.text.emoji).to be(false)
+    end
+  end
+
+  context "validations" do
+    it { is_expected.to be_valid }
+
+    it "validates the length of text" do
+      expect(header).to be_valid
+
+      header.text = "a" * 151
+      expect(header).not_to be_valid
+      expect(header.errors[:text]).to include("is too long (maximum is 150 characters)")
+
+      header.text = nil
+      expect(header).not_to be_valid
+      expect(header.errors[:text]).to include("can't be blank")
+    end
   end
 
   it_behaves_like "a block with a block_id"
