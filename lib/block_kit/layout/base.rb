@@ -6,6 +6,7 @@ module BlockKit
   module Layout
     class Base < Block
       attribute :block_id, :string
+
       validates :block_id, allow_blank: true, length: {maximum: 255}
 
       def as_json(*)

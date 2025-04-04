@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "../block"
-require_relative "plain_text"
+require_relative "../types/text_block"
 
 module BlockKit
   module Composition

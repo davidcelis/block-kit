@@ -9,21 +9,30 @@ RSpec.describe BlockKit::Composition::PlainText do
     expect(described_class::TYPE).to eq("plain_text")
   end
 
-  it "serializes to JSON" do
-    expect(plain_text_block.as_json).to eq({type: described_class::TYPE})
+  describe "#as_json" do
+    it "serializes to JSON" do
+      expect(plain_text_block.as_json).to eq({type: described_class::TYPE})
+    end
+
+    context "with all attributes" do
+      let(:plain_text_block) { described_class.new(text: "Hello, world!", emoji: false) }
+
+      it "serializes to JSON" do
+        expect(plain_text_block.as_json).to eq({
+          type: described_class::TYPE,
+          text: "Hello, world!",
+          emoji: false
+        })
+      end
+    end
   end
 
-  it { is_expected.to be_valid }
+  context "validations" do
+    it { is_expected.to be_valid }
+  end
 
-  context "with all attributes" do
-    let(:plain_text_block) { described_class.new(text: "Hello, world!", emoji: false) }
-
-    it "serializes to JSON" do
-      expect(plain_text_block.as_json).to eq({
-        type: described_class::TYPE,
-        text: "Hello, world!",
-        emoji: false
-      })
-    end
+  context "attributes" do
+    it { is_expected.to have_attribute(:text).with_type(:string) }
+    it { is_expected.to have_attribute(:emoji).with_type(:boolean) }
   end
 end

@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "shoulda-matchers"
 require "block_kit"
 
 RSpec.configure do |config|
@@ -13,3 +14,14 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 end
+
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    with.test_framework :rspec
+
+    # Keep as many of these lines as are necessary:
+    with.library :active_model
+  end
+end
+
+Dir[File.join(__dir__, "support/**/*.rb")].sort.each { |f| require f }
