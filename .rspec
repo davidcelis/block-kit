@@ -1,3 +1,5 @@
---format documentation
---color
 --require spec_helper
+--format progress
+--color
+--profile 10
+--order random
