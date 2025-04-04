@@ -1,4 +1,5 @@
 require_relative "layout/divider"
+require_relative "layout/header"
 
 module BlockKit
   class Blocks
@@ -12,6 +13,10 @@ module BlockKit
 
     def divider(block_id: nil)
       append(Layout::Divider.new(block_id: block_id))
+    end
+
+    def header(text:, block_id: nil, emoji: nil)
+      append(Layout::Header.new(text: text, block_id: block_id, emoji: emoji))
     end
 
     def append(block)
