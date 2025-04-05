@@ -36,6 +36,7 @@ RSpec.describe BlockKit::Composition::ConversationFilter, type: :model do
   context "validations" do
     it { is_expected.to be_valid }
 
-    it { is_expected.to validate_inclusion_of(:include).in_array(described_class::VALID_INCLUDES) }
+    it { is_expected.to validate_presence_of(:include).allow_nil }
+    it { is_expected.to validate_array_inclusion_of(:include).in_array(described_class::VALID_INCLUDES) }
   end
 end

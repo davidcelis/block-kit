@@ -51,6 +51,7 @@ RSpec.describe BlockKit::Composition::Dialog, type: :model do
     it { is_expected.to validate_length_of(:confirm).is_at_most(30) }
     it { is_expected.to validate_presence_of(:deny) }
     it { is_expected.to validate_length_of(:deny).is_at_most(30) }
-    it { is_expected.to validate_inclusion_of(:style).in_array(%w[primary danger]).allow_nil }
+    it { is_expected.to validate_presence_of(:style).allow_nil }
+    it { is_expected.to validate_inclusion_of(:style).in_array(%w[primary danger]) }
   end
 end

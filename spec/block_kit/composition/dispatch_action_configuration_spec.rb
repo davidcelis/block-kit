@@ -17,6 +17,6 @@ RSpec.describe BlockKit::Composition::DispatchActionConfiguration, type: :model 
     it { is_expected.to be_valid }
 
     it { is_expected.to validate_presence_of(:trigger_actions_on) }
-    it { is_expected.to validate_inclusion_of(:trigger_actions_on).in_array(described_class::VALID_TRIGGERS) }
+    it { is_expected.to validate_array_inclusion_of(:trigger_actions_on).in_array(described_class::VALID_TRIGGERS) }
   end
 end

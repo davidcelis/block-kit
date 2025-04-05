@@ -13,7 +13,7 @@ module BlockKit
       validates :text, presence: true, length: {maximum: 300}
       validates :confirm, presence: true, length: {maximum: 30}
       validates :deny, presence: true, length: {maximum: 30}
-      validates :style, inclusion: {in: %w[primary danger], allow_nil: true}
+      validates :style, presence: true, inclusion: {in: %w[primary danger]}, allow_nil: true
 
       def as_json(*)
         {

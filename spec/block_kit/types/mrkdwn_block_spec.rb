@@ -31,11 +31,7 @@ RSpec.describe BlockKit::Types::MrkdwnBlock do
     context "when the value is nil" do
       let(:value) { nil }
 
-      it "returns an empty Mrkdwn block" do
-        expect(result).to be_a(BlockKit::Composition::Mrkdwn)
-        expect(result.text).to be_nil
-        expect(result.verbatim).to be_nil
-      end
+      it { is_expected.to be_nil }
     end
 
     context "when the value is a string" do

@@ -15,7 +15,7 @@ module BlockKit
         case value
         when Composition::PlainText, Composition::Mrkdwn
           value
-        when String, NilClass
+        when String
           MrkdwnBlock.instance.cast(value)
         when Hash
           if value.key?(:emoji) && value.key?(:verbatim)
@@ -25,6 +25,8 @@ module BlockKit
           else
             MrkdwnBlock.instance.cast(value)
           end
+        when NilClass
+          nil
         else
           raise ArgumentError, "Cannot cast `#{value.inspect}' to BlockKit::Composition::Text"
         end
@@ -42,10 +44,12 @@ module BlockKit
           value
         when Composition::Mrkdwn
           Composition::PlainText.new(text: value.text)
-        when String, NilClass
+        when String
           Composition::PlainText.new(text: value)
         when Hash
           Composition::PlainText.new(value.with_indifferent_access.slice(*Composition::PlainText.attribute_names))
+        when NilClass
+          nil
         else
           raise ArgumentError, "Cannot cast `#{value.inspect}' to BlockKit::Composition::PlainText"
         end
@@ -63,10 +67,12 @@ module BlockKit
           value
         when Composition::PlainText
           Composition::Mrkdwn.new(text: value.text)
-        when String, NilClass
+        when String
           Composition::Mrkdwn.new(text: value)
         when Hash
           Composition::Mrkdwn.new(value.with_indifferent_access.slice(*Composition::Mrkdwn.attribute_names))
+        when NilClass
+          nil
         else
           raise ArgumentError, "Cannot cast `#{value.inspect}' to BlockKit::Composition::Mrkdwn"
         end

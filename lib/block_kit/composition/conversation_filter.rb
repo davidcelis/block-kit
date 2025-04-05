@@ -9,7 +9,7 @@ module BlockKit
       attribute :exclude_external_shared_channels, :boolean
       attribute :exclude_bot_users, :boolean
 
-      validates :include, presence: {allow_nil: true}, "block_kit/validators/array_inclusion": {in: VALID_INCLUDES}
+      validates :include, presence: true, "block_kit/validators/array_inclusion": {in: VALID_INCLUDES}, allow_nil: true
 
       def initialize(include: nil, **attributes)
         super(**attributes)
@@ -18,7 +18,9 @@ module BlockKit
       end
 
       def include=(value)
-        @include = Array(value).map(&:to_s)
+        raise ArgumentError, "Invalid value for Array `include': #{value.inspect}" unless value.nil? || value.is_a?(Array)
+
+        @include = value&.map(&:to_s)
       end
 
       def as_json(*)

@@ -39,6 +39,7 @@ RSpec.describe BlockKit::Composition::Option, type: :model do
     it { is_expected.to validate_length_of(:text).is_at_most(75) }
     it { is_expected.to validate_presence_of(:value) }
     it { is_expected.to validate_length_of(:value).is_at_most(150) }
+    it { is_expected.to validate_presence_of(:description).allow_nil }
     it { is_expected.to validate_length_of(:description).is_at_most(75) }
   end
 

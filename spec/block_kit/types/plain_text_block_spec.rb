@@ -31,11 +31,7 @@ RSpec.describe BlockKit::Types::PlainTextBlock do
     context "when the value is nil" do
       let(:value) { nil }
 
-      it "returns an empty PlainText block" do
-        expect(result).to be_a(BlockKit::Composition::PlainText)
-        expect(result.text).to be_nil
-        expect(result.emoji).to be_nil
-      end
+      it { is_expected.to be_nil }
     end
 
     context "when the value is a string" do
