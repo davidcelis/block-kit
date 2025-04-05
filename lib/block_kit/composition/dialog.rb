@@ -9,11 +9,11 @@ module BlockKit
       attribute :deny, Types::PlainTextBlock.instance
       attribute :style, :string
 
-      validates :title, presence: true, length: {maximum: 100, allow_blank: true}
-      validates :text, presence: true, length: {maximum: 300, allow_blank: true}
-      validates :confirm, presence: true, length: {maximum: 30, allow_blank: true}
-      validates :deny, presence: true, length: {maximum: 30, allow_blank: true}
-      validates :style, inclusion: {in: %w[primary danger], allow_blank: true}
+      validates :title, presence: true, length: {maximum: 100}
+      validates :text, presence: true, length: {maximum: 300}
+      validates :confirm, presence: true, length: {maximum: 30}
+      validates :deny, presence: true, length: {maximum: 30}
+      validates :style, inclusion: {in: %w[primary danger], allow_nil: true}
 
       def as_json(*)
         {

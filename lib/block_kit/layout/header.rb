@@ -7,7 +7,7 @@ module BlockKit
 
       attribute :text, Types::PlainTextBlock.instance
 
-      validates :text, presence: true, length: {maximum: 150, allow_blank: true}
+      validates :text, presence: true, length: {maximum: 150}
 
       def initialize(emoji: nil, **attributes)
         super(**attributes)

@@ -5,7 +5,11 @@ module BlockKit
     class Text < Block
       attribute :text, :string
 
-      delegate :length, :blank?, to: :text
+      delegate :blank?, to: :text
+
+      def length
+        text&.length || 0
+      end
 
       def as_json(*)
         super.merge(text: text)
