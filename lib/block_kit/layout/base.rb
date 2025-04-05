@@ -5,7 +5,7 @@ module BlockKit
     class Base < Block
       attribute :block_id, :string
 
-      validates :block_id, allow_blank: true, length: {maximum: 255}
+      validates :block_id, presence: true, length: {maximum: 255}, allow_nil: true
 
       def as_json(*)
         super.merge(block_id: block_id).compact
