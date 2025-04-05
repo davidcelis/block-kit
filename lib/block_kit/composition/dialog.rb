@@ -3,10 +3,10 @@
 module BlockKit
   module Composition
     class Dialog < Block
-      attribute :title, Types::PlainTextBlock.instance
-      attribute :text, Types::PlainTextBlock.instance
-      attribute :confirm, Types::PlainTextBlock.instance
-      attribute :deny, Types::PlainTextBlock.instance
+      attribute :title, Types::PlainText.instance
+      attribute :text, Types::PlainText.instance
+      attribute :confirm, Types::PlainText.instance
+      attribute :deny, Types::PlainText.instance
       attribute :style, :string
 
       validates :title, presence: true, length: {maximum: 100}

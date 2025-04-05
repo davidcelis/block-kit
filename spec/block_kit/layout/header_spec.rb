@@ -3,10 +3,20 @@
 require "spec_helper"
 
 RSpec.describe BlockKit::Layout::Header, type: :model do
-  subject(:header) { described_class.new(text: "Hello, world!") }
+  let(:attributes) { {text: "Hello, world!"} }
+  subject(:header) { described_class.new(**attributes) }
 
   it "has a type" do
     expect(described_class::TYPE).to eq("header")
+  end
+
+  describe "#initialize" do
+    let(:attributes) { super().merge(emoji: false) }
+
+    it "passes `emoji` to the text block" do
+      expect(header.text).to be_a(BlockKit::Composition::PlainText)
+      expect(header.text.emoji).to be(false)
+    end
   end
 
   describe "#as_json" do
@@ -19,7 +29,7 @@ RSpec.describe BlockKit::Layout::Header, type: :model do
   end
 
   describe "attributes" do
-    it { is_expected.to have_attribute(:text).with_type(:plain_text_block) }
+    it { is_expected.to have_attribute(:text).with_type(:block_kit_plain_text) }
   end
 
   context "validations" do

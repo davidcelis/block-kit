@@ -33,10 +33,10 @@ RSpec.describe BlockKit::Composition::Dialog, type: :model do
   end
 
   context "attributes" do
-    it { is_expected.to have_attribute(:title).with_type(:plain_text_block) }
-    it { is_expected.to have_attribute(:text).with_type(:plain_text_block) }
-    it { is_expected.to have_attribute(:confirm).with_type(:plain_text_block) }
-    it { is_expected.to have_attribute(:deny).with_type(:plain_text_block) }
+    it { is_expected.to have_attribute(:title).with_type(:block_kit_plain_text) }
+    it { is_expected.to have_attribute(:text).with_type(:block_kit_plain_text) }
+    it { is_expected.to have_attribute(:confirm).with_type(:block_kit_plain_text) }
+    it { is_expected.to have_attribute(:deny).with_type(:block_kit_plain_text) }
     it { is_expected.to have_attribute(:style).with_type(:string) }
   end
 

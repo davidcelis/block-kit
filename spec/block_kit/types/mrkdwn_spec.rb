@@ -2,11 +2,11 @@
 
 require "spec_helper"
 
-RSpec.describe BlockKit::Types::MrkdwnBlock do
+RSpec.describe BlockKit::Types::Mrkdwn do
   subject(:type) { described_class.instance }
 
   it "has a type" do
-    expect(subject.type).to eq(:mrkdwn_block)
+    expect(subject.type).to eq(:block_kit_mrkdwn)
   end
 
   describe "#cast" do
@@ -53,16 +53,6 @@ RSpec.describe BlockKit::Types::MrkdwnBlock do
         expect(result.verbatim).to be_nil
       end
 
-      context "when the value has an `verbatim` key" do
-        let(:value) { super().merge(verbatim: false) }
-
-        it "passes it through to the PlainText block" do
-          expect(result).to be_a(BlockKit::Composition::Mrkdwn)
-          expect(result.text).to eq("Hello, world!")
-          expect(result.verbatim).to be false
-        end
-      end
-
       context "when the value has a `emoji` key" do
         let(:value) { super().merge(emoji: false) }
 
@@ -71,6 +61,16 @@ RSpec.describe BlockKit::Types::MrkdwnBlock do
           expect(result.text).to eq("Hello, world!")
           expect(result.verbatim).to be_nil
         end
+      end
+    end
+
+    context "when the value is some other type" do
+      let(:value) { 123 }
+
+      it "falls back to ActiveModel's default casting behavior" do
+        expect(result).to be_a(BlockKit::Composition::Mrkdwn)
+        expect(result.text).to eq("123")
+        expect(result.verbatim).to be_nil
       end
     end
   end

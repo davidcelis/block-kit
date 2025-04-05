@@ -3,9 +3,9 @@
 module BlockKit
   module Composition
     class Option < Block
-      attribute :text, Types::PlainTextBlock.instance
+      attribute :text, Types::PlainText.instance
       attribute :value, :string
-      attribute :description, Types::PlainTextBlock.instance
+      attribute :description, Types::PlainText.instance
 
       validates :text, presence: true, length: {maximum: 75}
       validates :value, presence: true, length: {maximum: 150}

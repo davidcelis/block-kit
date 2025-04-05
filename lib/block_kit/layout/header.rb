@@ -5,12 +5,14 @@ module BlockKit
     class Header < Base
       TYPE = "header"
 
-      attribute :text, Types::PlainTextBlock.instance
+      attribute :text, Types::PlainText.instance
 
       validates :text, presence: true, length: {maximum: 150}
 
       def initialize(emoji: nil, **attributes)
         super(**attributes)
+
+        self.text ||= Composition::PlainText.new
 
         text.emoji = emoji
       end

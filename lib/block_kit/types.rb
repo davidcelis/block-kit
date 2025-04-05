@@ -2,8 +2,8 @@
 
 module BlockKit
   module Types
-    autoload :TextBlock, "block_kit/types/text_block"
-    autoload :PlainTextBlock, "block_kit/types/text_block"
-    autoload :MrkdwnBlock, "block_kit/types/text_block"
+    autoload :Mrkdwn, "block_kit/types/text"
+    autoload :PlainText, "block_kit/types/text"
+    autoload :Text, "block_kit/types/text"
   end
 end
