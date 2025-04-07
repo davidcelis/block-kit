@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe BlockKit::Composition::Dialog, type: :model do
+RSpec.describe BlockKit::Composition::ConfirmationDialog, type: :model do
   subject(:dialog) { described_class.new(attributes) }
   let(:attributes) do
     {

@@ -2,7 +2,7 @@
 
 module BlockKit
   module Composition
-    class Dialog < Block
+    class ConfirmationDialog < Block
       attribute :title, Types::PlainText.instance
       attribute :text, Types::PlainText.instance
       attribute :confirm, Types::PlainText.instance
@@ -17,10 +17,10 @@ module BlockKit
 
       def as_json(*)
         {
-          title: title.as_json,
-          text: text.as_json,
-          confirm: confirm.as_json,
-          deny: deny.as_json,
+          title: title&.as_json,
+          text: text&.as_json,
+          confirm: confirm&.as_json,
+          deny: deny&.as_json,
           style: style
         }.compact
       end

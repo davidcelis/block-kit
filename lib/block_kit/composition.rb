@@ -2,8 +2,8 @@
 
 module BlockKit
   module Composition
+    autoload :ConfirmationDialog, "block_kit/composition/confirmation_dialog"
     autoload :ConversationFilter, "block_kit/composition/conversation_filter"
-    autoload :Dialog, "block_kit/composition/dialog"
     autoload :DispatchActionConfiguration, "block_kit/composition/dispatch_action_configuration"
     autoload :Mrkdwn, "block_kit/composition/mrkdwn"
     autoload :Option, "block_kit/composition/option"
