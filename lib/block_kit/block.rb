@@ -11,5 +11,19 @@ module BlockKit
     def as_json(*)
       {type: self.class::TYPE}
     end
+
+    def inspect
+      "#<#{self.class} #{attributes.map { |k, v| "#{k}: #{v.inspect}" }.join(", ")}>"
+    end
+
+    def pretty_print(pp)
+      pp.object_group(self) do
+        pp.breakable
+        pp.seplist(attributes) do |k, v|
+          pp.text "#{k}: "
+          pp.pp v
+        end
+      end
+    end
   end
 end
