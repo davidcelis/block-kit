@@ -9,7 +9,7 @@ module BlockKit
       attribute :url, :string
 
       validates :id, presence: true, format: {with: /\AF[A-Z0-9]{8,}\z/, allow_blank: true}, allow_nil: true
-      validates :url, presence: true, format: {with: URI::DEFAULT_PARSER.make_regexp(%w[http https]), allow_blank: true}, allow_nil: true
+      validates :url, presence: true, format: {with: URI::DEFAULT_PARSER.make_regexp(%w[http https]), message: "is not a valid URI", allow_blank: true}, allow_nil: true
 
       validate :id_or_url_present
 

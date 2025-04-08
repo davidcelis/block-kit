@@ -37,7 +37,7 @@ RSpec.describe BlockKit::Composition::OverflowOption, type: :model do
     it { is_expected.to allow_value("http://example.com/").for(:url) }
     it { is_expected.to allow_value("https://example.com/").for(:url) }
     it { is_expected.to allow_value("anything://is.fine/").for(:url) }
-    it { is_expected.not_to allow_value("invalid_url").for(:url) }
+    it { is_expected.not_to allow_value("invalid_url").for(:url).with_message("is not a valid URI") }
   end
 
   context "attributes" do

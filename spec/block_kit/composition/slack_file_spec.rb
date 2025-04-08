@@ -26,8 +26,8 @@ RSpec.describe BlockKit::Composition::SlackFile, type: :model do
     it { is_expected.to validate_presence_of(:url).allow_nil }
     it { is_expected.to allow_value("http://example.com/").for(:url) }
     it { is_expected.to allow_value("https://example.com/").for(:url) }
-    it { is_expected.not_to allow_value("this://kind.of.url/").for(:url) }
-    it { is_expected.not_to allow_value("invalid_url").for(:url) }
+    it { is_expected.not_to allow_value("this://kind.of.url/").for(:url).with_message("is not a valid URI") }
+    it { is_expected.not_to allow_value("invalid_url").for(:url).with_message("is not a valid URI") }
 
     it { is_expected.to validate_presence_of(:id).allow_nil }
     it { is_expected.to allow_value("F12345678").for(:id) }
