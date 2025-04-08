@@ -26,31 +26,10 @@ RSpec.describe BlockKit::Composition::OptionGroup, type: :model do
     it { is_expected.to validate_presence_of(:label) }
     it { is_expected.to validate_length_of(:label).is_at_most(75) }
 
-    it "validates that options are present" do
-      option_group.options = nil
-      expect(option_group).not_to be_valid
-      expect(option_group.errors[:options]).to include("can't be blank")
-
-      option_group.options = []
-      expect(option_group).not_to be_valid
-      expect(option_group.errors[:options]).to include("can't be blank")
-    end
-
-    it "validates that there can be at most 100 options" do
-      option_group.options = Array.new(101) { {text: "Option", value: "value"} }
-      expect(option_group).not_to be_valid
-      expect(option_group.errors[:options]).to include("is too long (maximum is 100 options)")
-    end
-
-    it "validates the associated options themselves" do
-      option_group.options = [{text: "Option 1", value: ""}]
-      expect(option_group).not_to be_valid
-      expect(option_group.errors["options[0]"]).to include("is invalid: value can't be blank")
-    end
+    it_behaves_like "a block that has options", with_limit: 100
   end
 
   context "attributes" do
     it { is_expected.to have_attribute(:label).with_type(:block_kit_plain_text) }
-    it { is_expected.to have_attribute(:options).with_type(:array, :block_kit_option) }
   end
 end

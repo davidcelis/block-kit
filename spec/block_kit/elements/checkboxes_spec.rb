@@ -53,36 +53,14 @@ RSpec.describe BlockKit::Elements::Checkboxes, type: :model do
   end
 
   context "attributes" do
-    it { is_expected.to have_attribute(:options).with_type(:array, :block_kit_option) }
     it { is_expected.to have_attribute(:focus_on_load).with_type(:boolean) }
 
     it_behaves_like "a block with an action_id"
+    it_behaves_like "a block that has options", with_limit: 10
     it_behaves_like "a block that is confirmable"
   end
 
   context "validations" do
     it { is_expected.to be_valid }
-
-    it "validates that options are present" do
-      checkboxes.options = nil
-      expect(checkboxes).not_to be_valid
-      expect(checkboxes.errors[:options]).to include("can't be blank")
-
-      checkboxes.options = []
-      expect(checkboxes).not_to be_valid
-      expect(checkboxes.errors[:options]).to include("can't be blank")
-    end
-
-    it "validates that there can be at most 10 options" do
-      checkboxes.options = Array.new(11) { {text: "Option", value: "value"} }
-      expect(checkboxes).not_to be_valid
-      expect(checkboxes.errors[:options]).to include("is too long (maximum is 10 options)")
-    end
-
-    it "validates the associated options themselves" do
-      checkboxes.options = [{text: "Option 1", value: ""}]
-      expect(checkboxes).not_to be_valid
-      expect(checkboxes.errors["options[0]"]).to include("is invalid: value can't be blank")
-    end
   end
 end

@@ -3,11 +3,11 @@
 module BlockKit
   module Composition
     class OptionGroup < Block
+      include Concerns::HasOptions.with_limit(100)
+
       attribute :label, Types::PlainText.instance
-      attribute :options, Types::Array.of(Types::Option.instance)
 
       validates :label, presence: true, length: {maximum: 75}
-      validates :options, presence: true, length: {maximum: 100, message: "is too long (maximum is %{count} options)"}, "block_kit/validators/associated": true
 
       def as_json(*)
         {
