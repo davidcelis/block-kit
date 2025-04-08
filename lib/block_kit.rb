@@ -4,6 +4,7 @@ module BlockKit
   autoload :Block, "block_kit/block"
   autoload :Blocks, "block_kit/blocks"
   autoload :Composition, "block_kit/composition"
+  autoload :Elements, "block_kit/elements"
   autoload :Layout, "block_kit/layout"
   autoload :Types, "block_kit/types"
   autoload :Validators, "block_kit/validators"
