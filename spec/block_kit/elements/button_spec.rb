@@ -25,12 +25,6 @@ RSpec.describe BlockKit::Elements::Button, type: :model do
         super().merge(
           url: "https://example.com",
           style: "primary",
-          confirm: {
-            title: "Dialog Title",
-            text: "Dialog Text",
-            confirm: "Yes",
-            deny: "No"
-          },
           accessibility_label: "My Button Label"
         )
       end
@@ -42,7 +36,6 @@ RSpec.describe BlockKit::Elements::Button, type: :model do
           url: "https://example.com",
           value: "button_value",
           style: "primary",
-          confirm: button.confirm.as_json,
           accessibility_label: "My Button Label"
         })
       end
@@ -54,10 +47,10 @@ RSpec.describe BlockKit::Elements::Button, type: :model do
     it { is_expected.to have_attribute(:url).with_type(:string) }
     it { is_expected.to have_attribute(:value).with_type(:string) }
     it { is_expected.to have_attribute(:style).with_type(:string) }
-    it { is_expected.to have_attribute(:confirm).with_type(:block_kit_confirmation_dialog) }
     it { is_expected.to have_attribute(:accessibility_label).with_type(:string) }
 
     it_behaves_like "a block with an action_id"
+    it_behaves_like "a block that is confirmable"
   end
 
   context "validations" do
@@ -77,20 +70,7 @@ RSpec.describe BlockKit::Elements::Button, type: :model do
     it { is_expected.to validate_length_of(:value).is_at_most(2000).allow_nil }
     it { is_expected.to validate_presence_of(:style).allow_nil }
     it { is_expected.to validate_inclusion_of(:style).in_array(%w[primary danger]).allow_nil }
-    it { is_expected.to validate_presence_of(:confirm).allow_nil }
     it { is_expected.to validate_presence_of(:accessibility_label).allow_nil }
     it { is_expected.to validate_length_of(:accessibility_label).is_at_most(75) }
-
-    it "validates the associated confirmation dialog" do
-      button.confirm = BlockKit::Composition::ConfirmationDialog.new(
-        title: "",
-        text: "Dialog Text",
-        confirm: "Yes",
-        deny: "No"
-      )
-
-      expect(button).not_to be_valid
-      expect(button.errors[:confirm]).to include("is invalid: title can't be blank")
-    end
   end
 end

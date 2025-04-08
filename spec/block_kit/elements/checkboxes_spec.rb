@@ -32,12 +32,6 @@ RSpec.describe BlockKit::Elements::Checkboxes, type: :model do
             {text: "Option 1", value: "option_1"},
             {text: "Option 2", value: "option_2", initial: true}
           ],
-          confirm: {
-            title: "Dialog Title",
-            text: "Dialog Text",
-            confirm: "Yes",
-            deny: "No"
-          },
           focus_on_load: false
         }
       end
@@ -52,7 +46,6 @@ RSpec.describe BlockKit::Elements::Checkboxes, type: :model do
           initial_options: [
             {text: {type: "plain_text", text: "Option 2"}, value: "option_2"}
           ],
-          confirm: checkboxes.confirm.as_json,
           focus_on_load: false
         })
       end
@@ -61,10 +54,10 @@ RSpec.describe BlockKit::Elements::Checkboxes, type: :model do
 
   context "attributes" do
     it { is_expected.to have_attribute(:options).with_type(:array, :block_kit_option) }
-    it { is_expected.to have_attribute(:confirm).with_type(:block_kit_confirmation_dialog) }
     it { is_expected.to have_attribute(:focus_on_load).with_type(:boolean) }
 
     it_behaves_like "a block with an action_id"
+    it_behaves_like "a block that is confirmable"
   end
 
   context "validations" do
@@ -90,18 +83,6 @@ RSpec.describe BlockKit::Elements::Checkboxes, type: :model do
       checkboxes.options = [{text: "Option 1", value: ""}]
       expect(checkboxes).not_to be_valid
       expect(checkboxes.errors["options[0]"]).to include("is invalid: value can't be blank")
-    end
-
-    it "validates the associated confirmation dialog" do
-      checkboxes.confirm = BlockKit::Composition::ConfirmationDialog.new(
-        title: "",
-        text: "Dialog Text",
-        confirm: "Yes",
-        deny: "No"
-      )
-
-      expect(checkboxes).not_to be_valid
-      expect(checkboxes.errors[:confirm]).to include("is invalid: title can't be blank")
     end
   end
 end
