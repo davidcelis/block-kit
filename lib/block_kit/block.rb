@@ -8,6 +8,16 @@ module BlockKit
     include ActiveModel::Attributes
     include ActiveModel::Validations
 
+    class_attribute :required_attributes, default: []
+
+    def initialize(attributes = {})
+      missing_required_attributes = self.class.required_attributes - attributes.symbolize_keys.keys
+
+      raise ArgumentError, "missing required attributes: #{missing_required_attributes.join(", ")}" if missing_required_attributes.any?
+
+      super
+    end
+
     def as_json(*)
       {type: self.class::TYPE}
     end

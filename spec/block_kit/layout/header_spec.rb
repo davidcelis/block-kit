@@ -19,8 +19,18 @@ RSpec.describe BlockKit::Layout::Header, type: :model do
     end
   end
 
-  describe "attributes" do
+  describe "#initialize" do
+    it "allows setting emoji on the text" do
+      header = described_class.new(text: "Hello, world!", emoji: false)
+      expect(header.text.emoji).to be false
+    end
+  end
+
+  context "attributes" do
     it { is_expected.to have_attribute(:text).with_type(:block_kit_plain_text) }
+
+    it_behaves_like "a block with a block_id"
+    it_behaves_like "a block with required attributes", :text
   end
 
   context "validations" do
@@ -29,6 +39,4 @@ RSpec.describe BlockKit::Layout::Header, type: :model do
     it { is_expected.to validate_presence_of(:text) }
     it { is_expected.to validate_length_of(:text).is_at_most(150) }
   end
-
-  it_behaves_like "a block with a block_id"
 end

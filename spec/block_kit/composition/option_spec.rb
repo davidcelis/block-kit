@@ -47,5 +47,7 @@ RSpec.describe BlockKit::Composition::Option, type: :model do
     it { is_expected.to have_attribute(:text).with_type(:block_kit_plain_text) }
     it { is_expected.to have_attribute(:value).with_type(:string) }
     it { is_expected.to have_attribute(:description).with_type(:block_kit_plain_text) }
+
+    it_behaves_like "a block with required attributes", :text, :value
   end
 end

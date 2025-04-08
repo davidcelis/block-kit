@@ -9,6 +9,8 @@ module BlockKit
       attribute :deny, Types::PlainText.instance
       attribute :style, :string
 
+      self.required_attributes = %i[title text confirm deny]
+
       validates :title, presence: true, length: {maximum: 100}
       validates :text, presence: true, length: {maximum: 300}
       validates :confirm, presence: true, length: {maximum: 30}

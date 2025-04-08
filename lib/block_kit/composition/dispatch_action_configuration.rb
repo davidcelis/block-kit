@@ -12,10 +12,12 @@ module BlockKit
 
       validates :trigger_actions_on, presence: true, "block_kit/validators/array_inclusion": {in: VALID_TRIGGERS}
 
-      def initialize(trigger_actions_on: [])
+      def initialize(attributes = {})
+        triggers = attributes.delete(:trigger_actions_on)
+
         super
 
-        self.trigger_actions_on = trigger_actions_on
+        self.trigger_actions_on = triggers
       end
 
       def trigger_actions_on=(values)

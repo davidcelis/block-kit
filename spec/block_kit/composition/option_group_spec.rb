@@ -37,13 +37,13 @@ RSpec.describe BlockKit::Composition::OptionGroup, type: :model do
     end
 
     it "validates that there can be at most 100 options" do
-      option_group.options = Array.new(101) { {label: "Option", value: "value"} }
+      option_group.options = Array.new(101) { {text: "Option", value: "value"} }
       expect(option_group).not_to be_valid
       expect(option_group.errors[:options]).to include("is too long (maximum is 100 options)")
     end
 
     it "validates the associated options themselves" do
-      option_group.options = [{text: "Option 1"}]
+      option_group.options = [{text: "Option 1", value: ""}]
       expect(option_group).not_to be_valid
       expect(option_group.errors["options[0]"]).to include("is invalid: value can't be blank")
     end
@@ -51,5 +51,7 @@ RSpec.describe BlockKit::Composition::OptionGroup, type: :model do
 
   context "attributes" do
     it { is_expected.to have_attribute(:label).with_type(:block_kit_plain_text) }
+
+    it_behaves_like "a block with required attributes", :label
   end
 end

@@ -6,11 +6,15 @@ module BlockKit
       attribute :label, Types::PlainText.instance
       attr_reader :options
 
+      self.required_attributes = [:label]
+
       validates :label, presence: true, length: {maximum: 75}
       validates :options, presence: true, length: {maximum: 100, message: "is too long (maximum is %{count} options)"}, "block_kit/validators/associated": true
 
-      def initialize(options: [], **args)
-        super(**args)
+      def initialize(attributes = {})
+        options = attributes.delete(:options) { [] }
+
+        super
 
         self.options = options
       end

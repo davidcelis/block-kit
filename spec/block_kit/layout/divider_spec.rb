@@ -19,5 +19,7 @@ RSpec.describe BlockKit::Layout::Divider, type: :model do
     it { is_expected.to be_valid }
   end
 
-  it_behaves_like "a block with a block_id"
+  context "attributes" do
+    it_behaves_like "a block with a block_id"
+  end
 end

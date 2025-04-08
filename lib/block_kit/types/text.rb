@@ -42,7 +42,7 @@ module BlockKit
         when Composition::Mrkdwn
           Composition::PlainText.new(text: value.text)
         when Hash
-          Composition::PlainText.new(value.with_indifferent_access.slice(*Composition::PlainText.attribute_names))
+          Composition::PlainText.new(**value.with_indifferent_access.slice(*Composition::PlainText.attribute_names).symbolize_keys)
         else
           Composition::PlainText.new(text: value)
         end
@@ -61,7 +61,7 @@ module BlockKit
         when Composition::PlainText
           Composition::Mrkdwn.new(text: value.text)
         when Hash
-          Composition::Mrkdwn.new(value.with_indifferent_access.slice(*Composition::Mrkdwn.attribute_names))
+          Composition::Mrkdwn.new(**value.with_indifferent_access.slice(*Composition::Mrkdwn.attribute_names).symbolize_keys)
         else
           Composition::Mrkdwn.new(text: value)
         end

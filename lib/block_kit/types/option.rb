@@ -17,7 +17,7 @@ module BlockKit
         when Composition::Option
           value
         when Hash
-          Composition::Option.new(value.with_indifferent_access.slice(*Composition::Option.attribute_names))
+          Composition::Option.new(**value.with_indifferent_access.slice(*Composition::Option.attribute_names).symbolize_keys)
         end
       end
     end
