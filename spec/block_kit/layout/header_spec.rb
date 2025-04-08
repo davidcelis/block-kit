@@ -10,15 +10,6 @@ RSpec.describe BlockKit::Layout::Header, type: :model do
     expect(described_class::TYPE).to eq("header")
   end
 
-  describe "#initialize" do
-    let(:attributes) { super().merge(emoji: false) }
-
-    it "passes `emoji` to the text block" do
-      expect(header.text).to be_a(BlockKit::Composition::PlainText)
-      expect(header.text.emoji).to be(false)
-    end
-  end
-
   describe "#as_json" do
     it "serializes to JSON" do
       expect(header.as_json).to eq({

@@ -3,7 +3,12 @@
 module BlockKit
   module Composition
     class ConversationFilter < Block
-      VALID_INCLUDES = %w[im mpim public private].freeze
+      VALID_INCLUDES = [
+        IM = "im",
+        MPIM = "mpim",
+        PUBLIC = "public",
+        PRIVATE = "private"
+      ].freeze
 
       attr_reader :include
       attribute :exclude_external_shared_channels, :boolean
@@ -14,18 +19,18 @@ module BlockKit
       def initialize(include: nil, **attributes)
         super(**attributes)
 
-        self.include = include if include
+        self.include = include
       end
 
-      def include=(value)
-        raise ArgumentError, "Invalid value for Array `include': #{value.inspect}" unless value.nil? || value.is_a?(Array)
-
-        @include = value&.map(&:to_s)
+      def include=(values)
+        @include = if values
+          Array(values).map(&:to_s)
+        end
       end
 
       def as_json(*)
         {
-          include: include,
+          include: include&.uniq,
           exclude_external_shared_channels: exclude_external_shared_channels,
           exclude_bot_users: exclude_bot_users
         }.compact

@@ -13,7 +13,7 @@ module BlockKit
 
       def as_json(*)
         {
-          text: text.as_json,
+          text: text&.as_json,
           value: value,
           description: description&.as_json
         }.compact

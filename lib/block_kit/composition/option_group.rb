@@ -17,14 +17,14 @@ module BlockKit
 
       def options=(items)
         @options = if items
-          Array(items).map { |item| Types::Option.instance.cast(item) }
+          Array(items).map { |item| Types::Option.instance.cast(item) }.compact
         end
       end
 
       def as_json(*)
         {
-          label: label.as_json,
-          options: options.map(&:as_json)
+          label: label&.as_json,
+          options: options&.map(&:as_json)
         }
       end
     end

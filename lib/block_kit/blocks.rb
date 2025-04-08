@@ -12,10 +12,6 @@ module BlockKit
       append(Layout::Divider.new(block_id: block_id))
     end
 
-    def header(text:, block_id: nil, emoji: nil)
-      append(Layout::Header.new(text: text, block_id: block_id, emoji: emoji))
-    end
-
     def append(block)
       @blocks << block
 

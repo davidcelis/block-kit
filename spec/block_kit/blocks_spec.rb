@@ -23,25 +23,4 @@ RSpec.describe BlockKit::Blocks do
       expect(blocks.as_json).to eq([{type: "divider", block_id: "block_id"}])
     end
   end
-
-  describe "#header" do
-    it "appends a header block" do
-      blocks.header(text: "Hello, world!")
-
-      expect(blocks.as_json).to eq([{
-        type: "header",
-        text: {type: "plain_text", text: "Hello, world!"}
-      }])
-    end
-
-    it "accepts additional options" do
-      blocks.header(text: "Hello, world!", block_id: "block_id", emoji: true)
-
-      expect(blocks.as_json).to eq([{
-        type: "header",
-        text: {type: "plain_text", text: "Hello, world!", emoji: true},
-        block_id: "block_id"
-      }])
-    end
-  end
 end
