@@ -44,6 +44,12 @@ RSpec.describe BlockKit::Composition::Workflow, type: :model do
     it { is_expected.to be_valid }
 
     it { is_expected.to validate_presence_of(:trigger) }
+
+    it "validates the associated trigger" do
+      workflow.trigger = BlockKit::Composition::Trigger.new(url: "")
+      expect(workflow).not_to be_valid
+      expect(workflow.errors[:trigger]).to include("is invalid: url can't be blank")
+    end
   end
 
   context "attributes" do

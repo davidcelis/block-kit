@@ -51,7 +51,8 @@ RSpec.describe BlockKit::Composition::OptionGroup, type: :model do
 
   context "attributes" do
     it { is_expected.to have_attribute(:label).with_type(:block_kit_plain_text) }
+    it { is_expected.to have_attribute(:options).with_type(:array, :block_kit_option) }
 
-    it_behaves_like "a block with required attributes", :label
+    it_behaves_like "a block with required attributes", :label, :options
   end
 end

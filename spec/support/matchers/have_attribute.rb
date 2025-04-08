@@ -19,11 +19,12 @@ RSpec::Matchers.define :have_attribute do |attribute_name|
 
     next !!attribute unless @expected_type
 
-    attribute.type == @expected_type
+    attribute.type == @expected_type && (@item_type.nil? || (attribute.type == :array && attribute.item_type.type == @item_type))
   end
 
-  chain :with_type do |expected_type|
+  chain :with_type do |expected_type, item_type = nil|
     @expected_type = expected_type
+    @item_type = item_type
   end
 
   failure_message do |object|
@@ -32,9 +33,10 @@ RSpec::Matchers.define :have_attribute do |attribute_name|
 
     message = "expected #{responder} to have attribute `#{attribute_name}'"
     message += " with type `#{@expected_type}'" if @expected_type
+    message += " and item type `#{@item_type}'" if @item_type
 
     message += if attribute.present?
-      ", but it's type is `#{attribute.type}'"
+      ", but it's type is `#{attribute.type}'#{" with item type `#{attribute.item_type.type}'" if @item_type}"
     else
       ", but it doesn't"
     end
@@ -47,6 +49,7 @@ RSpec::Matchers.define :have_attribute do |attribute_name|
 
     message = "expected #{responder} not to have attribute `#{attribute_name}'"
     message += " with type `#{@expected_type}'" if @expected_type
+    message += " and item type `#{@item_type}'" if @item_type
     message += ", but it does"
 
     message

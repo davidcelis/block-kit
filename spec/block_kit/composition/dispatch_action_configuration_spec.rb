@@ -13,6 +13,10 @@ RSpec.describe BlockKit::Composition::DispatchActionConfiguration, type: :model 
     end
   end
 
+  context "attributes" do
+    it { is_expected.to have_attribute(:trigger_actions_on).with_type(:array, :string) }
+  end
+
   context "validations" do
     it { is_expected.to be_valid }
 

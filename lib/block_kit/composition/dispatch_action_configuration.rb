@@ -8,23 +8,9 @@ module BlockKit
         ON_CHARACTER_ENTERED = "on_character_entered"
       ].freeze
 
-      attr_reader :trigger_actions_on
+      attribute :trigger_actions_on, Types::Array.of(:string)
 
       validates :trigger_actions_on, presence: true, "block_kit/validators/array_inclusion": {in: VALID_TRIGGERS}
-
-      def initialize(attributes = {})
-        triggers = attributes.delete(:trigger_actions_on)
-
-        super
-
-        self.trigger_actions_on = triggers
-      end
-
-      def trigger_actions_on=(values)
-        @trigger_actions_on = if values
-          Array(values).map(&:to_s)
-        end
-      end
 
       def as_json(*)
         {

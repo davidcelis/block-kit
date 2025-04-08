@@ -10,23 +10,11 @@ module BlockKit
         PRIVATE = "private"
       ].freeze
 
-      attr_reader :include
+      attribute :include, Types::Array.of(:string)
       attribute :exclude_external_shared_channels, :boolean
       attribute :exclude_bot_users, :boolean
 
       validates :include, presence: true, "block_kit/validators/array_inclusion": {in: VALID_INCLUDES}, allow_nil: true
-
-      def initialize(include: nil, **attributes)
-        super(**attributes)
-
-        self.include = include
-      end
-
-      def include=(values)
-        @include = if values
-          Array(values).map(&:to_s)
-        end
-      end
 
       def as_json(*)
         {
