@@ -20,7 +20,7 @@ RSpec.describe BlockKit::Composition::Option, type: :model do
     end
 
     context "with all attributes" do
-      let(:attributes) { super().merge(description: "This option is great!") }
+      let(:attributes) { super().merge(description: "This option is great!", initial: true) }
 
       it "serializes to JSON" do
         expect(option.as_json).to eq({
@@ -47,5 +47,12 @@ RSpec.describe BlockKit::Composition::Option, type: :model do
     it { is_expected.to have_attribute(:text).with_type(:block_kit_plain_text) }
     it { is_expected.to have_attribute(:value).with_type(:string) }
     it { is_expected.to have_attribute(:description).with_type(:block_kit_plain_text) }
+    it { is_expected.to have_attribute(:initial).with_type(:boolean) }
+
+    it "has a predicate for initial" do
+      expect(option).not_to be_initial
+      option.initial = true
+      expect(option).to be_initial
+    end
   end
 end
