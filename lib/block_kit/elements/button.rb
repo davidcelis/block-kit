@@ -14,8 +14,6 @@ module BlockKit
       attribute :confirm, Types::ConfirmationDialog.instance
       attribute :accessibility_label, :string
 
-      self.required_attributes = [:text]
-
       validates :text, presence: true, length: {maximum: 75}
       validates :url, presence: true, format: {with: URI::DEFAULT_PARSER.make_regexp, message: "is not a valid URI", allow_blank: true}, length: {maximum: 3000}, allow_nil: true
       validates :value, presence: true, length: {maximum: 2000}, allow_nil: true

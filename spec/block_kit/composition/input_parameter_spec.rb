@@ -30,7 +30,5 @@ RSpec.describe BlockKit::Composition::InputParameter, type: :model do
   context "attributes" do
     it { is_expected.to have_attribute(:name).with_type(:string) }
     it { is_expected.to have_attribute(:value).with_type(:string) }
-
-    it_behaves_like "a block with required attributes", :name, :value
   end
 end

@@ -5,8 +5,6 @@ module BlockKit
     class Text < Block
       attribute :text, :string
 
-      self.required_attributes = [:text]
-
       delegate :blank?, to: :text
 
       def length

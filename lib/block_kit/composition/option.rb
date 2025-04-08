@@ -7,8 +7,6 @@ module BlockKit
       attribute :value, :string
       attribute :description, Types::PlainText.instance
 
-      self.required_attributes = [:text, :value]
-
       validates :text, presence: true, length: {maximum: 75}
       validates :value, presence: true, length: {maximum: 150}
       validates :description, presence: true, length: {maximum: 75}, allow_nil: true

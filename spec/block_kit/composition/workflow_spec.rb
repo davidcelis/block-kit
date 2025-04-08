@@ -54,7 +54,5 @@ RSpec.describe BlockKit::Composition::Workflow, type: :model do
 
   context "attributes" do
     it { is_expected.to have_attribute(:trigger).with_type(:block_kit_trigger) }
-
-    it_behaves_like "a block with required attributes", :trigger
   end
 end

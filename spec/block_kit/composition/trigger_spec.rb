@@ -59,7 +59,5 @@ RSpec.describe BlockKit::Composition::Trigger, type: :model do
     it { is_expected.to have_attribute(:url).with_type(:string) }
 
     it { is_expected.to have_attribute(:customizable_input_parameters).with_type(:array, :block_kit_input_parameter) }
-
-    it_behaves_like "a block with required attributes", :url
   end
 end

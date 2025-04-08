@@ -7,8 +7,6 @@ module BlockKit
 
       attribute :text, Types::PlainText.instance
 
-      self.required_attributes = [:text]
-
       validates :text, presence: true, length: {maximum: 150}
 
       def initialize(attributes = {})

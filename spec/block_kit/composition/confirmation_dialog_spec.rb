@@ -38,8 +38,6 @@ RSpec.describe BlockKit::Composition::ConfirmationDialog, type: :model do
     it { is_expected.to have_attribute(:confirm).with_type(:block_kit_plain_text) }
     it { is_expected.to have_attribute(:deny).with_type(:block_kit_plain_text) }
     it { is_expected.to have_attribute(:style).with_type(:string) }
-
-    it_behaves_like "a block with required attributes", %i[title text confirm deny]
   end
 
   context "validations" do

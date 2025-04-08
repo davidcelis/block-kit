@@ -30,7 +30,6 @@ RSpec.describe BlockKit::Layout::Header, type: :model do
     it { is_expected.to have_attribute(:text).with_type(:block_kit_plain_text) }
 
     it_behaves_like "a block with a block_id"
-    it_behaves_like "a block with required attributes", :text
   end
 
   context "validations" do

@@ -38,7 +38,5 @@ RSpec.describe BlockKit::Composition::PlainText do
   context "attributes" do
     it { is_expected.to have_attribute(:text).with_type(:string) }
     it { is_expected.to have_attribute(:emoji).with_type(:boolean) }
-
-    it_behaves_like "a block with required attributes", :text
   end
 end

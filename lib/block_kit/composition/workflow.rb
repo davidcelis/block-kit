@@ -5,8 +5,6 @@ module BlockKit
     class Workflow < Block
       attribute :trigger, Types::Trigger.instance
 
-      self.required_attributes = [:trigger]
-
       validates :trigger, presence: true, "block_kit/validators/associated": true
 
       def as_json(*)

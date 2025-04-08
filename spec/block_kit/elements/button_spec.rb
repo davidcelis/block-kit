@@ -58,7 +58,6 @@ RSpec.describe BlockKit::Elements::Button, type: :model do
     it { is_expected.to have_attribute(:accessibility_label).with_type(:string) }
 
     it_behaves_like "a block with an action_id"
-    it_behaves_like "a block with required attributes", :text
   end
 
   context "validations" do
