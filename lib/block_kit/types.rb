@@ -4,6 +4,7 @@ module BlockKit
   module Types
     autoload :Array, "block_kit/types/array"
     autoload :ConfirmationDialog, "block_kit/types/confirmation_dialog"
+    autoload :DispatchActionConfiguration, "block_kit/types/dispatch_action_configuration"
     autoload :InputParameter, "block_kit/types/input_parameter"
     autoload :Mrkdwn, "block_kit/types/text"
     autoload :Option, "block_kit/types/option"

@@ -8,5 +8,6 @@ module BlockKit
     autoload :Checkboxes, "block_kit/elements/checkboxes"
     autoload :DatePicker, "block_kit/elements/date_picker"
     autoload :DatetimePicker, "block_kit/elements/datetime_picker"
+    autoload :EmailInput, "block_kit/elements/email_input"
   end
 end
