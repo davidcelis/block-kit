@@ -15,7 +15,6 @@ RSpec.describe BlockKit::Elements::DatePicker, type: :model do
       let(:attributes) do
         super().merge(
           initial_date: Date.new(2025, 4, 8),
-          focus_on_load: true,
           placeholder: "Select a date"
         )
       end
@@ -24,7 +23,6 @@ RSpec.describe BlockKit::Elements::DatePicker, type: :model do
         expect(date_picker.as_json).to eq({
           type: described_class::TYPE,
           initial_date: "2025-04-08",
-          focus_on_load: true,
           placeholder: {type: "plain_text", text: "Select a date"}
         })
       end
@@ -33,11 +31,11 @@ RSpec.describe BlockKit::Elements::DatePicker, type: :model do
 
   context "attributes" do
     it { is_expected.to have_attribute(:initial_date).with_type(:date) }
-    it { is_expected.to have_attribute(:focus_on_load).with_type(:boolean) }
     it { is_expected.to have_attribute(:placeholder).with_type(:block_kit_plain_text) }
 
     it_behaves_like "a block with an action_id"
     it_behaves_like "a block that is confirmable"
+    it_behaves_like "a block that is focusable on load"
   end
 
   context "validations" do

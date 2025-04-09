@@ -7,14 +7,18 @@ module BlockKit
 
       include Concerns::Confirmable
       include Concerns::HasOptions.with_limit(10)
-
-      attribute :focus_on_load, :boolean
+      include Concerns::FocusableOnLoad
 
       def as_json(*)
         super.merge(
-          initial_options: options&.select(&:initial?)&.map(&:as_json),
-          focus_on_load: focus_on_load
+          initial_options: initial_options&.map(&:as_json)
         ).compact
+      end
+
+      private
+
+      def initial_options
+        options.select(&:initial?)
       end
     end
   end

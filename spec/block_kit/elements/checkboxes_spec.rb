@@ -31,8 +31,7 @@ RSpec.describe BlockKit::Elements::Checkboxes, type: :model do
           options: [
             {text: "Option 1", value: "option_1"},
             {text: "Option 2", value: "option_2", initial: true}
-          ],
-          focus_on_load: false
+          ]
         }
       end
 
@@ -45,19 +44,17 @@ RSpec.describe BlockKit::Elements::Checkboxes, type: :model do
           ],
           initial_options: [
             {text: {type: "plain_text", text: "Option 2"}, value: "option_2"}
-          ],
-          focus_on_load: false
+          ]
         })
       end
     end
   end
 
   context "attributes" do
-    it { is_expected.to have_attribute(:focus_on_load).with_type(:boolean) }
-
     it_behaves_like "a block with an action_id"
     it_behaves_like "a block that has options", with_limit: 10
     it_behaves_like "a block that is confirmable"
+    it_behaves_like "a block that is focusable on load"
   end
 
   context "validations" do

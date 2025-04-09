@@ -6,9 +6,9 @@ module BlockKit
       TYPE = "date_picker"
 
       include Concerns::Confirmable
+      include Concerns::FocusableOnLoad
 
       attribute :initial_date, :date
-      attribute :focus_on_load, :boolean
       attribute :placeholder, Types::PlainText.instance
 
       validates :initial_date, presence: true, allow_nil: true
@@ -17,7 +17,6 @@ module BlockKit
       def as_json(*)
         super.merge(
           initial_date: initial_date&.iso8601,
-          focus_on_load: focus_on_load,
           placeholder: placeholder&.as_json
         ).compact
       end
