@@ -26,7 +26,7 @@ RSpec.describe BlockKit::Composition::OptionGroup, type: :model do
     it { is_expected.to validate_presence_of(:label) }
     it { is_expected.to validate_length_of(:label).is_at_most(75) }
 
-    it_behaves_like "a block that has options", with_limit: 100
+    it_behaves_like "a block that has options", limit: 100
   end
 
   context "attributes" do

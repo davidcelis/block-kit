@@ -5,7 +5,7 @@ module BlockKit
     class OptionGroup < Block
       self.type = :option_group
 
-      include Concerns::HasOptions.with_limit(100)
+      include Concerns::HasOptions.new(limit: 100)
 
       attribute :label, Types::PlainText.instance
 
