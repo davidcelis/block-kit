@@ -8,7 +8,7 @@ RSpec.describe BlockKit::Elements::DatePicker, type: :model do
 
   describe "#as_json" do
     it "serializes to JSON" do
-      expect(date_picker.as_json).to eq({type: described_class::TYPE})
+      expect(date_picker.as_json).to eq({type: described_class.type.to_s})
     end
 
     context "with all attributes" do
@@ -21,7 +21,7 @@ RSpec.describe BlockKit::Elements::DatePicker, type: :model do
 
       it "serializes to JSON" do
         expect(date_picker.as_json).to eq({
-          type: described_class::TYPE,
+          type: described_class.type.to_s,
           initial_date: "2025-04-08",
           placeholder: {type: "plain_text", text: "Select a date"}
         })

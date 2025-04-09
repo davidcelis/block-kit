@@ -14,7 +14,7 @@ RSpec.describe BlockKit::Elements::Button, type: :model do
   describe "#as_json" do
     it "serializes to JSON" do
       expect(button.as_json).to eq({
-        type: described_class::TYPE,
+        type: described_class.type.to_s,
         text: {type: "plain_text", text: "My Button"},
         value: "button_value"
       })
@@ -31,7 +31,7 @@ RSpec.describe BlockKit::Elements::Button, type: :model do
 
       it "serializes to JSON" do
         expect(button.as_json).to eq({
-          type: described_class::TYPE,
+          type: described_class.type.to_s,
           text: {type: "plain_text", text: "My Button"},
           url: "https://example.com",
           value: "button_value",

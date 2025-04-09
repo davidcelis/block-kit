@@ -5,6 +5,8 @@ require "uri"
 module BlockKit
   module Composition
     class SlackFile < Block
+      self.type = :slack_file
+
       attribute :id, :string
       attribute :url, :string
 

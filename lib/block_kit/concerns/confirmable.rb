@@ -6,7 +6,7 @@ module BlockKit
       extend ActiveSupport::Concern
 
       included do
-        attribute :confirm, Types::ConfirmationDialog.instance
+        attribute :confirm, Types::Block.of_type(Composition::ConfirmationDialog)
 
         validates :confirm, "block_kit/validators/associated": true, allow_nil: true
       end

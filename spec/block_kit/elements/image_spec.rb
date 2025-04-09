@@ -14,7 +14,7 @@ RSpec.describe BlockKit::Elements::Image, type: :model do
   describe "#as_json" do
     it "serializes to JSON" do
       expect(image.as_json).to eq({
-        type: described_class::TYPE,
+        type: described_class.type.to_s,
         alt_text: "An image",
         image_url: "https://example.com/image.png"
       })
@@ -30,7 +30,7 @@ RSpec.describe BlockKit::Elements::Image, type: :model do
 
       it "serializes to JSON" do
         expect(image.as_json).to eq({
-          type: described_class::TYPE,
+          type: described_class.type.to_s,
           alt_text: "An image",
           slack_file: {id: "F12345678"}
         })

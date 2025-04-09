@@ -3,7 +3,7 @@
 module BlockKit
   module Layout
     class Header < Base
-      TYPE = "header"
+      self.type = :header
 
       attribute :text, Types::PlainText.instance
 

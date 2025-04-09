@@ -16,7 +16,7 @@ RSpec.describe BlockKit::Elements::Checkboxes, type: :model do
   describe "#as_json" do
     it "serializes to JSON" do
       expect(checkboxes.as_json).to eq({
-        type: described_class::TYPE,
+        type: described_class.type.to_s,
         options: [
           {text: {type: "plain_text", text: "Option 1"}, value: "option_1"},
           {text: {type: "plain_text", text: "Option 2"}, value: "option_2"}
@@ -37,7 +37,7 @@ RSpec.describe BlockKit::Elements::Checkboxes, type: :model do
 
       it "serializes to JSON" do
         expect(checkboxes.as_json).to eq({
-          type: described_class::TYPE,
+          type: described_class.type.to_s,
           options: [
             {text: {type: "plain_text", text: "Option 1"}, value: "option_1"},
             {text: {type: "plain_text", text: "Option 2"}, value: "option_2"}

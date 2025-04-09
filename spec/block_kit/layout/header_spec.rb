@@ -7,13 +7,13 @@ RSpec.describe BlockKit::Layout::Header, type: :model do
   subject(:header) { described_class.new(**attributes) }
 
   it "has a type" do
-    expect(described_class::TYPE).to eq("header")
+    expect(described_class.type.to_s).to eq("header")
   end
 
   describe "#as_json" do
     it "serializes to JSON" do
       expect(header.as_json).to eq({
-        type: described_class::TYPE,
+        type: described_class.type.to_s,
         text: {type: "plain_text", text: "Hello, world!"}
       })
     end

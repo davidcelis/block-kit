@@ -21,7 +21,11 @@ module BlockKit
       end
 
       def initialize(item_type)
-        item_type = ActiveModel::Type.lookup(item_type) if item_type.is_a?(Symbol)
+        item_type = if item_type.is_a?(Class) && item_type < BlockKit::Block
+          Types::Block.of_type(item_type)
+        elsif item_type.is_a?(Symbol)
+          ActiveModel::Type.lookup(item_type)
+        end
 
         @item_type = item_type
       end

@@ -3,6 +3,8 @@
 module BlockKit
   module Composition
     class DispatchActionConfiguration < Block
+      self.type = :dispatch_action_config
+
       VALID_TRIGGERS = [
         ON_ENTER_PRESSED = "on_enter_pressed",
         ON_CHARACTER_ENTERED = "on_character_entered"

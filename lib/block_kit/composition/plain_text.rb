@@ -3,7 +3,7 @@
 module BlockKit
   module Composition
     class PlainText < Text
-      TYPE = "plain_text"
+      self.type = :plain_text
 
       attribute :emoji, :boolean
 

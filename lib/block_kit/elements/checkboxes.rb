@@ -3,7 +3,7 @@
 module BlockKit
   module Elements
     class Checkboxes < Base
-      TYPE = "checkboxes"
+      self.type = :checkboxes
 
       include Concerns::Confirmable
       include Concerns::HasOptions.with_limit(10)

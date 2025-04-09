@@ -3,7 +3,7 @@
 module BlockKit
   module Composition
     class Mrkdwn < Text
-      TYPE = "mrkdwn"
+      self.type = :mrkdwn
 
       attribute :verbatim, :boolean
 

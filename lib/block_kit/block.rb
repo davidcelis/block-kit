@@ -8,8 +8,10 @@ module BlockKit
     include ActiveModel::Attributes
     include ActiveModel::Validations
 
+    class_attribute :type, default: nil
+
     def as_json(*)
-      {type: self.class::TYPE}
+      {type: self.class.type.to_s}
     end
 
     def inspect

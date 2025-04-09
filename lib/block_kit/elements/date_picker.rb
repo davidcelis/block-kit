@@ -3,7 +3,7 @@
 module BlockKit
   module Elements
     class DatePicker < Base
-      TYPE = "datepicker"
+      self.type = :datepicker
 
       include Concerns::Confirmable
       include Concerns::FocusableOnLoad

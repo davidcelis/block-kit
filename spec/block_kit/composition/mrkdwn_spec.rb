@@ -7,13 +7,13 @@ RSpec.describe BlockKit::Composition::Mrkdwn do
   let(:attributes) { {text: "Hello, world!"} }
 
   it "has a type" do
-    expect(described_class::TYPE).to eq("mrkdwn")
+    expect(described_class.type.to_s).to eq("mrkdwn")
   end
 
   describe "#as_json" do
     it "serializes to JSON" do
       expect(mrkdwn_block.as_json).to eq({
-        type: described_class::TYPE,
+        type: described_class.type.to_s,
         text: "Hello, world!"
       })
     end
@@ -23,7 +23,7 @@ RSpec.describe BlockKit::Composition::Mrkdwn do
 
       it "serializes to JSON" do
         expect(mrkdwn_block.as_json).to eq({
-          type: described_class::TYPE,
+          type: described_class.type.to_s,
           text: "Hello, world!",
           verbatim: false
         })

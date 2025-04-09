@@ -5,7 +5,7 @@ require "uri"
 module BlockKit
   module Elements
     class Button < Base
-      TYPE = "button"
+      self.type = :button
 
       include Concerns::Confirmable
 

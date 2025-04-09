@@ -6,12 +6,12 @@ RSpec.describe BlockKit::Layout::Divider, type: :model do
   subject(:divider) { described_class.new }
 
   it "has a type" do
-    expect(described_class::TYPE).to eq("divider")
+    expect(described_class.type.to_s).to eq("divider")
   end
 
   describe "#as_json" do
     it "serializes to JSON" do
-      expect(divider.as_json).to eq({type: described_class::TYPE})
+      expect(divider.as_json).to eq({type: described_class.type.to_s})
     end
   end
 

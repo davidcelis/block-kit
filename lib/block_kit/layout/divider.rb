@@ -3,7 +3,7 @@
 module BlockKit
   module Layout
     class Divider < Base
-      TYPE = "divider"
+      self.type = :divider
     end
   end
 end

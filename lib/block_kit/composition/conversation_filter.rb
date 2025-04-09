@@ -3,6 +3,8 @@
 module BlockKit
   module Composition
     class ConversationFilter < Block
+      self.type = :conversation_filter
+
       VALID_INCLUDES = [
         IM = "im",
         MPIM = "mpim",

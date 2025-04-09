@@ -3,6 +3,8 @@
 module BlockKit
   module Composition
     class Option < Block
+      self.type = :option
+
       attribute :text, Types::PlainText.instance
       attribute :value, :string
       attribute :description, Types::PlainText.instance

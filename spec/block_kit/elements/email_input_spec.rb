@@ -8,7 +8,7 @@ RSpec.describe BlockKit::Elements::EmailInput, type: :model do
 
   describe "#as_json" do
     it "serializes to JSON" do
-      expect(input.as_json).to eq({type: described_class::TYPE})
+      expect(input.as_json).to eq({type: described_class.type.to_s})
     end
 
     context "with all attributes" do
@@ -22,7 +22,7 @@ RSpec.describe BlockKit::Elements::EmailInput, type: :model do
 
       it "serializes to JSON" do
         expect(input.as_json).to eq({
-          type: described_class::TYPE,
+          type: described_class.type.to_s,
           initial_value: "hello@example.com",
           dispatch_action_config: {trigger_actions_on: ["on_enter_pressed"]},
           placeholder: {type: "plain_text", text: "Enter your email"}
@@ -33,7 +33,7 @@ RSpec.describe BlockKit::Elements::EmailInput, type: :model do
 
   context "attributes" do
     it { is_expected.to have_attribute(:initial_value).with_type(:string) }
-    it { is_expected.to have_attribute(:dispatch_action_config).with_type(:block_kit_dispatch_action_configuration) }
+    it { is_expected.to have_attribute(:dispatch_action_config).with_type(:block_kit_dispatch_action_config) }
     it { is_expected.to have_attribute(:placeholder).with_type(:block_kit_plain_text) }
 
     it_behaves_like "a block with an action_id"

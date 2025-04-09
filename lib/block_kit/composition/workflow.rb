@@ -3,7 +3,9 @@
 module BlockKit
   module Composition
     class Workflow < Block
-      attribute :trigger, Types::Trigger.instance
+      self.type = :workflow
+
+      attribute :trigger, Types::Block.of_type(Composition::Trigger)
 
       validates :trigger, presence: true, "block_kit/validators/associated": true
 

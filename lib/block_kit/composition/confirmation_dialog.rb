@@ -3,6 +3,8 @@
 module BlockKit
   module Composition
     class ConfirmationDialog < Block
+      self.type = :confirmation_dialog
+
       attribute :title, Types::PlainText.instance
       attribute :text, Types::PlainText.instance
       attribute :confirm, Types::PlainText.instance

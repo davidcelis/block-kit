@@ -5,12 +5,12 @@ require "uri"
 module BlockKit
   module Elements
     class EmailInput < Base
-      TYPE = "email_text_input"
+      self.type = :email_text_input
 
       include Concerns::FocusableOnLoad
 
       attribute :initial_value, :string
-      attribute :dispatch_action_config, Types::DispatchActionConfiguration.instance
+      attribute :dispatch_action_config, Types::Block.of_type(Composition::DispatchActionConfiguration)
       attribute :placeholder, Types::PlainText.instance
 
       validates :initial_value, presence: true, format: {with: URI::MailTo::EMAIL_REGEXP}, allow_nil: true

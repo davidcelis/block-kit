@@ -76,7 +76,7 @@ RSpec.describe BlockKit::Types::Array do
   end
 
   describe ".of" do
-    let(:type) { described_class.of(BlockKit::Types::Option.instance) }
+    let(:type) { described_class.of(BlockKit::Composition::Option) }
 
     it "creates an array type that casts elements using the specified type" do
       option1 = {value: "value1", text: "Text 1"}

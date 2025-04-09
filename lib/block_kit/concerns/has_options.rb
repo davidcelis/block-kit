@@ -8,7 +8,7 @@ module BlockKit
           extend ActiveSupport::Concern
 
           included do
-            attribute :options, Types::Array.of(Types::Option.instance)
+            attribute :options, Types::Array.of(Composition::Option)
 
             validates :options, presence: true, length: {maximum: limit, message: "is too long (maximum is %{count} options)"}, "block_kit/validators/associated": true
           end
