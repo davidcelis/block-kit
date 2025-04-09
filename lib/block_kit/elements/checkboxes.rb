@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "uri"
-
 module BlockKit
   module Elements
     class Checkboxes < Base

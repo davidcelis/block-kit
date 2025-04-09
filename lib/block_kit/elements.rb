@@ -6,5 +6,6 @@ module BlockKit
 
     autoload :Button, "block_kit/elements/button"
     autoload :Checkboxes, "block_kit/elements/checkboxes"
+    autoload :DatePicker, "block_kit/elements/date_picker"
   end
 end
