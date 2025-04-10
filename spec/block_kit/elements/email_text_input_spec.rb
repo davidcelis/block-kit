@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe BlockKit::Elements::EmailInput, type: :model do
+RSpec.describe BlockKit::Elements::EmailTextInput, type: :model do
   subject(:input) { described_class.new(attributes) }
   let(:attributes) { {} }
 

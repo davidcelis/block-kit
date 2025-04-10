@@ -4,7 +4,7 @@ require "uri"
 
 module BlockKit
   module Elements
-    class EmailInput < Base
+    class EmailTextInput < Base
       self.type = :email_text_input
 
       include Concerns::FocusableOnLoad
