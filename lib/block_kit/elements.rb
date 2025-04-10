@@ -22,5 +22,6 @@ module BlockKit
     autoload :NumberInput, "block_kit/elements/number_input"
     autoload :Overflow, "block_kit/elements/overflow"
     autoload :PlainTextInput, "block_kit/elements/plain_text_input"
+    autoload :RadioButtons, "block_kit/elements/radio_buttons"
   end
 end

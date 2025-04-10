@@ -27,9 +27,7 @@ RSpec.shared_examples_for "a block that has options" do |limit:, select: nil, gr
         ]
 
         expect(subject.as_json).to include(
-          initial_option: [
-            {text: {type: "plain_text", text: "Option 2"}, value: "option_2"}
-          ]
+          initial_option: {text: {type: "plain_text", text: "Option 2"}, value: "option_2"}
         )
       end
     when :multi
