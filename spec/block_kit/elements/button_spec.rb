@@ -4,19 +4,13 @@ require "spec_helper"
 
 RSpec.describe BlockKit::Elements::Button, type: :model do
   subject(:button) { described_class.new(attributes) }
-  let(:attributes) do
-    {
-      text: "My Button",
-      value: "button_value"
-    }
-  end
+  let(:attributes) { {text: "My Button"} }
 
   describe "#as_json" do
     it "serializes to JSON" do
       expect(button.as_json).to eq({
-        type: described_class.type.to_s,
         text: {type: "plain_text", text: "My Button"},
-        value: "button_value"
+        type: described_class.type.to_s
       })
     end
 
@@ -24,8 +18,7 @@ RSpec.describe BlockKit::Elements::Button, type: :model do
       let(:attributes) do
         super().merge(
           url: "https://example.com",
-          style: "primary",
-          accessibility_label: "My Button Label"
+          value: "button_value"
         )
       end
 
@@ -34,30 +27,22 @@ RSpec.describe BlockKit::Elements::Button, type: :model do
           type: described_class.type.to_s,
           text: {type: "plain_text", text: "My Button"},
           url: "https://example.com",
-          value: "button_value",
-          style: "primary",
-          accessibility_label: "My Button Label"
+          value: "button_value"
         })
       end
     end
   end
 
   context "attributes" do
-    it { is_expected.to have_attribute(:text).with_type(:block_kit_plain_text) }
     it { is_expected.to have_attribute(:url).with_type(:string) }
     it { is_expected.to have_attribute(:value).with_type(:string) }
-    it { is_expected.to have_attribute(:style).with_type(:string) }
-    it { is_expected.to have_attribute(:accessibility_label).with_type(:string) }
 
-    it_behaves_like "a block with an action_id"
+    it_behaves_like "a button"
     it_behaves_like "a block that is confirmable"
   end
 
   context "validations" do
     it { is_expected.to be_valid }
-
-    it { is_expected.to validate_presence_of(:text) }
-    it { is_expected.to validate_length_of(:text).is_at_most(75) }
 
     it { is_expected.to validate_presence_of(:url).allow_nil }
     it { is_expected.to allow_value("http://example.com/").for(:url) }
@@ -68,9 +53,5 @@ RSpec.describe BlockKit::Elements::Button, type: :model do
 
     it { is_expected.to validate_presence_of(:value).allow_nil }
     it { is_expected.to validate_length_of(:value).is_at_most(2000).allow_nil }
-    it { is_expected.to validate_presence_of(:style).allow_nil }
-    it { is_expected.to validate_inclusion_of(:style).in_array(%w[primary danger]).allow_nil }
-    it { is_expected.to validate_presence_of(:accessibility_label).allow_nil }
-    it { is_expected.to validate_length_of(:accessibility_label).is_at_most(75) }
   end
 end
