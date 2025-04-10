@@ -47,7 +47,7 @@ RSpec.describe BlockKit::Elements::WorkflowButton, type: :model do
     it "validates the associated workflow" do
       button.workflow.trigger.url = nil
       expect(button).not_to be_valid
-      expect(button.errors[:workflow]).to include("is invalid: trigger is invalid: url can't be blank")
+      expect(button.errors[:workflow]).to include("is invalid: trigger.url can't be blank")
     end
   end
 end

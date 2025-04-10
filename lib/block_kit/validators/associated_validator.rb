@@ -11,22 +11,46 @@ module BlockKit
         if value.is_a?(Array)
           value.each_with_index do |item, i|
             unless item.valid?
-              record.errors.add("#{attribute}[#{i}]", invalid_message_for(item), **options, value: item)
+              error_messages = build_error_messages(item.errors)
+              record.errors.add("#{attribute}[#{i}]", "is invalid: #{error_messages.join(", ")}", **options, value: item)
             end
           end
         elsif value.present? && value.invalid?
-          record.errors.add(attribute, invalid_message_for(value), **options, value: value)
+          error_messages = build_error_messages(value.errors)
+          record.errors.add(attribute, "is invalid: #{error_messages.join(", ")}", **options, value: value)
         end
       end
 
       private
 
-      def invalid_message_for(item)
-        messages = item.errors.group_by_attribute.map do |attribute, errors|
-          "#{attribute} #{errors.map(&:message).join(", ")}"
+      def build_error_messages(errors, prefix = nil)
+        messages = []
+
+        errors.group_by_attribute.each do |attribute, error_details|
+          error_details.each do |error|
+            # If the message starts with "is invalid: ", it indicates a nested
+            # error from a more deeply nested model. We'll parse it to extract
+            # each comma-separated message and format it with the full path.
+            if error.message.start_with?("is invalid: ")
+              error.message.sub(/^is invalid:\s*/, "").split(", ").each do |nested_error|
+                if nested_error.include?(" ")
+                  path, message = nested_error.split(" ", 2)
+                  full_path = [prefix, attribute, path].compact.join(".")
+                  messages << "#{full_path} #{message}"
+                else
+                  # Fallback for unexpected format
+                  full_path = [prefix, attribute].compact.join(".")
+                  messages << "#{full_path} #{nested_error}"
+                end
+              end
+            else
+              full_path = [prefix, attribute].compact.join(".")
+              messages << "#{full_path} #{error.message}"
+            end
+          end
         end
 
-        "is invalid: #{messages.join(", ")}"
+        messages
       end
     end
   end
