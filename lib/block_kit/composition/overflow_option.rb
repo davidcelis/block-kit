@@ -5,6 +5,8 @@ require "uri"
 module BlockKit
   module Composition
     class OverflowOption < Option
+      self.type = :overflow_option
+
       attribute :url, :string
 
       validates :url, presence: true, format: {with: URI::DEFAULT_PARSER.make_regexp, message: "is not a valid URI", allow_blank: true}, length: {maximum: 3000}, allow_nil: true

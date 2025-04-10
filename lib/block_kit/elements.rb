@@ -20,5 +20,6 @@ module BlockKit
     autoload :MultiStaticSelect, "block_kit/elements/multi_static_select"
     autoload :MultiUsersSelect, "block_kit/elements/multi_users_select"
     autoload :NumberInput, "block_kit/elements/number_input"
+    autoload :Overflow, "block_kit/elements/overflow"
   end
 end
