@@ -28,6 +28,7 @@ module BlockKit
     autoload :RadioButtons, "block_kit/elements/radio_buttons"
     autoload :Select, "block_kit/elements/select"
     autoload :StaticSelect, "block_kit/elements/static_select"
+    autoload :TimePicker, "block_kit/elements/time_picker"
     autoload :UsersSelect, "block_kit/elements/users_select"
   end
 end
