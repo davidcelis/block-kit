@@ -5,16 +5,12 @@ module BlockKit
     class MultiExternalSelect < MultiSelect
       self.type = :multi_external_select
 
-      attribute :initial_options, Types::Array.of(Composition::Option)
-      attribute :min_query_length, :integer
+      include Concerns::External
 
-      validates :min_query_length, presence: true, numericality: {only_integer: true, greater_than_or_equal_to: 0}, allow_nil: true
+      attribute :initial_options, Types::Array.of(Composition::Option)
 
       def as_json(*)
-        super.merge(
-          initial_options: initial_options&.map(&:as_json),
-          min_query_length: min_query_length
-        ).compact
+        super.merge(initial_options: initial_options&.map(&:as_json)).compact
       end
     end
   end

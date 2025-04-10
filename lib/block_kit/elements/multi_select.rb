@@ -2,11 +2,7 @@
 
 module BlockKit
   module Elements
-    class MultiSelect < Base
-      include Concerns::Confirmable
-      include Concerns::FocusableOnLoad
-      include Concerns::HasPlaceholder
-
+    class MultiSelect < Select
       attribute :max_selected_items, :integer
 
       validates :max_selected_items, presence: true, numericality: {only_integer: true, greater_than: 0}, allow_nil: true

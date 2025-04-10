@@ -2,8 +2,8 @@
 
 require "spec_helper"
 
-RSpec.describe BlockKit::Elements::MultiStaticSelect, type: :model do
-  subject(:multi_static_select) { described_class.new(attributes) }
+RSpec.describe BlockKit::Elements::StaticSelect, type: :model do
+  subject(:static_select) { described_class.new(attributes) }
   let(:attributes) do
     {
       options: [
@@ -15,7 +15,7 @@ RSpec.describe BlockKit::Elements::MultiStaticSelect, type: :model do
 
   describe "#as_json" do
     it "serializes to JSON" do
-      expect(multi_static_select.as_json).to eq({
+      expect(static_select.as_json).to eq({
         type: described_class.type.to_s,
         options: [
           {text: {type: "plain_text", text: "Option 1"}, value: "option_1"},
@@ -27,11 +27,10 @@ RSpec.describe BlockKit::Elements::MultiStaticSelect, type: :model do
 
   context "attributes" do
     it_behaves_like "a block with an action_id"
-    it_behaves_like "a block that has options", limit: 100, select: :multi, groups: 100
+    it_behaves_like "a block that has options", limit: 100, select: :single, groups: 100
     it_behaves_like "a block that is confirmable"
     it_behaves_like "a block that is focusable on load"
     it_behaves_like "a block that has a placeholder"
-    it_behaves_like "a multi select"
   end
 
   context "validations" do

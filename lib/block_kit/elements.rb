@@ -5,11 +5,14 @@ module BlockKit
     autoload :Base, "block_kit/elements/base"
 
     autoload :Button, "block_kit/elements/button"
+    autoload :ChannelsSelect, "block_kit/elements/channels_select"
     autoload :Checkboxes, "block_kit/elements/checkboxes"
+    autoload :ConversationsSelect, "block_kit/elements/conversations_select"
     autoload :DatePicker, "block_kit/elements/date_picker"
     autoload :DatetimePicker, "block_kit/elements/datetime_picker"
     autoload :DecimalInput, "block_kit/elements/decimal_input"
     autoload :EmailTextInput, "block_kit/elements/email_text_input"
+    autoload :ExternalSelect, "block_kit/elements/external_select"
     autoload :FileInput, "block_kit/elements/file_input"
     autoload :Image, "block_kit/elements/image"
     autoload :IntegerInput, "block_kit/elements/integer_input"
@@ -23,5 +26,8 @@ module BlockKit
     autoload :Overflow, "block_kit/elements/overflow"
     autoload :PlainTextInput, "block_kit/elements/plain_text_input"
     autoload :RadioButtons, "block_kit/elements/radio_buttons"
+    autoload :Select, "block_kit/elements/select"
+    autoload :StaticSelect, "block_kit/elements/static_select"
+    autoload :UsersSelect, "block_kit/elements/users_select"
   end
 end
