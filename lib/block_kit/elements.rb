@@ -11,6 +11,8 @@ module BlockKit
     autoload :EmailInput, "block_kit/elements/email_input"
     autoload :FileInput, "block_kit/elements/file_input"
     autoload :Image, "block_kit/elements/image"
+    autoload :MultiExternalSelect, "block_kit/elements/multi_external_select"
+    autoload :MultiSelect, "block_kit/elements/multi_select"
     autoload :MultiStaticSelect, "block_kit/elements/multi_static_select"
   end
 end
