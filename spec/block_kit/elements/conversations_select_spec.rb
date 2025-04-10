@@ -46,5 +46,7 @@ RSpec.describe BlockKit::Elements::ConversationsSelect, type: :model do
 
   context "validations" do
     it { is_expected.to be_valid }
+
+    it { is_expected.to validate_presence_of(:initial_conversation).allow_nil }
   end
 end

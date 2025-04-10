@@ -10,6 +10,8 @@ module BlockKit
       attribute :initial_conversation, :string
       attribute :response_url_enabled, :boolean
 
+      validates :initial_conversation, presence: true, allow_nil: true
+
       def as_json(*)
         super.merge(
           initial_conversation: initial_conversation,

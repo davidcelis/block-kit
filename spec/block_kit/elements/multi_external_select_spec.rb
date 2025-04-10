@@ -45,5 +45,18 @@ RSpec.describe BlockKit::Elements::MultiExternalSelect, type: :model do
 
   context "validations" do
     it { is_expected.to be_valid }
+
+    it "validates the associated initial_options" do
+      multi_external_select.initial_options = [
+        {text: "Option 1", value: "option_1"},
+        {text: "Option 2", value: "option_2"},
+        {text: "Option 3", value: "option_3"}
+      ]
+      expect(multi_external_select).to be_valid
+
+      multi_external_select.initial_options[1].value = ""
+      expect(multi_external_select).not_to be_valid
+      expect(multi_external_select.errors["initial_options[1]"]).to include("is invalid: value can't be blank")
+    end
   end
 end
