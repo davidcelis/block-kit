@@ -10,11 +10,9 @@ module BlockKit
       include Concerns::HasPlaceholder
 
       def initialize(attributes = {})
-        if instance_of?(NumberInput)
-          raise NotImplementedError, "#{self} is an abstract class and cannot be instantiated. You must explicitly instantiate an IntegerInput or DecimalInput."
-        else
-          super
-        end
+        raise NotImplementedError, "#{self.class} is an abstract class and cannot be instantiated. You must explicitly instantiate an IntegerInput or DecimalInput." if instance_of?(NumberInput)
+
+        super
       end
     end
   end

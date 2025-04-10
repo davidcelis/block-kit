@@ -10,6 +10,12 @@ module BlockKit
 
     class_attribute :type, default: nil
 
+    def initialize(attributes = {})
+      raise NotImplementedError, "#{self.class} is an abstract class and cannot be instantiated." if instance_of?(Block)
+
+      super
+    end
+
     def as_json(*)
       {type: self.class.type.to_s}
     end
