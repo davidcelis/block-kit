@@ -29,6 +29,7 @@ module BlockKit
     autoload :Select, "block_kit/elements/select"
     autoload :StaticSelect, "block_kit/elements/static_select"
     autoload :TimePicker, "block_kit/elements/time_picker"
+    autoload :URLTextInput, "block_kit/elements/url_text_input"
     autoload :UsersSelect, "block_kit/elements/users_select"
   end
 end
