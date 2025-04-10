@@ -15,7 +15,7 @@ RSpec.describe BlockKit::Elements::EmailInput, type: :model do
       let(:attributes) do
         super().merge(
           initial_value: "hello@example.com",
-          dispatch_action_config: BlockKit::Composition::DispatchActionConfiguration.new(trigger_actions_on: ["on_enter_pressed"]),
+          dispatch_action_config: BlockKit::Composition::DispatchActionConfig.new(trigger_actions_on: ["on_enter_pressed"]),
           placeholder: "Enter your email"
         )
       end
@@ -36,6 +36,8 @@ RSpec.describe BlockKit::Elements::EmailInput, type: :model do
     it { is_expected.to have_attribute(:dispatch_action_config).with_type(:block_kit_dispatch_action_config) }
     it { is_expected.to have_attribute(:placeholder).with_type(:block_kit_plain_text) }
 
+    it { is_expected.to alias_attribute(:dispatch_action_config).as(:dispatch_action_configuration) }
+
     it_behaves_like "a block with an action_id"
     it_behaves_like "a block that is focusable on load"
   end
@@ -53,7 +55,7 @@ RSpec.describe BlockKit::Elements::EmailInput, type: :model do
     it { is_expected.to validate_presence_of(:dispatch_action_config).allow_nil }
 
     it "validates the associated dispatch_action_config" do
-      subject.dispatch_action_config = BlockKit::Composition::DispatchActionConfiguration.new(trigger_actions_on: [])
+      subject.dispatch_action_config = BlockKit::Composition::DispatchActionConfig.new(trigger_actions_on: [])
       expect(subject).not_to be_valid
       expect(subject.errors[:dispatch_action_config]).to include("is invalid: trigger_actions_on can't be blank")
     end

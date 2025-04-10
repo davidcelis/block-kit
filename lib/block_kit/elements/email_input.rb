@@ -10,8 +10,10 @@ module BlockKit
       include Concerns::FocusableOnLoad
 
       attribute :initial_value, :string
-      attribute :dispatch_action_config, Types::Block.of_type(Composition::DispatchActionConfiguration)
+      attribute :dispatch_action_config, Types::Block.of_type(Composition::DispatchActionConfig)
       attribute :placeholder, Types::PlainText.instance
+
+      alias_attribute :dispatch_action_configuration, :dispatch_action_config
 
       validates :initial_value, presence: true, format: {with: URI::MailTo::EMAIL_REGEXP}, allow_nil: true
       validates :dispatch_action_config, presence: true, "block_kit/validators/associated": true, allow_nil: true

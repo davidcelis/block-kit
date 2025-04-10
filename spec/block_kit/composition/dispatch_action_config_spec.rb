@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe BlockKit::Composition::DispatchActionConfiguration, type: :model do
+RSpec.describe BlockKit::Composition::DispatchActionConfig, type: :model do
   subject(:config) { described_class.new(trigger_actions_on: ["on_enter_pressed", "on_character_entered"]) }
 
   describe "#as_json" do
