@@ -37,11 +37,11 @@ module BlockKit
           case select
           when :single
             def initial_option
-              options.find(&:initial?)
+              options&.find(&:initial?)
             end
           when :multi
             def initial_options
-              options.select(&:initial?).presence
+              options&.select(&:initial?)&.presence
             end
           end
 
