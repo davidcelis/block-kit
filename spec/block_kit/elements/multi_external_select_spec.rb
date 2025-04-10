@@ -19,8 +19,7 @@ RSpec.describe BlockKit::Elements::MultiExternalSelect, type: :model do
             {text: "Option 2", value: "option_2"}
           ],
           min_query_length: 3,
-          max_selected_items: 3,
-          placeholder: "Select an option"
+          max_selected_items: 3
         )
       end
 
@@ -32,21 +31,20 @@ RSpec.describe BlockKit::Elements::MultiExternalSelect, type: :model do
             {text: {type: "plain_text", text: "Option 2"}, value: "option_2"}
           ],
           min_query_length: 3,
-          max_selected_items: 3,
-          placeholder: {type: "plain_text", text: "Select an option"}
+          max_selected_items: 3
         })
       end
     end
   end
 
   context "attributes" do
+    it { is_expected.to have_attribute(:initial_options).with_type(:array, :block_kit_option) }
+    it { is_expected.to have_attribute(:max_selected_items).with_type(:integer) }
+
     it_behaves_like "a block with an action_id"
     it_behaves_like "a block that is confirmable"
     it_behaves_like "a block that is focusable on load"
-
-    it { is_expected.to have_attribute(:initial_options).with_type(:array, :block_kit_option) }
-    it { is_expected.to have_attribute(:max_selected_items).with_type(:integer) }
-    it { is_expected.to have_attribute(:placeholder).with_type(:block_kit_plain_text) }
+    it_behaves_like "a block that has a placeholder"
   end
 
   context "validations" do
@@ -56,7 +54,5 @@ RSpec.describe BlockKit::Elements::MultiExternalSelect, type: :model do
     it { is_expected.not_to allow_value(-1).for(:min_query_length).with_message("must be greater than or equal to 0") }
     it { is_expected.to validate_presence_of(:max_selected_items).allow_nil }
     it { is_expected.not_to allow_value(0).for(:max_selected_items).with_message("must be greater than 0") }
-    it { is_expected.to validate_presence_of(:placeholder).allow_nil }
-    it { is_expected.to validate_length_of(:placeholder).is_at_most(150).allow_nil }
   end
 end

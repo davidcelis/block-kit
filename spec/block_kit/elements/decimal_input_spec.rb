@@ -19,9 +19,7 @@ RSpec.describe BlockKit::Elements::DecimalInput, type: :model do
         super().merge(
           initial_value: 7.77,
           min_value: 0.1,
-          max_value: 9.9,
-          dispatch_action_config: BlockKit::Composition::DispatchActionConfig.new(trigger_actions_on: ["on_enter_pressed"]),
-          placeholder: "Pick a number"
+          max_value: 9.9
         )
       end
 
@@ -31,9 +29,7 @@ RSpec.describe BlockKit::Elements::DecimalInput, type: :model do
           is_decimal_allowed: true,
           initial_value: "7.77",
           min_value: "0.1",
-          max_value: "9.9",
-          dispatch_action_config: {trigger_actions_on: ["on_enter_pressed"]},
-          placeholder: {type: "plain_text", text: "Pick a number"}
+          max_value: "9.9"
         })
       end
     end
@@ -43,13 +39,11 @@ RSpec.describe BlockKit::Elements::DecimalInput, type: :model do
     it { is_expected.to have_attribute(:initial_value).with_type(:decimal) }
     it { is_expected.to have_attribute(:min_value).with_type(:decimal) }
     it { is_expected.to have_attribute(:max_value).with_type(:decimal) }
-    it { is_expected.to have_attribute(:dispatch_action_config).with_type(:block_kit_dispatch_action_config) }
-    it { is_expected.to have_attribute(:placeholder).with_type(:block_kit_plain_text) }
-
-    it { is_expected.to alias_attribute(:dispatch_action_config).as(:dispatch_action_configuration) }
 
     it_behaves_like "a block with an action_id"
     it_behaves_like "a block that is focusable on load"
+    it_behaves_like "a block that is dispatchable"
+    it_behaves_like "a block that has a placeholder"
   end
 
   context "validations" do
@@ -80,14 +74,6 @@ RSpec.describe BlockKit::Elements::DecimalInput, type: :model do
       it { is_expected.to allow_value(max_value).for(:max_value) }
       it { is_expected.to allow_value(nil).for(:max_value) }
       it { is_expected.not_to allow_value(min_value - 1).for(:max_value) }
-    end
-
-    it { is_expected.to validate_presence_of(:dispatch_action_config).allow_nil }
-
-    it "validates the associated dispatch_action_config" do
-      subject.dispatch_action_config = BlockKit::Composition::DispatchActionConfig.new(trigger_actions_on: [])
-      expect(subject).not_to be_valid
-      expect(subject.errors[:dispatch_action_config]).to include("is invalid: trigger_actions_on can't be blank")
     end
   end
 end
