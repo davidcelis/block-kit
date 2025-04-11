@@ -4,7 +4,7 @@ require "spec_helper"
 
 RSpec.describe BlockKit::Types::Block do
   block_class = Class.new(BlockKit::Block) do
-    self.type = :user
+    self.type = :person
 
     attribute :name, :string
     attribute :age, :integer
@@ -22,7 +22,7 @@ RSpec.describe BlockKit::Types::Block do
 
   describe "#type" do
     it "prefixes the type with 'block_kit'" do
-      expect(type_class.type).to eq(:block_kit_user)
+      expect(type_class.type).to eq(:block_kit_person)
     end
   end
 

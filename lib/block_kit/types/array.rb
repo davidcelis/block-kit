@@ -160,10 +160,12 @@ module BlockKit
             matching_type = @item_types.find { |type| item.is_a?(type.block_class) }
 
             matching_type&.cast(item)
-          elsif item.is_a?(Hash) && item.key?(:type)
+          elsif item.is_a?(Hash)
+            item = item.with_indifferent_access
+
             # If the item is a Hash, try to determine the correct type based on the
             # `:type` key that most blocks have.
-            type_name = item[:type].to_sym
+            type_name = item[:type]&.to_sym
 
             matching_type = @item_types.find do |type_class|
               type_class.respond_to?(:type) && type_class.type == :"block_kit_#{type_name}"
