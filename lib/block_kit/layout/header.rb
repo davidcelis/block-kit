@@ -3,11 +3,13 @@
 module BlockKit
   module Layout
     class Header < Base
+      MAX_LENGTH = 150
+
       self.type = :header
 
       attribute :text, Types::PlainText.instance
 
-      validates :text, presence: true, length: {maximum: 150}
+      validates :text, presence: true, length: {maximum: MAX_LENGTH}
 
       def initialize(attributes = {})
         emoji = attributes.delete(:emoji)
@@ -19,6 +21,12 @@ module BlockKit
 
       def as_json(*)
         super.merge(text: text&.as_json)
+      end
+
+      def autofix!
+        self.text = text.truncate(MAX_LENGTH) if text.length > MAX_LENGTH
+
+        true
       end
     end
   end

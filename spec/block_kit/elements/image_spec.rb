@@ -60,13 +60,13 @@ RSpec.describe BlockKit::Elements::Image, type: :model do
       image.slack_file = nil
 
       expect(image).not_to be_valid
-      expect(image.errors[:base]).to include("must have either a slack_file or image_url, but not both")
+      expect(image.errors[:base]).to include("must have either a slack_file or image_url but not both")
 
       image.image_url = "https://example.com"
       image.slack_file = BlockKit::Composition::SlackFile.new(id: "F12345678")
 
       expect(image).not_to be_valid
-      expect(image.errors[:base]).to include("must have either a slack_file or image_url, but not both")
+      expect(image.errors[:base]).to include("must have either a slack_file or image_url but not both")
     end
   end
 end

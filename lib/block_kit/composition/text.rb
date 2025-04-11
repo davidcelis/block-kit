@@ -5,7 +5,7 @@ module BlockKit
     class Text < Block
       attribute :text, :string
 
-      delegate :blank?, to: :text
+      delegate :blank?, :truncate, to: :text
 
       def length
         text&.length || 0

@@ -27,8 +27,8 @@ module BlockKit
       private
 
       def slack_file_or_url_present
-        if (slack_file.blank? && image_url.blank?) || (slack_file.present? && image_url.present?)
-          errors.add(:base, "must have either a slack_file or image_url, but not both")
+        if (slack_file.nil? && image_url.nil?) || (slack_file.present? && image_url.present?)
+          errors.add(:base, "must have either a slack_file or image_url but not both")
         end
       end
     end

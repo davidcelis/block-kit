@@ -29,7 +29,7 @@ module BlockKit
 
       attribute :elements, Types::Array.of(*SUPPORTED_ELEMENTS)
 
-      validates :elements, presence: true, "block_kit/validators/associated": true
+      validates :elements, presence: true, length: {maximum: 25, message: "is too long (maximum is %{count} elements)"}, "block_kit/validators/associated": true
 
       def as_json(*)
         super.merge(elements: elements&.map(&:as_json)).compact

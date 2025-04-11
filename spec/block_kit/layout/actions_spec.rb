@@ -83,5 +83,12 @@ RSpec.describe BlockKit::Layout::Actions, type: :model do
       expect(block).not_to be_valid
       expect(block.errors["elements[1]"]).to include("is invalid: options[2].text can't be blank")
     end
+
+    it "validates the number of elements" do
+      block.elements = Array.new(26) { BlockKit::Elements::Button.new(text: "Button", value: "button") }
+
+      expect(block).not_to be_valid
+      expect(block.errors[:elements]).to include("is too long (maximum is 25 elements)")
+    end
   end
 end
