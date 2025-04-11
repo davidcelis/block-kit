@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe BlockKit::Elements::Image, type: :model do
+RSpec.describe BlockKit::Layout::Image, type: :model do
   subject(:image) { described_class.new(attributes) }
   let(:attributes) do
     {
@@ -20,11 +20,12 @@ RSpec.describe BlockKit::Elements::Image, type: :model do
       })
     end
 
-    context "with a slack_file" do
+    context "with all attributes" do
       let(:attributes) do
         {
           alt_text: "An image",
-          slack_file: BlockKit::Composition::SlackFile.new(id: "F12345678")
+          slack_file: BlockKit::Composition::SlackFile.new(id: "F12345678"),
+          title: "Image title"
         }
       end
 
@@ -32,7 +33,8 @@ RSpec.describe BlockKit::Elements::Image, type: :model do
         expect(image.as_json).to eq({
           type: described_class.type.to_s,
           alt_text: "An image",
-          slack_file: {id: "F12345678"}
+          slack_file: {id: "F12345678"},
+          title: {type: "plain_text", text: "Image title"}
         })
       end
     end
@@ -42,6 +44,9 @@ RSpec.describe BlockKit::Elements::Image, type: :model do
     it { is_expected.to have_attribute(:alt_text).with_type(:string) }
     it { is_expected.to have_attribute(:image_url).with_type(:string) }
     it { is_expected.to have_attribute(:slack_file).with_type(:block_kit_slack_file) }
+    it { is_expected.to have_attribute(:title).with_type(:block_kit_plain_text) }
+
+    it_behaves_like "a block with a block_id"
   end
 
   context "validations" do
@@ -55,6 +60,7 @@ RSpec.describe BlockKit::Elements::Image, type: :model do
     it { is_expected.to allow_value("https://example.com/").for(:image_url) }
     it { is_expected.not_to allow_value("this://kind.of.url/").for(:image_url).with_message("is not a valid URI") }
     it { is_expected.not_to allow_value("invalid_url").for(:image_url).with_message("is not a valid URI") }
+    it { is_expected.to validate_presence_of(:title).allow_nil }
 
     it "validates that one (and only one) of url or slack_file is present" do
       image.image_url = nil

@@ -8,6 +8,7 @@ module BlockKit
     autoload :Context, "block_kit/layout/context"
     autoload :Divider, "block_kit/layout/divider"
     autoload :Header, "block_kit/layout/header"
+    autoload :Image, "block_kit/layout/image"
     autoload :RichText, "block_kit/layout/rich_text"
   end
 end
