@@ -28,6 +28,7 @@ module BlockKit
     autoload :Overflow, "block_kit/elements/overflow"
     autoload :PlainTextInput, "block_kit/elements/plain_text_input"
     autoload :RadioButtons, "block_kit/elements/radio_buttons"
+    autoload :RichTextInput, "block_kit/elements/rich_text_input"
     autoload :StaticSelect, "block_kit/elements/static_select"
     autoload :TimePicker, "block_kit/elements/time_picker"
     autoload :URLTextInput, "block_kit/elements/url_text_input"
