@@ -9,6 +9,7 @@ module BlockKit
     autoload :Divider, "block_kit/layout/divider"
     autoload :Header, "block_kit/layout/header"
     autoload :Image, "block_kit/layout/image"
+    autoload :Input, "block_kit/layout/input"
     autoload :RichText, "block_kit/layout/rich_text"
   end
 end

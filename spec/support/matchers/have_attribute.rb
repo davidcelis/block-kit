@@ -32,6 +32,12 @@ RSpec::Matchers.define :have_attribute do |attribute_name|
     @item_types = item_types
   end
 
+  chain :supporting do |*block_types|
+    raise ArgumentError, "Cannot chain `with_type' and `supporting' when `with_type' is not `:array'" unless @expected_type == :block_kit_block
+
+    @block_types = block_types
+  end
+
   failure_message do |object|
     responder = get_class(object)
     attribute = get_attribute(responder)
@@ -39,9 +45,13 @@ RSpec::Matchers.define :have_attribute do |attribute_name|
     message = "expected #{responder} to have attribute `#{attribute_name}'"
     message += " with type `#{@expected_type}'" if @expected_type
     message += " containing `#{@item_types}'" if @item_types
+    message += " supporting `#{@block_types}'" if @block_types
 
     message += if attribute.present?
-      ", but it's type is `#{attribute.type}'#{" containing `#{attribute.item_types.map(&:type)}'" if @item_types}"
+      msg = ", but it's type is `#{attribute.type}'"
+      msg += " containing `#{attribute.item_types.map(&:type)}'" if @item_types
+      msg += " supporting `#{attribute.block_types.map(&:type)}'" if @block_types
+      msg
     else
       ", but it doesn't"
     end
@@ -55,6 +65,7 @@ RSpec::Matchers.define :have_attribute do |attribute_name|
     message = "expected #{responder} not to have attribute `#{attribute_name}'"
     message += " with type `#{@expected_type}'" if @expected_type
     message += " containing `#{@item_types}'" if @item_types
+    message += " supporting `#{@block_types}'" if @block_types
     message += ", but it does"
 
     message

@@ -17,7 +17,6 @@ module BlockKit
       attribute :multiline, :boolean
 
       validates :initial_value, presence: true, length: {minimum: ->(input) { input.min_length || 0 }, maximum: ->(input) { input.max_length || 3000 }}, allow_nil: true
-      validates :multiline, inclusion: {in: [true, false]}, allow_nil: true
       validates :min_length, presence: true, numericality: {only_integer: true}, allow_nil: true
       validates :max_length, presence: true, numericality: {only_integer: true}, allow_nil: true
       validate :min_and_max_lengths_are_valid
