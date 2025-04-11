@@ -29,7 +29,7 @@ module BlockKit
             type_class.respond_to?(:type) && type_class.type == :"block_kit_#{type_name}"
           end
 
-          matching_type&.cast(item)
+          matching_type&.cast(value)
         end
       end
     end

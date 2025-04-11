@@ -43,22 +43,21 @@ RSpec.describe BlockKit::Layout::Input, type: :model do
 
   context "attributes" do
     it do
-      is_expected.to have_attribute(:element).with_type(:block_kit_block).supporting(
+      is_expected.to have_attribute(:element).with_type(:block_kit_block).containing(
         :block_kit_channels_select,
         :block_kit_checkboxes,
         :block_kit_conversations_select,
         :block_kit_datepicker,
         :block_kit_datetimepicker,
-        :block_kit_decimal_input,
         :block_kit_email_text_input,
         :block_kit_external_select,
         :block_kit_file_input,
-        :block_kit_integer_input,
         :block_kit_multi_channels_select,
         :block_kit_multi_conversations_select,
         :block_kit_multi_external_select,
         :block_kit_multi_static_select,
         :block_kit_multi_users_select,
+        :block_kit_number_input,
         :block_kit_plain_text_input,
         :block_kit_radio_buttons,
         :block_kit_rich_text_input,

@@ -11,7 +11,14 @@ module BlockKit
       autoload :Quote, "block_kit/layout/rich_text/quote"
       autoload :Section, "block_kit/layout/rich_text/section"
 
-      attribute :elements, Types::Array.of(RichText::List, RichText::Preformatted, RichText::Quote, RichText::Section)
+      SUPPORTED_ELEMENTS = [
+        RichText::List,
+        RichText::Preformatted,
+        RichText::Quote,
+        RichText::Section
+      ].freeze
+
+      attribute :elements, Types::Array.of(Types::Blocks.new(*SUPPORTED_ELEMENTS))
 
       validates :elements, presence: true, "block_kit/validators/associated": true
 

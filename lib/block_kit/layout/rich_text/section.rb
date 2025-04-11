@@ -5,7 +5,7 @@ module BlockKit
     class RichText::Section < Block
       self.type = :rich_text_section
 
-      attribute :elements, Types::Array.of(*RichText::Elements.all)
+      attribute :elements, Types::Array.of(Types::Blocks.new(*RichText::Elements.all))
 
       validates :elements, presence: true, "block_kit/validators/associated": true
 

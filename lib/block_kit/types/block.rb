@@ -8,10 +8,13 @@ module BlockKit
     # Most block types can simply be cast from an object of the same type or a Hash with
     # the object's attributes.
     class Block < ActiveModel::Type::Value
-      class_attribute :instances, default: {}
+      class_attribute :instances, default: {
+        Composition::PlainText => PlainText.instance,
+        Composition::Mrkdwn => Mrkdwn.instance
+      }
 
       def self.new(block_class)
-        instances[block_class.type] ||= super
+        instances[block_class] ||= super
       end
 
       class << self
@@ -26,8 +29,6 @@ module BlockKit
       end
 
       def cast(value)
-        return value if value.is_a?(@block_class)
-
         case value
         when @block_class
           value

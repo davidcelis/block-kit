@@ -6,7 +6,7 @@ module BlockKit
       extend ActiveSupport::Concern
 
       included do
-        attribute :placeholder, Types::PlainText.instance
+        attribute :placeholder, Types::Block.of_type(Composition::PlainText)
 
         validates :placeholder, presence: true, length: {maximum: 150}, allow_nil: true
       end

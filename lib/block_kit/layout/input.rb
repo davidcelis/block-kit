@@ -13,16 +13,15 @@ module BlockKit
         Elements::ConversationsSelect,
         Elements::DatePicker,
         Elements::DatetimePicker,
-        Elements::DecimalInput,
         Elements::EmailTextInput,
         Elements::ExternalSelect,
         Elements::FileInput,
-        Elements::IntegerInput,
         Elements::MultiChannelsSelect,
         Elements::MultiConversationsSelect,
         Elements::MultiExternalSelect,
         Elements::MultiStaticSelect,
         Elements::MultiUsersSelect,
+        Elements::NumberInput,
         Elements::PlainTextInput,
         Elements::RadioButtons,
         Elements::RichTextInput,
@@ -32,9 +31,9 @@ module BlockKit
         Elements::URLTextInput
       ].freeze
 
-      attribute :label, Types::PlainText.instance
+      attribute :label, Types::Block.of_type(Composition::PlainText)
       attribute :element, Types::Blocks.new(*SUPPORTED_ELEMENTS)
-      attribute :hint, Types::PlainText.instance
+      attribute :hint, Types::Block.of_type(Composition::PlainText)
       attribute :optional, :boolean
 
       validates :label, presence: true, length: {maximum: 2000}

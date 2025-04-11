@@ -11,7 +11,7 @@ module BlockKit
         Composition::PlainText
       ].freeze
 
-      attribute :elements, Types::Array.of(*SUPPORTED_ELEMENTS)
+      attribute :elements, Types::Array.of(Types::Blocks.new(*SUPPORTED_ELEMENTS))
 
       validates :elements, presence: true, length: {maximum: 10, message: "is too long (maximum is %{count} elements)"}, "block_kit/validators/associated": true
 

@@ -5,9 +5,9 @@ module BlockKit
     class Option < Block
       self.type = :option
 
-      attribute :text, Types::PlainText.instance
+      attribute :text, Types::Block.of_type(Composition::PlainText)
       attribute :value, :string
-      attribute :description, Types::PlainText.instance
+      attribute :description, Types::Block.of_type(Composition::PlainText)
       attribute :initial, :boolean
 
       validates :text, presence: true, length: {maximum: 75}

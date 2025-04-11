@@ -7,7 +7,7 @@ module BlockKit
 
       include Concerns::HasOptions.new(limit: 100)
 
-      attribute :label, Types::PlainText.instance
+      attribute :label, Types::Block.of_type(Composition::PlainText)
 
       validates :label, presence: true, length: {maximum: 75}
 

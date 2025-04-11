@@ -7,7 +7,7 @@ module BlockKit
 
       self.type = :header
 
-      attribute :text, Types::PlainText.instance
+      attribute :text, Types::Block.of_type(Composition::PlainText)
 
       validates :text, presence: true, length: {maximum: MAX_LENGTH}
 

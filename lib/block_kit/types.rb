@@ -6,6 +6,7 @@ module BlockKit
     autoload :Block, "block_kit/types/block"
     autoload :Blocks, "block_kit/types/blocks"
     autoload :Mrkdwn, "block_kit/types/text"
+    autoload :NumberInput, "block_kit/types/number_input"
     autoload :PlainText, "block_kit/types/text"
     autoload :Text, "block_kit/types/text"
   end

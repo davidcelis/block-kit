@@ -9,17 +9,38 @@ RSpec::Matchers.define :have_attribute do |attribute_name|
     object.is_a?(Class) ? object : object.class
   end
 
-  define_method :get_attribute do |responder|
+  define_method :get_active_model_type do |responder|
     responder.respond_to?(:attribute_types) && responder.attribute_types[attribute_name.to_s]
   end
 
   match do |object|
     responder = get_class(object)
-    attribute = get_attribute(responder)
+    active_model_type = get_active_model_type(responder)
 
-    next !!attribute unless @expected_type
+    next active_model_type unless @expected_type
 
-    attribute.type == @expected_type && (@item_types.nil? || (attribute.type == :array && attribute.item_types.map(&:type).sort == @item_types.sort))
+    @actual_type = active_model_type.type
+    @actual_item_types = []
+
+    if @expected_item_types
+      @actual_item_types = if @expected_type == :block_kit_block
+        active_model_type.block_types
+      elsif active_model_type.item_type.type == :block_kit_block
+        active_model_type.item_type.block_classes
+      else
+        [active_model_type.item_type]
+      end
+
+      @actual_item_types = @actual_item_types.map do |item_type|
+        if item_type.is_a?(Class) && item_type < BlockKit::Block
+          :"block_kit_#{item_type.type}"
+        else
+          item_type.type
+        end
+      end
+    end
+
+    @expected_type == @actual_type && (@expected_item_types.nil? || @expected_item_types.sort == @actual_item_types.sort)
   end
 
   chain :with_type do |expected_type|
@@ -27,30 +48,22 @@ RSpec::Matchers.define :have_attribute do |attribute_name|
   end
 
   chain :containing do |*item_types|
-    raise ArgumentError, "Cannot chain `with_type' and `containing' when `with_type' is not `:array'" unless @expected_type == :array
+    raise ArgumentError, "Cannot chain `with_type' and `containing' when `with_type' is not `:array' or `:block_kit_block`" unless @expected_type == :array || @expected_type == :block_kit_block
 
-    @item_types = item_types
-  end
-
-  chain :supporting do |*block_types|
-    raise ArgumentError, "Cannot chain `with_type' and `supporting' when `with_type' is not `:array'" unless @expected_type == :block_kit_block
-
-    @block_types = block_types
+    @expected_item_types = item_types
   end
 
   failure_message do |object|
     responder = get_class(object)
-    attribute = get_attribute(responder)
+    active_model_type = get_active_model_type(responder)
 
     message = "expected #{responder} to have attribute `#{attribute_name}'"
     message += " with type `#{@expected_type}'" if @expected_type
-    message += " containing `#{@item_types}'" if @item_types
-    message += " supporting `#{@block_types}'" if @block_types
+    message += " containing `#{@expected_item_types}'" if @expected_item_types
 
-    message += if attribute.present?
-      msg = ", but it's type is `#{attribute.type}'"
-      msg += " containing `#{attribute.item_types.map(&:type)}'" if @item_types
-      msg += " supporting `#{attribute.block_types.map(&:type)}'" if @block_types
+    message += if active_model_type.present?
+      msg = ", but its type is `#{@actual_type}'"
+      msg += " containing `#{@actual_item_types}'" if @actual_item_types
       msg
     else
       ", but it doesn't"
@@ -64,8 +77,7 @@ RSpec::Matchers.define :have_attribute do |attribute_name|
 
     message = "expected #{responder} not to have attribute `#{attribute_name}'"
     message += " with type `#{@expected_type}'" if @expected_type
-    message += " containing `#{@item_types}'" if @item_types
-    message += " supporting `#{@block_types}'" if @block_types
+    message += " containing `#{@expected_item_types}'" if @expected_item_types
     message += ", but it does"
 
     message
