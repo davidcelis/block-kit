@@ -24,6 +24,13 @@ RSpec.describe BlockKit::Layout::Header, type: :model do
       header = described_class.new(text: "Hello, world!", emoji: false)
       expect(header.text.emoji).to be false
     end
+
+    it "initializes an empty text if none is provided" do
+      header = described_class.new(emoji: false)
+      expect(header.text).to be_a(BlockKit::Composition::PlainText)
+      expect(header.text.text).to be_nil
+      expect(header.text.emoji).to be false
+    end
   end
 
   context "attributes" do

@@ -10,6 +10,7 @@ module BlockKit
     autoload :Header, "block_kit/layout/header"
     autoload :Image, "block_kit/layout/image"
     autoload :Input, "block_kit/layout/input"
+    autoload :Markdown, "block_kit/layout/markdown"
     autoload :RichText, "block_kit/layout/rich_text"
   end
 end
