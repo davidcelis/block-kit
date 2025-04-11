@@ -83,7 +83,7 @@ RSpec.describe BlockKit::Types::Array do
           array[0..1] = []
           expect(array).to eq(["baz"])
         end
-        
+
         it "keeps valid values while removing nil ones in multi-assignment" do
           array[0..2] = [123, nil, 456]
           expect(array).to eq(["123", "456"])
@@ -146,7 +146,7 @@ RSpec.describe BlockKit::Types::Array do
         expect(array[0]).to be_a(BlockKit::Composition::Option)
         expect(array[0].value).to eq("value3")
       end
-      
+
       it "replaces a range with array of values" do
         array[0..1] = [option3]
         expect(array.length).to eq(1)
@@ -159,13 +159,13 @@ RSpec.describe BlockKit::Types::Array do
         expect(array.length).to eq(1)
         expect(array[0].value).to eq("value2") # Original removed, second item became first
       end
-      
+
       it "filters out nil values after assignment" do
         array[0] = nil
         expect(array.length).to eq(1)
         expect(array[0].value).to eq("value2")
       end
-      
+
       it "keeps valid values while removing invalid ones in multi-assignment" do
         array.push(option1) # Now have: option1, option2, option1
         array[0..2] = [option3, "invalid_option", option2]
@@ -288,13 +288,13 @@ RSpec.describe BlockKit::Types::Array do
         expect(array.length).to eq(1)
         expect(array[0]).to be_a(test_block_b_class) # Original removed, second item became first
       end
-      
+
       it "filters out nil values after assignment" do
         array[0] = nil
         expect(array.length).to eq(1)
         expect(array[0]).to be_a(test_block_b_class)
       end
-      
+
       it "keeps valid values while removing invalid ones in multi-assignment" do
         # Now have: block_a, block_b
         array[0..1] = [block_a_instance, {type: "unknown_type"}, block_b_instance]
