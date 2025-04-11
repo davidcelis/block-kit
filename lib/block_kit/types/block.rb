@@ -18,7 +18,7 @@ module BlockKit
         alias_method :of_type, :new
       end
 
-      attr_reader :type
+      attr_reader :type, :block_class
 
       def initialize(block_class)
         @block_class = block_class

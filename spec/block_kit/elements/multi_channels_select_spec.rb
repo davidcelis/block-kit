@@ -30,7 +30,7 @@ RSpec.describe BlockKit::Elements::MultiChannelsSelect, type: :model do
     it_behaves_like "a block that has a placeholder"
     it_behaves_like "a multi select"
 
-    it { is_expected.to have_attribute(:initial_channels).with_type(:array, :string) }
+    it { is_expected.to have_attribute(:initial_channels).with_type(:array).containing(:string) }
   end
 
   context "validations" do

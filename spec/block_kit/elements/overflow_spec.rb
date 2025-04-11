@@ -26,7 +26,7 @@ RSpec.describe BlockKit::Elements::Overflow, type: :model do
   end
 
   context "attributes" do
-    it { is_expected.to have_attribute(:options).with_type(:array, :block_kit_overflow_option) }
+    it { is_expected.to have_attribute(:options).with_type(:array).containing(:block_kit_overflow_option) }
 
     it_behaves_like "a block with an action_id"
     it_behaves_like "a block that is confirmable"

@@ -19,12 +19,17 @@ RSpec::Matchers.define :have_attribute do |attribute_name|
 
     next !!attribute unless @expected_type
 
-    attribute.type == @expected_type && (@item_type.nil? || (attribute.type == :array && attribute.item_type.type == @item_type))
+    attribute.type == @expected_type && (@item_types.nil? || (attribute.type == :array && attribute.item_types.map(&:type).sort == @item_types.sort))
   end
 
-  chain :with_type do |expected_type, item_type = nil|
+  chain :with_type do |expected_type|
     @expected_type = expected_type
-    @item_type = item_type
+  end
+
+  chain :containing do |*item_types|
+    raise ArgumentError, "Cannot chain `with_type' and `containing' when `with_type' is not `:array'" unless @expected_type == :array
+
+    @item_types = item_types
   end
 
   failure_message do |object|
@@ -33,10 +38,10 @@ RSpec::Matchers.define :have_attribute do |attribute_name|
 
     message = "expected #{responder} to have attribute `#{attribute_name}'"
     message += " with type `#{@expected_type}'" if @expected_type
-    message += " and item type `#{@item_type}'" if @item_type
+    message += " containing `#{@item_types}'" if @item_types
 
     message += if attribute.present?
-      ", but it's type is `#{attribute.type}'#{" with item type `#{attribute.item_type.type}'" if @item_type}"
+      ", but it's type is `#{attribute.type}'#{" containing `#{attribute.item_types.map(&:type)}'" if @item_types}"
     else
       ", but it doesn't"
     end
@@ -49,7 +54,7 @@ RSpec::Matchers.define :have_attribute do |attribute_name|
 
     message = "expected #{responder} not to have attribute `#{attribute_name}'"
     message += " with type `#{@expected_type}'" if @expected_type
-    message += " and item type `#{@item_type}'" if @item_type
+    message += " containing `#{@item_types}'" if @item_types
     message += ", but it does"
 
     message

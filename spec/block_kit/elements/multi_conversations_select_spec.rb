@@ -39,7 +39,7 @@ RSpec.describe BlockKit::Elements::MultiConversationsSelect, type: :model do
     it_behaves_like "a conversation selector"
     it_behaves_like "a multi select"
 
-    it { is_expected.to have_attribute(:initial_conversations).with_type(:array, :string) }
+    it { is_expected.to have_attribute(:initial_conversations).with_type(:array).containing(:string) }
     it { is_expected.to have_attribute(:default_to_current_conversation).with_type(:boolean) }
   end
 

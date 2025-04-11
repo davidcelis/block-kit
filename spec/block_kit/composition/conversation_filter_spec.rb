@@ -29,7 +29,7 @@ RSpec.describe BlockKit::Composition::ConversationFilter, type: :model do
   end
 
   context "attributes" do
-    it { is_expected.to have_attribute(:include).with_type(:array, :string) }
+    it { is_expected.to have_attribute(:include).with_type(:array).containing(:string) }
     it { is_expected.to have_attribute(:exclude_external_shared_channels).with_type(:boolean) }
     it { is_expected.to have_attribute(:exclude_bot_users).with_type(:boolean) }
   end

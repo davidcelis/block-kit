@@ -1,7 +1,7 @@
 require "spec_helper"
 
 RSpec.shared_examples_for "a block that has options" do |limit:, select: nil, groups: 0|
-  it { is_expected.to have_attribute(:options).with_type(:array, :block_kit_option) }
+  it { is_expected.to have_attribute(:options).with_type(:array).containing(:block_kit_option) }
 
   describe "#as_json" do
     it "serializes options as JSON" do

@@ -24,7 +24,7 @@ RSpec.describe BlockKit::Elements::MultiUsersSelect, type: :model do
   end
 
   context "attributes" do
-    it { is_expected.to have_attribute(:initial_users).with_type(:array, :string) }
+    it { is_expected.to have_attribute(:initial_users).with_type(:array).containing(:string) }
 
     it_behaves_like "a block with an action_id"
     it_behaves_like "a block that is confirmable"
