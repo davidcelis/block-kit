@@ -98,11 +98,11 @@ RSpec.describe BlockKit::Types::Array do
       it "returns new, untyped arrays when not modifying in place" do
         new_array = array + [123, 456]
         expect(new_array).to eq(["foo", "bar", "baz", 123, 456])
-        expect(new_array).not_to be_a(BlockKit::Types::Array::TypedArray)
+        expect(new_array).not_to be_a(BlockKit::TypedArray)
 
         new_array = array.map { |item| item.to_sym }
         expect(new_array).to eq([:foo, :bar, :baz])
-        expect(new_array).not_to be_a(BlockKit::Types::Array::TypedArray)
+        expect(new_array).not_to be_a(BlockKit::TypedArray)
       end
     end
   end
@@ -182,7 +182,7 @@ RSpec.describe BlockKit::Types::Array do
       array = type.cast([option1, option2])
       new_array = array + [{value: "value3", text: "Text 3"}]
 
-      expect(new_array).not_to be_a(BlockKit::Types::Array::TypedArray)
+      expect(new_array).not_to be_a(BlockKit::TypedArray)
       expect(new_array.last).to be_a(Hash)
 
       new_array = array.map(&:as_json)
