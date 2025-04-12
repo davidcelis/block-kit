@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module BlockKit
   class Blocks
     attr_reader :blocks
@@ -5,7 +7,7 @@ module BlockKit
     def initialize
       @blocks = []
 
-      yield self if block_given?
+      yield(self) if block_given?
     end
 
     def divider(block_id: nil)

@@ -1,5 +1,7 @@
-# Source: https://github.com/sciencehistory/kithe/blob/master/app/validators/array_inclusion_validator.rb
+# frozen_string_literal: true
 
+# Source: https://github.com/sciencehistory/kithe/blob/master/app/validators/array_inclusion_validator.rb
+#
 # Like the default Rails inclusion validator, but the built-in Rails
 # validator won't work on an _array_ of things.
 #
