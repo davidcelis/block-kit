@@ -26,8 +26,8 @@ module BlockKit
         Elements::WorkflowButton
       ].freeze
 
-      attribute :text, Types::Text.instance
-      attribute :fields, Types::Array.of(Types::Text.instance)
+      attribute :text, Types::Block.of_type(Composition::Text)
+      attribute :fields, Types::Array.of(Composition::Text)
       attribute :accessory, Types::Blocks.new(*SUPPORTED_ELEMENTS)
       attribute :expand, :boolean
 

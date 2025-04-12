@@ -9,6 +9,7 @@ module BlockKit
     # the object's attributes.
     class Block < ActiveModel::Type::Value
       class_attribute :instances, default: {
+        Composition::Text => Text.instance,
         Composition::PlainText => PlainText.instance,
         Composition::Mrkdwn => Mrkdwn.instance
       }

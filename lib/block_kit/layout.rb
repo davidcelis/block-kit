@@ -13,5 +13,6 @@ module BlockKit
     autoload :Markdown, "block_kit/layout/markdown"
     autoload :RichText, "block_kit/layout/rich_text"
     autoload :Section, "block_kit/layout/section"
+    autoload :Video, "block_kit/layout/video"
   end
 end
