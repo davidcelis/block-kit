@@ -17,9 +17,14 @@ module BlockKit
         when Composition::PlainText, Composition::Mrkdwn, NilClass
           value
         when Hash
-          # Prefer Mrkdwn over PlainText except in the explicit case where only
-          # the `:text` and `:emoji` keys are provided
-          if value.key?(:verbatim) || !value.key?(:emoji)
+          # Check for a `:type` key, otherwise prefer Mrkdwn over PlainText except
+          # in the explicit case where only the `:text` and `:emoji` keys are provided
+          type = value[:type]&.to_sym
+          if type == :mrkdwn
+            Mrkdwn.instance.cast(value)
+          elsif type == :plain_text
+            PlainText.instance.cast(value)
+          elsif value.key?(:verbatim) || !value.key?(:emoji)
             Mrkdwn.instance.cast(value)
           else
             PlainText.instance.cast(value)

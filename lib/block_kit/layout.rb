@@ -12,5 +12,6 @@ module BlockKit
     autoload :Input, "block_kit/layout/input"
     autoload :Markdown, "block_kit/layout/markdown"
     autoload :RichText, "block_kit/layout/rich_text"
+    autoload :Section, "block_kit/layout/section"
   end
 end

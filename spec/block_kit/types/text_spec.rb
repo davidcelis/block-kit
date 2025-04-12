@@ -49,6 +49,35 @@ RSpec.describe BlockKit::Types::Text do
         expect(result.verbatim).to be_nil
       end
 
+      context "when the value has a `type` key" do
+        let(:value) { super().merge(type: "plain_text") }
+
+        it "returns a block based on the type" do
+          expect(result).to be_a(BlockKit::Composition::PlainText)
+          expect(result.text).to eq("Hello, world!")
+        end
+
+        context "when the other keys do not match the type" do
+          let(:value) { super().merge(type: "mrkdwn", emoji: true) }
+
+          it "ignores the other keys" do
+            expect(result).to be_a(BlockKit::Composition::Mrkdwn)
+            expect(result.text).to eq("Hello, world!")
+            expect(result.verbatim).to be_nil
+          end
+        end
+
+        context "when the type is not recognized" do
+          let(:value) { super().merge(type: "unknown") }
+
+          it "returns a Mrkdwn block" do
+            expect(result).to be_a(BlockKit::Composition::Mrkdwn)
+            expect(result.text).to eq("Hello, world!")
+            expect(result.verbatim).to be_nil
+          end
+        end
+      end
+
       context "when the value has a `verbatim` key" do
         let(:value) { super().merge(verbatim: false) }
 
