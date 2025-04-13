@@ -37,6 +37,10 @@ module BlockKit
       validate :has_text_or_fields
       validate :fields_are_valid
 
+      def expand?
+        !!expand
+      end
+
       def as_json(*)
         super.merge(
           text: text&.as_json,

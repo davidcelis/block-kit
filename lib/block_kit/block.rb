@@ -20,6 +20,10 @@ module BlockKit
       {type: self.class.type.to_s}
     end
 
+    def self.inspect
+      "#{name}(#{attribute_types.map { |k, v| "#{k}: #{v.type}" }.join(", ")})"
+    end
+
     def inspect
       "#<#{self.class} #{attributes.map { |k, v| "#{k}: #{v.inspect}" }.join(", ")}>"
     end

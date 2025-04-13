@@ -42,6 +42,18 @@ module BlockKit
       validates :dispatch_action, inclusion: {in: [nil, false], message: "can't be enabled for FileInputs"}, if: ->(input) { input.element.is_a?(Elements::FileInput) }
       validates :hint, length: {maximum: 2000}, allow_nil: true
 
+      def optional?
+        !!optional
+      end
+
+      def required?
+        !optional?
+      end
+
+      def dispatch_action?
+        !!dispatch_action
+      end
+
       def as_json(*)
         super.merge(
           label: label&.as_json,

@@ -3,6 +3,8 @@
 module BlockKit
   # Custom array class that maintains type constraints during mutation
   class TypedArray < ::Array
+    attr_reader :item_type
+
     def initialize(item_type, *args)
       @item_type = item_type
 
@@ -108,9 +110,5 @@ module BlockKit
     # resulting array. If the resulting array is later assigned back to the
     # attribute backing the original array, type constraints will be enforced
     # at that time.
-
-    private
-
-    attr_reader :item_type
   end
 end
