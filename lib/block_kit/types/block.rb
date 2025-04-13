@@ -8,11 +8,7 @@ module BlockKit
     # Most block types can simply be cast from an object of the same type or a Hash with
     # the object's attributes.
     class Block < ActiveModel::Type::Value
-      class_attribute :instances, default: {
-        Composition::Text => Text.instance,
-        Composition::PlainText => PlainText.instance,
-        Composition::Mrkdwn => Mrkdwn.instance
-      }
+      class_attribute :instances, default: {}
 
       def self.new(block_class)
         instances[block_class] ||= super
@@ -21,6 +17,13 @@ module BlockKit
       class << self
         alias_method :of_type, :new
       end
+
+      # These block types have special casting logic.
+      instances[Composition::Text] = Text.instance
+      instances[Composition::PlainText] = PlainText.instance
+      instances[Composition::Mrkdwn] = Mrkdwn.instance
+      instances[Composition::Option] = Option.instance
+      instances[Composition::OverflowOption] = OverflowOption.instance
 
       attr_reader :type, :block_class
 
