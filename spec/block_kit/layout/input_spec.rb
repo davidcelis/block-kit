@@ -24,7 +24,7 @@ RSpec.describe BlockKit::Layout::Input, type: :model do
     end
 
     context "with all attributes" do
-      let(:attributes) { super().merge(hint: "This is a hint", optional: true) }
+      let(:attributes) { super().merge(hint: "This is a hint", optional: true, dispatch_action: true) }
 
       it "serializes to JSON" do
         expect(block.as_json).to eq({
@@ -34,6 +34,7 @@ RSpec.describe BlockKit::Layout::Input, type: :model do
             type: "plain_text_input",
             placeholder: {type: "plain_text", text: "Enter your name"}
           },
+          dispatch_action: true,
           hint: {type: "plain_text", text: "This is a hint"},
           optional: true
         })
@@ -42,6 +43,11 @@ RSpec.describe BlockKit::Layout::Input, type: :model do
   end
 
   context "attributes" do
+    it { is_expected.to have_attribute(:label).with_type(:block_kit_plain_text) }
+    it { is_expected.to have_attribute(:dispatch_action).with_type(:boolean) }
+    it { is_expected.to have_attribute(:optional).with_type(:boolean) }
+    it { is_expected.to have_attribute(:hint).with_type(:block_kit_plain_text) }
+
     it do
       is_expected.to have_attribute(:element).with_type(:block_kit_block).containing(
         :block_kit_channels_select,
@@ -93,6 +99,15 @@ RSpec.describe BlockKit::Layout::Input, type: :model do
 
       expect(block).not_to be_valid
       expect(block.errors[:element]).to include("is invalid: min_length must be less than or equal to max_length")
+    end
+
+    it "validates that dispatch_action is not true for FileInputs" do
+      subject.element = BlockKit::Elements::FileInput.new
+      expect(subject).to be_valid
+
+      subject.dispatch_action = true
+      expect(subject).not_to be_valid
+      expect(subject.errors[:dispatch_action]).to include("can't be enabled for FileInputs")
     end
   end
 end

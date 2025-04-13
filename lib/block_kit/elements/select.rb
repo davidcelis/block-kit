@@ -9,7 +9,7 @@ module BlockKit
       include Concerns::PlainTextEmojiAssignment.new(:placeholder)
 
       def initialize(attributes = {})
-        raise NotImplementedError, "#{self.class} is an abstract class and cannot be instantiated." if instance_of?(Select)
+        raise NotImplementedError, "#{self.class} is an abstract class and can't be instantiated." if instance_of?(Select)
 
         super
       end

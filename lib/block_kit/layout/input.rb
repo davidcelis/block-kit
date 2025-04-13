@@ -5,8 +5,6 @@ module BlockKit
     class Input < Base
       self.type = :input
 
-      include Concerns::Dispatchable
-
       SUPPORTED_ELEMENTS = [
         Elements::ChannelsSelect,
         Elements::Checkboxes,
@@ -33,6 +31,7 @@ module BlockKit
 
       attribute :label, Types::Block.of_type(Composition::PlainText)
       attribute :element, Types::Blocks.new(*SUPPORTED_ELEMENTS)
+      attribute :dispatch_action, :boolean
       attribute :hint, Types::Block.of_type(Composition::PlainText)
       attribute :optional, :boolean
 
@@ -40,12 +39,14 @@ module BlockKit
 
       validates :label, presence: true, length: {maximum: 2000}
       validates :element, presence: true, "block_kit/validators/associated": true
+      validates :dispatch_action, inclusion: {in: [nil, false], message: "can't be enabled for FileInputs"}, if: ->(input) { input.element.is_a?(Elements::FileInput) }
       validates :hint, length: {maximum: 2000}, allow_nil: true
 
       def as_json(*)
         super.merge(
           label: label&.as_json,
           element: element&.as_json,
+          dispatch_action: dispatch_action,
           hint: hint&.as_json,
           optional: optional
         ).compact

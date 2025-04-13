@@ -11,7 +11,7 @@ module BlockKit
     class_attribute :type, default: nil
 
     def initialize(attributes = {})
-      raise NotImplementedError, "#{self.class} is an abstract class and cannot be instantiated." if instance_of?(Block)
+      raise NotImplementedError, "#{self.class} is an abstract class and can't be instantiated." if instance_of?(Block)
 
       super
     end

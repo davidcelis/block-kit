@@ -69,9 +69,9 @@ RSpec.shared_examples_for "a block that has options" do |limit:, select: nil, gr
       ]
 
       expect(subject).not_to be_valid
-      expect(subject.errors["options[0]"]).to include("cannot be initial when other options are also as initial")
+      expect(subject.errors["options[0]"]).to include("can't be initial when other options are also as initial")
       expect(subject.errors["options[1]"]).to be_empty
-      expect(subject.errors["options[2]"]).to include("cannot be initial when other options are also as initial")
+      expect(subject.errors["options[2]"]).to include("can't be initial when other options are also as initial")
     end
   else
     it "is valid with multiple initial options" do

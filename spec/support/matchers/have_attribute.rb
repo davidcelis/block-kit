@@ -48,7 +48,7 @@ RSpec::Matchers.define :have_attribute do |attribute_name|
   end
 
   chain :containing do |*item_types|
-    raise ArgumentError, "Cannot chain `with_type' and `containing' when `with_type' is not `:array' or `:block_kit_block`" unless @expected_type == :array || @expected_type == :block_kit_block
+    raise ArgumentError, "can't chain `with_type' and `containing' when `with_type' is not `:array' or `:block_kit_block`" unless @expected_type == :array || @expected_type == :block_kit_block
 
     @expected_item_types = item_types
   end

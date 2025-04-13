@@ -51,7 +51,7 @@ module BlockKit
             def only_one_initial_option
               if options.present? && options.count(&:initial?) > 1
                 options.each_with_index do |option, index|
-                  errors.add("options[#{index}]", "cannot be initial when other options are also as initial") if option.initial?
+                  errors.add("options[#{index}]", "can't be initial when other options are also as initial") if option.initial?
                 end
               end
             end

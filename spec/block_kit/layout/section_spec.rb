@@ -123,13 +123,13 @@ RSpec.describe BlockKit::Layout::Section, type: :model do
       expect(section.errors[:base]).to include("must have either text or fields")
     end
 
-    it "validates that there cannot be more than 10 fields" do
+    it "validates that there can't be more than 10 fields" do
       section.fields = Array.new(11) { BlockKit::Composition::Mrkdwn.new(text: "Field") }
       expect(section).to be_invalid
       expect(section.errors[:fields]).to include("is too long (maximum is 10 fields)")
     end
 
-    it "validates that fields cannot have more than 2000 characters" do
+    it "validates that fields can't have more than 2000 characters" do
       section.fields = [
         BlockKit::Composition::Mrkdwn.new(text: "a" * 2000),
         BlockKit::Composition::PlainText.new(text: "a" * 2001),
