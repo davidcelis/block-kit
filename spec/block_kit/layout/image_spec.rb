@@ -47,6 +47,7 @@ RSpec.describe BlockKit::Layout::Image, type: :model do
     it { is_expected.to have_attribute(:title).with_type(:block_kit_plain_text) }
 
     it_behaves_like "a block with a block_id"
+    it_behaves_like "a block that has plain text emoji assignment", :title
   end
 
   context "validations" do

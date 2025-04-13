@@ -12,6 +12,8 @@ module BlockKit
       attribute :slack_file, Types::Block.of_type(Composition::SlackFile)
       attribute :title, Types::Block.of_type(Composition::PlainText)
 
+      include Concerns::PlainTextEmojiAssignment.new(:title)
+
       validates :alt_text, presence: true, length: {maximum: 2000}
       validates :image_url, presence: true, length: {maximum: 3000}, format: {with: URI::DEFAULT_PARSER.make_regexp(%w[http https]), message: "is not a valid URI", allow_blank: true}, allow_nil: true
       validates :title, presence: true, length: {maximum: 2000}, allow_nil: true

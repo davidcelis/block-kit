@@ -8,6 +8,7 @@ module BlockKit
       include Concerns::Dispatchable
       include Concerns::FocusableOnLoad
       include Concerns::HasPlaceholder
+      include Concerns::PlainTextEmojiAssignment.new(:placeholder)
 
       attribute :is_decimal_allowed, :boolean
       attribute :min_value, :decimal

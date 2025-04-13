@@ -30,6 +30,7 @@ RSpec.describe BlockKit::Elements::URLTextInput, type: :model do
     it_behaves_like "a block that is focusable on load"
     it_behaves_like "a block that is dispatchable"
     it_behaves_like "a block that has a placeholder"
+    it_behaves_like "a block that has plain text emoji assignment", :placeholder
   end
 
   context "validations" do

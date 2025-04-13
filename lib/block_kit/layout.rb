@@ -14,5 +14,20 @@ module BlockKit
     autoload :RichText, "block_kit/layout/rich_text"
     autoload :Section, "block_kit/layout/section"
     autoload :Video, "block_kit/layout/video"
+
+    def self.all
+      @all ||= [
+        Actions,
+        Context,
+        Divider,
+        Header,
+        Image,
+        Input,
+        Markdown,
+        RichText,
+        Section,
+        Video
+      ].freeze
+    end
   end
 end

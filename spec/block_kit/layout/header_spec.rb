@@ -6,10 +6,6 @@ RSpec.describe BlockKit::Layout::Header, type: :model do
   let(:attributes) { {text: "Hello, world!"} }
   subject(:header) { described_class.new(**attributes) }
 
-  it "has a type" do
-    expect(described_class.type.to_s).to eq("header")
-  end
-
   describe "#as_json" do
     it "serializes to JSON" do
       expect(header.as_json).to eq({
@@ -37,6 +33,7 @@ RSpec.describe BlockKit::Layout::Header, type: :model do
     it { is_expected.to have_attribute(:text).with_type(:block_kit_plain_text) }
 
     it_behaves_like "a block with a block_id"
+    it_behaves_like "a block that has plain text emoji assignment", :text
   end
 
   context "validations" do

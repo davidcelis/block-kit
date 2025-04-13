@@ -38,6 +38,7 @@ RSpec.describe BlockKit::Elements::ConversationsSelect, type: :model do
     it_behaves_like "a block that is confirmable"
     it_behaves_like "a block that is focusable on load"
     it_behaves_like "a block that has a placeholder"
+    it_behaves_like "a block that has plain text emoji assignment", :placeholder
     it_behaves_like "a conversation selector"
 
     it { is_expected.to have_attribute(:initial_conversation).with_type(:string) }

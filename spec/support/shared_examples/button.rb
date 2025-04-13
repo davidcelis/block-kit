@@ -31,4 +31,5 @@ RSpec.shared_examples_for "a button" do
   it { is_expected.to validate_length_of(:accessibility_label).is_at_most(75) }
 
   it_behaves_like "a block with an action_id"
+  it_behaves_like "a block that has plain text emoji assignment", :text
 end

@@ -69,6 +69,7 @@ RSpec.describe BlockKit::Layout::Input, type: :model do
     end
 
     it_behaves_like "a block with a block_id"
+    it_behaves_like "a block that has plain text emoji assignment", :label, :hint
 
     it "does not allow unsupported elements" do
       block.element = BlockKit::Elements::Button.new

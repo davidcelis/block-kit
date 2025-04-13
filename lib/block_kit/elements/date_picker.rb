@@ -8,6 +8,7 @@ module BlockKit
       include Concerns::Confirmable
       include Concerns::FocusableOnLoad
       include Concerns::HasPlaceholder
+      include Concerns::PlainTextEmojiAssignment.new(:placeholder)
 
       attribute :initial_date, :date
 

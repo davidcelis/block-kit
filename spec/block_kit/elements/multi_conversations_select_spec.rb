@@ -36,6 +36,7 @@ RSpec.describe BlockKit::Elements::MultiConversationsSelect, type: :model do
     it_behaves_like "a block that is confirmable"
     it_behaves_like "a block that is focusable on load"
     it_behaves_like "a block that has a placeholder"
+    it_behaves_like "a block that has plain text emoji assignment", :placeholder
     it_behaves_like "a conversation selector"
     it_behaves_like "a multi select"
 

@@ -10,6 +10,7 @@ module BlockKit
       include Concerns::Dispatchable
       include Concerns::FocusableOnLoad
       include Concerns::HasPlaceholder
+      include Concerns::PlainTextEmojiAssignment.new(:placeholder)
 
       attribute :initial_value, :string
       attribute :min_length, :integer

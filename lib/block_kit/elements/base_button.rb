@@ -9,6 +9,8 @@ module BlockKit
       attribute :style, :string
       attribute :accessibility_label, :string
 
+      include Concerns::PlainTextEmojiAssignment.new(:text)
+
       validates :text, presence: true, length: {maximum: 75}
       validates :style, presence: true, inclusion: {in: %w[primary danger]}, allow_nil: true
       validates :accessibility_label, presence: true, length: {maximum: 75}, allow_nil: true

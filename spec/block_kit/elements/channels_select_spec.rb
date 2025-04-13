@@ -34,6 +34,7 @@ RSpec.describe BlockKit::Elements::ChannelsSelect, type: :model do
     it_behaves_like "a block that is confirmable"
     it_behaves_like "a block that is focusable on load"
     it_behaves_like "a block that has a placeholder"
+    it_behaves_like "a block that has plain text emoji assignment", :placeholder
 
     it { is_expected.to have_attribute(:initial_channel).with_type(:string) }
     it { is_expected.to have_attribute(:response_url_enabled).with_type(:boolean) }

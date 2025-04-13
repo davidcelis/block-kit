@@ -36,6 +36,8 @@ module BlockKit
       attribute :hint, Types::Block.of_type(Composition::PlainText)
       attribute :optional, :boolean
 
+      include Concerns::PlainTextEmojiAssignment.new(:label, :hint)
+
       validates :label, presence: true, length: {maximum: 2000}
       validates :element, presence: true, "block_kit/validators/associated": true
       validates :hint, length: {maximum: 2000}, allow_nil: true
