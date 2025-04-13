@@ -27,21 +27,29 @@ module BlockKit
             super(*args).merge(options: options&.map(&:as_json)).tap do |json|
               case select
               when :single
-                json[:initial_option] = initial_option&.as_json
+                json[:initial_option] = initial_option&.as_json&.presence
               when :multi
-                json[:initial_options] = initial_options&.map(&:as_json)
+                json[:initial_options] = initial_options&.map(&:as_json)&.presence
               end
             end.compact
           end
 
           case select
           when :single
-            def initial_option
-              options&.find(&:initial?)
+            define_method :initial_option do
+              if groups > 0
+                options&.find(&:initial?) || option_groups&.flat_map(&:options)&.find(&:initial?)
+              else
+                options&.find(&:initial?)
+              end
             end
           when :multi
-            def initial_options
-              options&.select(&:initial?)&.presence
+            define_method :initial_options do
+              if groups > 0
+                options&.select(&:initial?) || option_groups&.flat_map(&:options)&.select(&:initial?)
+              else
+                options&.select(&:initial?)
+              end
             end
           end
 
