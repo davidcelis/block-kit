@@ -18,6 +18,17 @@ module BlockKit
 
       validates :include, presence: true, "block_kit/validators/array_inclusion": {in: VALID_INCLUDES, message: "contains invalid values: %{rejected_values}"}, allow_nil: true
 
+      VALID_INCLUDES.each do |value|
+        define_method(:"include_#{value}?") do
+          !!include&.member?(value)
+        end
+
+        define_method(:"include_#{value}!") do
+          self.include ||= []
+          self.include.add(value)
+        end
+      end
+
       def as_json(*)
         {
           include: include&.to_a,

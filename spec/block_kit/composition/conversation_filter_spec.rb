@@ -11,6 +11,15 @@ RSpec.describe BlockKit::Composition::ConversationFilter, type: :model do
     }
   end
 
+  it "declares predicate and mutator methods for each include value" do
+    described_class::VALID_INCLUDES.each do |value|
+      expect(conversation_filter.public_send(:"include_#{value}?")).to be(false)
+      conversation_filter.public_send(:"include_#{value}!")
+      expect(conversation_filter.include).to include(value)
+      expect(conversation_filter.public_send(:"include_#{value}?")).to be(true)
+    end
+  end
+
   describe "#as_json" do
     it "serializes to JSON" do
       expect(conversation_filter.as_json).to eq({

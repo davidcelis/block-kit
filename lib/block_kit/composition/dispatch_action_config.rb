@@ -11,8 +11,18 @@ module BlockKit
       ].freeze
 
       attribute :trigger_actions_on, Types::Set.of(:string)
-
       validates :trigger_actions_on, presence: true, "block_kit/validators/array_inclusion": {in: VALID_TRIGGERS}
+
+      VALID_TRIGGERS.each do |value|
+        define_method(:"trigger_actions_on_#{value}?") do
+          !!trigger_actions_on&.member?(value)
+        end
+
+        define_method(:"trigger_actions_on_#{value}!") do
+          self.trigger_actions_on ||= []
+          self.trigger_actions_on.add(value)
+        end
+      end
 
       def as_json(*)
         {
