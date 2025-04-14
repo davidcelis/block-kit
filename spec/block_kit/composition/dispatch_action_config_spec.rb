@@ -14,7 +14,7 @@ RSpec.describe BlockKit::Composition::DispatchActionConfig, type: :model do
   end
 
   context "attributes" do
-    it { is_expected.to have_attribute(:trigger_actions_on).with_type(:array).containing(:string) }
+    it { is_expected.to have_attribute(:trigger_actions_on).with_type(:set).containing(:string) }
   end
 
   context "validations" do

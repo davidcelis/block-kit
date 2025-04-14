@@ -7,10 +7,10 @@ module BlockKit
 
       include Concerns::ConversationSelection
 
-      attribute :initial_conversations, Types::Array.of(:string)
+      attribute :initial_conversations, Types::Set.of(:string)
 
       def as_json(*)
-        super.merge(initial_conversations: initial_conversations).compact
+        super.merge(initial_conversations: initial_conversations&.to_a).compact
       end
     end
   end

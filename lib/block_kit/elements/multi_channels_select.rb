@@ -5,10 +5,10 @@ module BlockKit
     class MultiChannelsSelect < MultiSelect
       self.type = :multi_channels_select
 
-      attribute :initial_channels, Types::Array.of(:string)
+      attribute :initial_channels, Types::Set.of(:string)
 
       def as_json(*)
-        super.merge(initial_channels: initial_channels).compact
+        super.merge(initial_channels: initial_channels&.to_a).compact
       end
     end
   end

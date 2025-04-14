@@ -5,10 +5,10 @@ module BlockKit
     class MultiUsersSelect < MultiSelect
       self.type = :multi_users_select
 
-      attribute :initial_users, Types::Array.of(:string)
+      attribute :initial_users, Types::Set.of(:string)
 
       def as_json(*)
-        super.merge(initial_users: initial_users).compact
+        super.merge(initial_users: initial_users&.to_a).compact
       end
     end
   end

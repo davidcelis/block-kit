@@ -128,7 +128,7 @@ RSpec.describe BlockKit::Layout::Input, type: :model do
         expect(block.element.response_url_enabled).to be false
         expect(block.element.focus_on_load).to be true
         expect(block.element.confirm.title.text).to eq("Confirm")
-        expect(block.element.filter.include).to eq(["im", "public"])
+        expect(block.element.filter.include.to_a).to eq(["im", "public"])
         expect(block.element.action_id).to eq("action_id")
       end
     end
@@ -234,7 +234,7 @@ RSpec.describe BlockKit::Layout::Input, type: :model do
         expect(block.element.placeholder.text).to eq("Enter your email")
         expect(block.element.placeholder.emoji).to be false
         expect(block.element.focus_on_load).to be true
-        expect(block.element.dispatch_action_config.trigger_actions_on).to eq(["on_enter_pressed"])
+        expect(block.element.dispatch_action_config.trigger_actions_on.to_a).to eq(["on_enter_pressed"])
         expect(block.element.action_id).to eq("action_id")
       end
     end
@@ -304,7 +304,7 @@ RSpec.describe BlockKit::Layout::Input, type: :model do
 
       it "creates a file input with the given attributes" do
         expect { subject }.to change { block.element }.to(an_instance_of(BlockKit::Elements::FileInput))
-        expect(block.element.filetypes).to eq(["png", "jpg"])
+        expect(block.element.filetypes.to_a).to eq(["png", "jpg"])
         expect(block.element.max_files).to eq(3)
         expect(block.element.action_id).to eq("action_id")
       end
@@ -341,7 +341,7 @@ RSpec.describe BlockKit::Layout::Input, type: :model do
         expect { subject }.to change { block.element }.to(an_instance_of(BlockKit::Elements::MultiChannelsSelect))
         expect(block.element.placeholder.text).to eq("Select some channels")
         expect(block.element.placeholder.emoji).to be false
-        expect(block.element.initial_channels).to eq(["C12345678", "C23456789"])
+        expect(block.element.initial_channels.to_a).to eq(["C12345678", "C23456789"])
         expect(block.element.max_selected_items).to eq(3)
         expect(block.element.focus_on_load).to be false
         expect(block.element.confirm.title.text).to eq("Confirm")
@@ -382,12 +382,12 @@ RSpec.describe BlockKit::Layout::Input, type: :model do
         expect { subject }.to change { block.element }.to(an_instance_of(BlockKit::Elements::MultiConversationsSelect))
         expect(block.element.placeholder.text).to eq("Select some conversations")
         expect(block.element.placeholder.emoji).to be false
-        expect(block.element.initial_conversations).to eq(["C12345678", "C23456789"])
+        expect(block.element.initial_conversations.to_a).to eq(["C12345678", "C23456789"])
         expect(block.element.max_selected_items).to eq(3)
         expect(block.element.default_to_current_conversation).to be true
         expect(block.element.focus_on_load).to be true
         expect(block.element.confirm.title.text).to eq("Confirm")
-        expect(block.element.filter.include).to eq(["im", "public"])
+        expect(block.element.filter.include.to_a).to eq(["im", "public"])
         expect(block.element.action_id).to eq("action_id")
       end
     end
@@ -552,7 +552,7 @@ RSpec.describe BlockKit::Layout::Input, type: :model do
         expect { subject }.to change { block.element }.to(an_instance_of(BlockKit::Elements::MultiUsersSelect))
         expect(block.element.placeholder.text).to eq("Select some users")
         expect(block.element.placeholder.emoji).to be false
-        expect(block.element.initial_users).to eq(["U12345678", "U23456789"])
+        expect(block.element.initial_users.to_a).to eq(["U12345678", "U23456789"])
         expect(block.element.max_selected_items).to eq(3)
         expect(block.element.focus_on_load).to be true
         expect(block.element.confirm.title.text).to eq("Confirm")
@@ -598,7 +598,7 @@ RSpec.describe BlockKit::Layout::Input, type: :model do
         expect(block.element.min_value).to eq(1)
         expect(block.element.max_value).to eq(10)
         expect(block.element.focus_on_load).to be true
-        expect(block.element.dispatch_action_config.trigger_actions_on).to eq(["on_enter_pressed"])
+        expect(block.element.dispatch_action_config.trigger_actions_on.to_a).to eq(["on_enter_pressed"])
         expect(block.element.action_id).to eq("action_id")
       end
     end
@@ -641,7 +641,7 @@ RSpec.describe BlockKit::Layout::Input, type: :model do
         expect(block.element.max_length).to eq(50)
         expect(block.element.multiline).to be false
         expect(block.element.focus_on_load).to be true
-        expect(block.element.dispatch_action_config.trigger_actions_on).to eq(["on_enter_pressed"])
+        expect(block.element.dispatch_action_config.trigger_actions_on.to_a).to eq(["on_enter_pressed"])
         expect(block.element.action_id).to eq("action_id")
       end
     end
@@ -717,7 +717,7 @@ RSpec.describe BlockKit::Layout::Input, type: :model do
         expect(block.element.placeholder.text).to eq("Type something")
         expect(block.element.initial_value).to eq(args[:initial_value])
         expect(block.element.focus_on_load).to be true
-        expect(block.element.dispatch_action_config.trigger_actions_on).to eq(["on_enter_pressed"])
+        expect(block.element.dispatch_action_config.trigger_actions_on.to_a).to eq(["on_enter_pressed"])
         expect(block.element.action_id).to eq("action_id")
       end
     end
@@ -914,7 +914,7 @@ RSpec.describe BlockKit::Layout::Input, type: :model do
         expect(block.element.placeholder.emoji).to be false
         expect(block.element.initial_value).to eq("https://example.com")
         expect(block.element.focus_on_load).to be true
-        expect(block.element.dispatch_action_config.trigger_actions_on).to eq(["on_enter_pressed"])
+        expect(block.element.dispatch_action_config.trigger_actions_on.to_a).to eq(["on_enter_pressed"])
         expect(block.element.action_id).to eq("action_id")
       end
     end

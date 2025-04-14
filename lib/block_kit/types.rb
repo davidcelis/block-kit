@@ -10,6 +10,7 @@ module BlockKit
     autoload :Option, "block_kit/types/option"
     autoload :OverflowOption, "block_kit/types/option"
     autoload :PlainText, "block_kit/types/text"
+    autoload :Set, "block_kit/types/set"
     autoload :Text, "block_kit/types/text"
   end
 end

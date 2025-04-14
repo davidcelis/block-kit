@@ -34,7 +34,7 @@ module BlockKit
   module Validators
     class ArrayInclusionValidator < ActiveModel::EachValidator
       def validate_each(record, attribute, value)
-        values = value || []
+        values = Array(value) || []
         not_allowed_values = []
 
         if options[:in]

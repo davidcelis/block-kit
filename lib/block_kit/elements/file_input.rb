@@ -7,7 +7,7 @@ module BlockKit
     class FileInput < Base
       self.type = :file_input
 
-      attribute :filetypes, Types::Array.of(:string)
+      attribute :filetypes, Types::Set.of(:string)
       attribute :max_files, :integer
 
       validates :filetypes, presence: true, allow_nil: true
@@ -15,7 +15,7 @@ module BlockKit
 
       def as_json(*)
         super.merge(
-          filetypes: filetypes,
+          filetypes: filetypes&.to_a,
           max_files: max_files
         ).compact
       end

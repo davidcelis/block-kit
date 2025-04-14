@@ -12,7 +12,7 @@ module BlockKit
         PRIVATE = "private"
       ].freeze
 
-      attribute :include, Types::Array.of(:string)
+      attribute :include, Types::Set.of(:string)
       attribute :exclude_external_shared_channels, :boolean
       attribute :exclude_bot_users, :boolean
 
@@ -20,7 +20,7 @@ module BlockKit
 
       def as_json(*)
         {
-          include: include&.uniq,
+          include: include&.to_a,
           exclude_external_shared_channels: exclude_external_shared_channels,
           exclude_bot_users: exclude_bot_users
         }.compact

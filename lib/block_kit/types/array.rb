@@ -26,7 +26,6 @@ module BlockKit
       end
 
       def cast(value)
-        # binding.irb if caller.join.include?("spec/block_kit/layout/rich_text/preformatted_spec.rb")
         return nil if value.nil?
 
         TypedArray.new(item_type, Array(value))

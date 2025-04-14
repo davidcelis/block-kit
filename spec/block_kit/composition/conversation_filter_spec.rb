@@ -29,7 +29,7 @@ RSpec.describe BlockKit::Composition::ConversationFilter, type: :model do
   end
 
   context "attributes" do
-    it { is_expected.to have_attribute(:include).with_type(:array).containing(:string) }
+    it { is_expected.to have_attribute(:include).with_type(:set).containing(:string) }
     it { is_expected.to have_attribute(:exclude_external_shared_channels).with_type(:boolean) }
     it { is_expected.to have_attribute(:exclude_bot_users).with_type(:boolean) }
   end
@@ -46,17 +46,17 @@ RSpec.describe BlockKit::Composition::ConversationFilter, type: :model do
 
     it "handles pushing new values" do
       conversation_filter.include << :mpim
-      expect(conversation_filter.include).to eq(["im", "mpim"])
+      expect(conversation_filter.include.to_a).to eq(["im", "mpim"])
     end
 
     it "handles assignment with symbols" do
       conversation_filter.include = [:public, :private]
-      expect(conversation_filter.include).to eq(["public", "private"])
+      expect(conversation_filter.include.to_a).to eq(["public", "private"])
     end
 
     it "handles appending arrays" do
       conversation_filter.include += [:public, :private]
-      expect(conversation_filter.include).to eq(["im", "public", "private"])
+      expect(conversation_filter.include.to_a).to eq(["im", "public", "private"])
     end
   end
 end

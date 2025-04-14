@@ -30,7 +30,7 @@ RSpec.describe BlockKit::Elements::FileInput, type: :model do
   end
 
   context "attributes" do
-    it { is_expected.to have_attribute(:filetypes).with_type(:array).containing(:string) }
+    it { is_expected.to have_attribute(:filetypes).with_type(:set).containing(:string) }
     it { is_expected.to have_attribute(:max_files).with_type(:integer) }
 
     it_behaves_like "a block with an action_id"

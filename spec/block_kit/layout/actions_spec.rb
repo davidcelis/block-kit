@@ -176,7 +176,7 @@ RSpec.describe BlockKit::Layout::Actions, type: :model do
         expect(block.elements.last.response_url_enabled).to be false
         expect(block.elements.last.focus_on_load).to be true
         expect(block.elements.last.confirm.title.text).to eq("Confirm")
-        expect(block.elements.last.filter.include).to eq(["im", "public"])
+        expect(block.elements.last.filter.include.to_a).to eq(["im", "public"])
         expect(block.elements.last.action_id).to eq("action_id")
       end
     end
@@ -320,7 +320,7 @@ RSpec.describe BlockKit::Layout::Actions, type: :model do
         expect { subject }.to change { block.elements.size }.by(1)
         expect(block.elements.last.placeholder.text).to eq("Select some channels")
         expect(block.elements.last.placeholder.emoji).to be false
-        expect(block.elements.last.initial_channels).to eq(["C12345678", "C23456789"])
+        expect(block.elements.last.initial_channels.to_a).to eq(["C12345678", "C23456789"])
         expect(block.elements.last.max_selected_items).to eq(3)
         expect(block.elements.last.focus_on_load).to be false
         expect(block.elements.last.confirm.title.text).to eq("Confirm")
@@ -361,12 +361,12 @@ RSpec.describe BlockKit::Layout::Actions, type: :model do
         expect { subject }.to change { block.elements.size }.by(1)
         expect(block.elements.last.placeholder.text).to eq("Select some conversations")
         expect(block.elements.last.placeholder.emoji).to be false
-        expect(block.elements.last.initial_conversations).to eq(["C12345678", "C23456789"])
+        expect(block.elements.last.initial_conversations.to_a).to eq(["C12345678", "C23456789"])
         expect(block.elements.last.max_selected_items).to eq(3)
         expect(block.elements.last.default_to_current_conversation).to be true
         expect(block.elements.last.focus_on_load).to be true
         expect(block.elements.last.confirm.title.text).to eq("Confirm")
-        expect(block.elements.last.filter.include).to eq(["im", "public"])
+        expect(block.elements.last.filter.include.to_a).to eq(["im", "public"])
         expect(block.elements.last.action_id).to eq("action_id")
       end
     end
@@ -532,7 +532,7 @@ RSpec.describe BlockKit::Layout::Actions, type: :model do
         expect { subject }.to change { block.elements.size }.by(1)
         expect(block.elements.last.placeholder.text).to eq("Select some users")
         expect(block.elements.last.placeholder.emoji).to be false
-        expect(block.elements.last.initial_users).to eq(["U12345678", "U23456789"])
+        expect(block.elements.last.initial_users.to_a).to eq(["U12345678", "U23456789"])
         expect(block.elements.last.max_selected_items).to eq(3)
         expect(block.elements.last.focus_on_load).to be true
         expect(block.elements.last.confirm.title.text).to eq("Confirm")
@@ -650,7 +650,7 @@ RSpec.describe BlockKit::Layout::Actions, type: :model do
         expect(block.elements.last.placeholder.text).to eq("Type something")
         expect(block.elements.last.initial_value).to eq(args[:initial_value])
         expect(block.elements.last.focus_on_load).to be true
-        expect(block.elements.last.dispatch_action_config.trigger_actions_on).to eq(["on_enter_pressed"])
+        expect(block.elements.last.dispatch_action_config.trigger_actions_on.to_a).to eq(["on_enter_pressed"])
         expect(block.elements.last.action_id).to eq("action_id")
       end
     end

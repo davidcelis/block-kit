@@ -30,7 +30,7 @@ module BlockKit
 
     # Override methods that modify the array to ensure type constraints
     def <<(item)
-      super(item_type.cast(item)).tap { |_| compact! }
+      super(item_type.cast(item)).tap(&:compact!)
     end
 
     def push(*items)

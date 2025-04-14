@@ -332,7 +332,7 @@ RSpec.describe BlockKit::Layout::Section, type: :model do
         expect(block.accessory.response_url_enabled).to be false
         expect(block.accessory.focus_on_load).to be true
         expect(block.accessory.confirm.title.text).to eq("Confirm")
-        expect(block.accessory.filter.include).to eq(["im", "public"])
+        expect(block.accessory.filter.include.to_a).to eq(["im", "public"])
         expect(block.accessory.action_id).to eq("action_id")
       end
     end
@@ -487,7 +487,7 @@ RSpec.describe BlockKit::Layout::Section, type: :model do
         expect { subject }.to change { block.accessory }.to(an_instance_of(BlockKit::Elements::MultiChannelsSelect))
         expect(block.accessory.placeholder.text).to eq("Select some channels")
         expect(block.accessory.placeholder.emoji).to be false
-        expect(block.accessory.initial_channels).to eq(["C12345678", "C23456789"])
+        expect(block.accessory.initial_channels.to_a).to eq(["C12345678", "C23456789"])
         expect(block.accessory.max_selected_items).to eq(3)
         expect(block.accessory.focus_on_load).to be false
         expect(block.accessory.confirm.title.text).to eq("Confirm")
@@ -528,12 +528,12 @@ RSpec.describe BlockKit::Layout::Section, type: :model do
         expect { subject }.to change { block.accessory }.to(an_instance_of(BlockKit::Elements::MultiConversationsSelect))
         expect(block.accessory.placeholder.text).to eq("Select some conversations")
         expect(block.accessory.placeholder.emoji).to be false
-        expect(block.accessory.initial_conversations).to eq(["C12345678", "C23456789"])
+        expect(block.accessory.initial_conversations.to_a).to eq(["C12345678", "C23456789"])
         expect(block.accessory.max_selected_items).to eq(3)
         expect(block.accessory.default_to_current_conversation).to be true
         expect(block.accessory.focus_on_load).to be true
         expect(block.accessory.confirm.title.text).to eq("Confirm")
-        expect(block.accessory.filter.include).to eq(["im", "public"])
+        expect(block.accessory.filter.include.to_a).to eq(["im", "public"])
         expect(block.accessory.action_id).to eq("action_id")
       end
     end
@@ -698,7 +698,7 @@ RSpec.describe BlockKit::Layout::Section, type: :model do
         expect { subject }.to change { block.accessory }.to(an_instance_of(BlockKit::Elements::MultiUsersSelect))
         expect(block.accessory.placeholder.text).to eq("Select some users")
         expect(block.accessory.placeholder.emoji).to be false
-        expect(block.accessory.initial_users).to eq(["U12345678", "U23456789"])
+        expect(block.accessory.initial_users.to_a).to eq(["U12345678", "U23456789"])
         expect(block.accessory.max_selected_items).to eq(3)
         expect(block.accessory.focus_on_load).to be true
         expect(block.accessory.confirm.title.text).to eq("Confirm")
