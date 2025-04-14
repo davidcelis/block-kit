@@ -650,6 +650,7 @@ RSpec.describe BlockKit::Layout::Actions, type: :model do
         expect(block.elements.last.placeholder.text).to eq("Type something")
         expect(block.elements.last.initial_value).to eq(args[:initial_value])
         expect(block.elements.last.focus_on_load).to be true
+        expect(block.elements.last.dispatch_action_config.trigger_actions_on).to eq(["on_enter_pressed"])
         expect(block.elements.last.action_id).to eq("action_id")
       end
     end

@@ -4,5 +4,6 @@
 - [ ] Try defining `as_json` in the base class to rely on `attributes` so most Block classes don't need to define their own
 - [ ] Alias certain block constants to have more human names:
   * `DispatchActionConfig` -> `DispatchActionConfiguration`
-  * `EmailTextInput` -> `EmailTextInput`
+  * `EmailTextInput` -> `EmailInput`
   * `Overflow` -> `OverflowMenu`
+  * `PlainTextInput` -> `TextInput`
