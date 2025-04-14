@@ -6,6 +6,19 @@ RSpec.describe BlockKit::Elements::MultiExternalSelect, type: :model do
   subject(:multi_external_select) { described_class.new(attributes) }
   let(:attributes) { {} }
 
+  it_behaves_like "a block that has a DSL method",
+    attribute: :initial_options,
+    as: :initial_option,
+    type: BlockKit::Composition::Option,
+    actual_fields: {text: "New Option", value: "new", description: "Description", emoji: false},
+    expected_fields: {
+      text: BlockKit::Composition::PlainText.new(text: "New Option", emoji: false),
+      value: "new",
+      description: BlockKit::Composition::PlainText.new(text: "Description", emoji: false)
+    },
+    required_fields: [:text, :value],
+    yields: false
+
   describe "#as_json" do
     it "serializes to JSON" do
       expect(multi_external_select.as_json).to eq({type: described_class.type.to_s})

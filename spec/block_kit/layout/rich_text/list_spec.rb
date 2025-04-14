@@ -23,37 +23,11 @@ RSpec.describe BlockKit::Layout::RichText::List, type: :model do
     }
   end
 
-  describe "#section" do
-    let(:args) { {} }
-    subject { block.section(**args) }
-
-    it "adds a RichText::Section to the elements" do
-      expect { subject }.to change { block.elements.size }.by(1)
-      expect(block.elements.last).to be_a(BlockKit::Layout::RichText::Section)
-    end
-
-    it "yields the section block" do
-      expect { |b| block.section(**args, &b) }.to yield_with_args(BlockKit::Layout::RichText::Section)
-    end
-
-    context "with optional args" do
-      let(:args) do
-        {
-          elements: [
-            {type: "text", text: "Item 1"},
-            {type: "text", text: "Item 2"}
-          ]
-        }
-      end
-
-      it "creates a rich text section block with the given attributes" do
-        expect { subject }.to change { block.elements.size }.by(1)
-        expect(block.elements.last.elements.size).to eq(2)
-        expect(block.elements.last.elements.first.text).to eq("Item 1")
-        expect(block.elements.last.elements.last.text).to eq("Item 2")
-      end
-    end
-  end
+  it_behaves_like "a block that has a DSL method",
+    attribute: :elements,
+    as: :section,
+    type: BlockKit::Layout::RichText::Section,
+    actual_fields: {elements: [BlockKit::Layout::RichText::Elements::Text.new(text: "Item 1")]}
 
   describe "#as_json" do
     it "serializes to JSON" do

@@ -17,8 +17,18 @@ module BlockKit
       validates :alt_text, presence: true, length: {maximum: 2000}
       validates :image_url, presence: true, length: {maximum: 3000}, format: {with: URI::DEFAULT_PARSER.make_regexp(%w[http https]), message: "is not a valid URI", allow_blank: true}, allow_nil: true
       validates :title, presence: true, length: {maximum: 2000}, allow_nil: true
-
       validate :slack_file_or_url_present
+
+      def slack_file(attrs = {})
+        attrs = attrs.with_indifferent_access
+        return super() unless attrs.key?(:id) || attrs.key?(:url)
+
+        raise ArgumentError, "mutually exclusive keywords: :id, :url" if attrs.key?(:id) && attrs.key?(:url)
+
+        self.slack_file = Composition::SlackFile.new(**attrs.slice(:id, :url))
+
+        self
+      end
 
       def as_json(*)
         super.merge(

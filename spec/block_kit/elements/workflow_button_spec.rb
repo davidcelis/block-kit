@@ -18,6 +18,11 @@ RSpec.describe BlockKit::Elements::WorkflowButton, type: :model do
     }
   end
 
+  it_behaves_like "a block that has a DSL method",
+    attribute: :workflow,
+    type: BlockKit::Composition::Workflow,
+    actual_fields: {trigger: BlockKit::Composition::Trigger.new}
+
   describe "#as_json" do
     it "serializes to JSON" do
       expect(button.as_json).to eq({

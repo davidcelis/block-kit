@@ -2,6 +2,7 @@ require "spec_helper"
 
 RSpec.shared_examples_for "a block that has a DSL method" do |attribute:, type:, actual_fields:, as: nil, expected_fields: nil, required_fields: [], mutually_exclusive_fields: [], yields: true|
   expected_fields ||= actual_fields
+  is_array_attribute = described_class.attribute_types[attribute.to_s].type == :array
 
   describe "##{as || attribute}" do
     let(:attributes) { {} }
@@ -20,10 +21,16 @@ RSpec.shared_examples_for "a block that has a DSL method" do |attribute:, type:,
       let(:args) { actual_fields }
 
       it "creates a value with the given attributes" do
-        expect { result }.to change { subject.public_send(attribute) }.to instance_of(type)
+        if is_array_attribute
+          expect { result }.to change { subject.public_send(attribute)&.length || 0 }.by(1)
+          expect(subject.public_send(attribute).last).to be_a(type)
+        else
+          expect { result }.to change { subject.public_send(attribute) }.to instance_of(type)
+        end
 
         actual_fields.each do |key, value|
           field = subject.public_send(attribute)
+          field = field.last if is_array_attribute
 
           next if key == :emoji && !field.is_a?(BlockKit::Composition::PlainText)
           expect(field.public_send(key)).to eq(expected_fields[key])

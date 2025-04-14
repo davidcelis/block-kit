@@ -6,6 +6,11 @@ RSpec.describe BlockKit::Elements::RichTextInput, type: :model do
   subject(:input) { described_class.new(attributes) }
   let(:attributes) { {} }
 
+  it_behaves_like "a block that has a DSL method",
+    attribute: :initial_value,
+    type: BlockKit::Layout::RichText,
+    actual_fields: {elements: [BlockKit::Layout::RichText::Section.new]}
+
   describe "#as_json" do
     it "serializes to JSON" do
       expect(input.as_json).to eq({type: described_class.type.to_s})

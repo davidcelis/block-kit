@@ -11,26 +11,19 @@ RSpec.describe BlockKit::Composition::OptionGroup, type: :model do
     }
   end
 
-  describe "#option" do
-    it "adds an option to the options array" do
-      expect { subject.option(text: "New Option", value: "new") }.to change { subject.options.length }.by(1)
-      expect(subject.options.last).to be_a(BlockKit::Composition::Option)
-      expect(subject.options.last.text.text).to eq("New Option")
-      expect(subject.options.last.value).to eq("new")
-    end
-
-    context "with optional args" do
-      it "adds an option with all attributes set" do
-        subject.option(text: "New Option", value: "new", description: "Description", initial: true, emoji: true)
-
-        expect(subject.options.last.text.text).to eq("New Option")
-        expect(subject.options.last.text.emoji).to be(true)
-        expect(subject.options.last.value).to eq("new")
-        expect(subject.options.last.description.text).to eq("Description")
-        expect(subject.options.last).to be_initial
-      end
-    end
-  end
+  it_behaves_like "a block that has a DSL method",
+    attribute: :options,
+    as: :option,
+    type: BlockKit::Composition::Option,
+    actual_fields: {text: "New Option", value: "new", description: "Description", initial: true, emoji: true},
+    expected_fields: {
+      text: BlockKit::Composition::PlainText.new(text: "New Option", emoji: true),
+      value: "new",
+      description: BlockKit::Composition::PlainText.new(text: "Description", emoji: true),
+      initial: true
+    },
+    required_fields: [:text, :value],
+    yields: false
 
   describe "#as_json" do
     it "serializes to JSON" do

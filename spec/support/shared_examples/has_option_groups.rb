@@ -3,6 +3,17 @@ require "spec_helper"
 RSpec.shared_examples_for "a block that has option groups" do |limit:, options_limit:|
   it_behaves_like "a block that has options", limit: options_limit
 
+  it_behaves_like "a block that has a DSL method",
+    attribute: :option_groups,
+    as: :option_group,
+    type: BlockKit::Composition::OptionGroup,
+    actual_fields: {label: "Some great options", options: [{text: "Option 1", value: "option_1", initial: true}], emoji: true},
+    expected_fields: {
+      label: BlockKit::Composition::PlainText.new(text: "Some great options", emoji: true),
+      options: [BlockKit::Composition::Option.new(text: "Option 1", value: "option_1", initial: true)]
+    },
+    required_fields: [:label]
+
   describe "#as_json" do
     it "serializes option groups as JSON" do
       subject.option_groups = [

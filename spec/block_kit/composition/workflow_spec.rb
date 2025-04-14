@@ -6,10 +6,13 @@ RSpec.describe BlockKit::Composition::Workflow, type: :model do
   subject(:block) { described_class.new(**attributes) }
   let(:attributes) { {trigger: {url: "https://example.com"}} }
 
-  it_behaves_like "a block that has a DSL method", attribute: :trigger, type: BlockKit::Composition::Trigger, actual_fields: {
-    url: "https://example.com",
-    customizable_input_parameters: [BlockKit::Composition::InputParameter.new(name: "greeting", value: "Hello, world!")]
-  }
+  it_behaves_like "a block that has a DSL method",
+    attribute: :trigger,
+    type: BlockKit::Composition::Trigger,
+    actual_fields: {
+      url: "https://example.com",
+      customizable_input_parameters: [BlockKit::Composition::InputParameter.new(name: "greeting", value: "Hello, world!")]
+    }
 
   describe "#as_json" do
     it "serializes to JSON" do

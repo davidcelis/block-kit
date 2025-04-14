@@ -8,10 +8,11 @@ module BlockKit
       included do
         attribute :elements, Types::Array.of(Types::Blocks.new(*Layout::RichText::Elements.all))
         validates :elements, presence: true, "block_kit/validators/associated": true
-      end
 
-      def broadcast(range:)
-        append(Layout::RichText::Elements::Broadcast.new(range: range))
+        dsl_method :elements, as: :broadcast, type: Layout::RichText::Elements::Broadcast, required_fields: [:range], yields: false
+        dsl_method :elements, as: :color, type: Layout::RichText::Elements::Color, required_fields: [:value], yields: false
+        dsl_method :elements, as: :date, type: Layout::RichText::Elements::Date, required_fields: [:timestamp, :format], yields: false
+        dsl_method :elements, as: :emoji, type: Layout::RichText::Elements::Emoji, required_fields: [:name], yields: false
       end
 
       def channel(channel_id:, styles: [])
@@ -23,19 +24,7 @@ module BlockKit
         append(Layout::RichText::Elements::Channel.new(channel_id: channel_id, style: style))
       end
 
-      def color(value:)
-        append(Layout::RichText::Elements::Color.new(value: value))
-      end
-
-      def date(timestamp:, format:, url: nil, fallback: nil)
-        append(Layout::RichText::Elements::Date.new(timestamp: timestamp, format: format, url: url, fallback: fallback))
-      end
-
-      def emoji(name:, unicode: nil)
-        append(Layout::RichText::Elements::Emoji.new(name: name, unicode: unicode))
-      end
-
-      def link(url:, text:, unsafe: nil, styles: nil)
+      def link(url:, text:, unsafe: nil, styles: [])
         style = if styles.present?
           styles = Array(styles).map { |s| [s.to_s, true] }.to_h
           Layout::RichText::Elements::TextStyle.new(**styles.slice(*Layout::RichText::Elements::TextStyle.attribute_names))
@@ -44,7 +33,7 @@ module BlockKit
         append(Layout::RichText::Elements::Link.new(url: url, text: text, unsafe: unsafe, style: style))
       end
 
-      def text(text:, styles: nil)
+      def text(text:, styles: [])
         style = if styles.present?
           styles = Array(styles).map { |s| [s.to_s, true] }.to_h
           Layout::RichText::Elements::TextStyle.new(**styles.slice(*Layout::RichText::Elements::TextStyle.attribute_names))

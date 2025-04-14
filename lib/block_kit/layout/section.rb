@@ -41,10 +41,10 @@ module BlockKit
         !!expand
       end
 
-      dsl_method :text, as: :mrkdwn, type: Composition::Mrkdwn, required_fields: [:text], yield_block: false
-      dsl_method :text, as: :plain_text, type: Composition::PlainText, required_fields: [:text], yield_block: false
-      dsl_method :fields, as: :mrkdwn_field, type: Composition::Mrkdwn, required_fields: [:text], yield_block: false
-      dsl_method :fields, as: :plain_text_field, type: Composition::PlainText, required_fields: [:text], yield_block: false
+      dsl_method :text, as: :mrkdwn, type: Composition::Mrkdwn, required_fields: [:text], yields: false
+      dsl_method :text, as: :plain_text, type: Composition::PlainText, required_fields: [:text], yields: false
+      dsl_method :fields, as: :mrkdwn_field, type: Composition::Mrkdwn, required_fields: [:text], yields: false
+      dsl_method :fields, as: :plain_text_field, type: Composition::PlainText, required_fields: [:text], yields: false
       dsl_method :accessory, as: :button, type: Elements::Button, required_fields: [:text]
       dsl_method :accessory, as: :channels_select, type: Elements::ChannelsSelect
       dsl_method :accessory, as: :checkboxes, type: Elements::Checkboxes

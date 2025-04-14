@@ -4,6 +4,20 @@ RSpec.shared_examples_for "a conversation selector" do
   it { is_expected.to have_attribute(:default_to_current_conversation).with_type(:boolean) }
   it { is_expected.to have_attribute(:filter).with_type(:block_kit_conversation_filter) }
 
+  it_behaves_like "a block that has a DSL method",
+    attribute: :filter,
+    type: BlockKit::Composition::ConversationFilter,
+    actual_fields: {
+      include: [:im, :mpim],
+      exclude_external_shared_channels: true,
+      exclude_bot_users: false
+    },
+    expected_fields: {
+      include: BlockKit::TypedSet.new(ActiveModel::Type::String.new, ["im", "mpim"]),
+      exclude_external_shared_channels: true,
+      exclude_bot_users: false
+    }
+
   describe "#as_json" do
     let(:attributes) do
       super().merge(

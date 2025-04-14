@@ -21,40 +21,14 @@ module BlockKit
       attribute :elements, Types::Array.of(Types::Blocks.new(*SUPPORTED_ELEMENTS))
       validates :elements, presence: true, "block_kit/validators/associated": true
 
-      def list(style: nil, elements: nil, indent: nil, offset: nil, border: nil)
-        block = RichText::List.new(style: style, elements: elements, indent: indent, offset: offset, border: border)
+      dsl_method :elements, as: :list, type: RichText::List
+      dsl_method :elements, as: :preformatted, type: RichText::Preformatted
+      dsl_method :elements, as: :quote, type: RichText::Quote
+      dsl_method :elements, as: :section, type: RichText::Section
 
-        yield(block) if block_given?
-
-        append(block)
-      end
       alias_method :rich_text_list, :list
-
-      def preformatted(elements: nil, border: nil)
-        block = RichText::Preformatted.new(elements: elements, border: border)
-
-        yield(block) if block_given?
-
-        append(block)
-      end
       alias_method :rich_text_preformatted, :preformatted
-
-      def quote(elements: nil, border: nil)
-        block = RichText::Quote.new(elements: elements, border: border)
-
-        yield(block) if block_given?
-
-        append(block)
-      end
       alias_method :rich_text_quote, :quote
-
-      def section(elements: nil)
-        block = RichText::Section.new(elements: elements)
-
-        yield(block) if block_given?
-
-        append(block)
-      end
       alias_method :rich_text_section, :section
 
       def append(element)

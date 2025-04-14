@@ -4,6 +4,12 @@ RSpec.shared_examples_for "a block that is dispatchable" do
   it { is_expected.to have_attribute(:dispatch_action_config).with_type(:block_kit_dispatch_action_config) }
   it { is_expected.to alias_attribute(:dispatch_action_config).as(:dispatch_action_configuration) }
 
+  it_behaves_like "a block that has a DSL method",
+    attribute: :dispatch_action_config,
+    type: BlockKit::Composition::DispatchActionConfig,
+    actual_fields: {trigger_actions_on: "on_enter_pressed"},
+    expected_fields: {trigger_actions_on: BlockKit::TypedSet.new(ActiveModel::Type::String.new, ["on_enter_pressed"])}
+
   describe "#as_json" do
     it "serializes the dispatch_action_config in as JSON" do
       subject.dispatch_action_configuration = BlockKit::Composition::DispatchActionConfig.new(trigger_actions_on: ["on_enter_pressed"])

@@ -45,18 +45,23 @@ module BlockKit
     def self.plain_text_attribute(name)
       attribute name, Types::Block.of_type(Composition::PlainText)
 
-      dsl_method(name, required_fields: [:text], yield_block: false)
+      dsl_method(name, required_fields: [:text], yields: false)
     end
     private_class_method :plain_text_attribute
 
-    def self.dsl_method(attribute, as: nil, type: nil, required_fields: [], mutually_exclusive_fields: [], yield_block: true)
+    def self.dsl_method(attribute, as: nil, type: nil, required_fields: [], mutually_exclusive_fields: [], yields: true)
       type ||= attribute_types[attribute.to_s]
       type = Types::Block.of_type(type) if type.is_a?(Class) && type < BlockKit::Block
       raise ArgumentError, "attribute #{attribute} does not exist" if type.instance_of?(ActiveModel::Type::Value)
 
-      is_array_attribute = type.instance_of?(Types::Array)
+      is_array_attribute = false
 
-      type = item_type if is_array_attribute
+      if type.instance_of?(Types::Array)
+        is_array_attribute = true
+        type = type.item_type
+      end
+
+      is_array_attribute ||= attribute_types[attribute.to_s].type == :array
 
       fields = type.block_class.attribute_names.map(&:to_sym)
       plain_text_fields = type.block_class.attribute_types.select { |_, v| v.respond_to?(:block_class) && v.block_class == Composition::PlainText }.keys.map(&:to_sym)
@@ -101,7 +106,7 @@ module BlockKit
           new_value.public_send(field).emoji = args[:emoji] if args.key?(:emoji)
         end
 
-        block&.call(new_value) if yield_block
+        block&.call(new_value) if yields
 
         self
       end

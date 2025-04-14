@@ -13,6 +13,20 @@ RSpec.describe BlockKit::Elements::Overflow, type: :model do
     }
   end
 
+  it_behaves_like "a block that has a DSL method",
+    attribute: :options,
+    as: :option,
+    type: BlockKit::Composition::OverflowOption,
+    actual_fields: {text: "New Option", value: "new", description: "Description", url: "https://example.com", emoji: true},
+    expected_fields: {
+      text: BlockKit::Composition::PlainText.new(text: "New Option", emoji: true),
+      value: "new",
+      description: BlockKit::Composition::PlainText.new(text: "Description", emoji: true),
+      url: "https://example.com"
+    },
+    required_fields: [:text, :value],
+    yields: false
+
   describe "#as_json" do
     it "serializes to JSON" do
       expect(overflow.as_json).to eq({

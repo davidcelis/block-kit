@@ -11,6 +11,29 @@ RSpec.describe BlockKit::Elements::Image, type: :model do
     }
   end
 
+  describe "#slack_file" do
+    it "sets the slack_file attribute by ID" do
+      image.slack_file(id: "F12345678")
+
+      expect(image.slack_file).to be_a(BlockKit::Composition::SlackFile)
+      expect(image.slack_file.id).to eq("F12345678")
+      expect(image.slack_file.url).to be_nil
+    end
+
+    it "sets the slack_file attribute by URL" do
+      image.slack_file(url: "https://example.com/image.png")
+      expect(image.slack_file).to be_a(BlockKit::Composition::SlackFile)
+      expect(image.slack_file.id).to be_nil
+      expect(image.slack_file.url).to eq("https://example.com/image.png")
+    end
+
+    it "raises an error if both id and url are provided" do
+      expect {
+        image.slack_file(id: "F12345678", url: "https://example.com/image.png")
+      }.to raise_error(ArgumentError, "mutually exclusive keywords: :id, :url")
+    end
+  end
+
   describe "#as_json" do
     it "serializes to JSON" do
       expect(image.as_json).to eq({

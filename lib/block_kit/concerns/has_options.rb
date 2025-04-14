@@ -13,13 +13,8 @@ module BlockKit
               presence: {unless: ->(block) { block.respond_to?(:option_groups) }},
               length: {maximum: limit, message: "is too long (maximum is %{count} options)"},
               "block_kit/validators/associated": true
-          end
 
-          def option(text:, value:, description: nil, initial: nil, emoji: nil)
-            self.options ||= []
-            options << Composition::Option.new(text: text, value: value, description: description, initial: initial, emoji: emoji)
-
-            self
+            dsl_method :options, as: :option, required_fields: [:text, :value], yields: false
           end
 
           def as_json(*)

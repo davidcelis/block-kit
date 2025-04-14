@@ -10,7 +10,7 @@ module BlockKit
       attribute :initial_option, Types::Block.of_type(Composition::Option)
       validates :initial_option, "block_kit/validators/associated": true, allow_nil: true
 
-      dsl_method :initial_option, required_fields: %i[text value], yield_block: false
+      dsl_method :initial_option, required_fields: [:text, :value], yields: false
 
       def as_json(*)
         super.merge(initial_option: initial_option&.as_json).compact

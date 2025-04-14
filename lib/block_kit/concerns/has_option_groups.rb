@@ -14,15 +14,8 @@ module BlockKit
             validates :option_groups, length: {maximum: limit, message: "is too long (maximum is %{count} groups)"}, "block_kit/validators/associated": true
 
             validate :options_or_option_groups
-          end
 
-          def option_group(label:, options: nil)
-            self.option_groups ||= []
-            self.option_groups << group = Composition::OptionGroup.new(label: label, options: options)
-
-            yield(group) if block_given?
-
-            group
+            dsl_method :option_groups, as: :option_group, required_fields: [:label]
           end
 
           def as_json(*)

@@ -10,13 +10,7 @@ module BlockKit
       plain_text_attribute :label
       validates :label, presence: true, length: {maximum: 75}
 
-      def option(text:, value:, description: nil, initial: nil, emoji: nil)
-        self.options ||= []
-
-        options << Composition::Option.new(text: text, value: value, description: description, initial: initial, emoji: emoji)
-
-        self
-      end
+      dsl_method :options, as: :option, required_fields: [:text, :value], yields: false
 
       def as_json(*)
         {
