@@ -10,6 +10,8 @@ module BlockKit
       attribute :description, Types::Block.of_type(Composition::PlainText)
       attribute :initial, :boolean
 
+      include Concerns::PlainTextEmojiAssignment.new(:text)
+
       validates :text, presence: true, length: {maximum: 75}
       validates :value, presence: true, length: {maximum: 150}
       validates :description, presence: true, length: {maximum: 75}, allow_nil: true

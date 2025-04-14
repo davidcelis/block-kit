@@ -54,5 +54,7 @@ RSpec.describe BlockKit::Composition::Option, type: :model do
       option.initial = true
       expect(option).to be_initial
     end
+
+    it_behaves_like "a block that has plain text emoji assignment", :text
   end
 end

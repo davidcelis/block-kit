@@ -23,6 +23,12 @@ module BlockKit
             end
           end
 
+          def option(text:, value:, description: nil, initial: nil, emoji: nil)
+            options << Composition::Option.new(text: text, value: value, description: description, initial: initial, emoji: emoji)
+
+            self
+          end
+
           define_method :as_json do |*args|
             super(*args).merge(options: options&.map(&:as_json)).tap do |json|
               case select
