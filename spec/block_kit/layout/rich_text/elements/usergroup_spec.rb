@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe BlockKit::Layout::RichText::Elements::UserGroup, type: :model do
+RSpec.describe BlockKit::Layout::RichText::Elements::Usergroup, type: :model do
   subject(:element) { described_class.new(attributes) }
   let(:attributes) { {usergroup_id: "G12345678"} }
 

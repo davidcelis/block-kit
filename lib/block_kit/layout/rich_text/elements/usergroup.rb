@@ -2,8 +2,8 @@
 
 module BlockKit
   module Layout
-    class RichText::Elements::UserGroup < Block
-      self.type = :usergroup
+    class RichText::Elements::Usergroup < Block
+      self.type = :Usergroup
 
       attribute :usergroup_id, :string
       attribute :style, Types::Block.of_type(RichText::Elements::MentionStyle)

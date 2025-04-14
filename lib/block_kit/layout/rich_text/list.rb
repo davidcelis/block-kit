@@ -22,6 +22,21 @@ module BlockKit
       validates :offset, numericality: {only_integer: true, greater_than_or_equal_to: 0}, allow_nil: true
       validates :border, numericality: {only_integer: true, greater_than_or_equal_to: 0}, allow_nil: true
 
+      def section(elements: nil)
+        block = RichText::Section.new(elements: elements)
+
+        yield(block) if block_given?
+
+        append(block)
+      end
+      alias_method :rich_text_section, :section
+
+      def append(element)
+        elements << element
+
+        self
+      end
+
       def as_json(*)
         super.merge(
           style: style,

@@ -11,7 +11,7 @@ module BlockKit
       autoload :Link, "block_kit/layout/rich_text/elements/link"
       autoload :Text, "block_kit/layout/rich_text/elements/text"
       autoload :User, "block_kit/layout/rich_text/elements/user"
-      autoload :UserGroup, "block_kit/layout/rich_text/elements/user_group"
+      autoload :Usergroup, "block_kit/layout/rich_text/elements/usergroup"
 
       # Utility blocks
       autoload :MentionStyle, "block_kit/layout/rich_text/elements/mention_style"
@@ -27,7 +27,7 @@ module BlockKit
           Link,
           Text,
           User,
-          UserGroup
+          Usergroup
         ].freeze
       end
     end

@@ -7,3 +7,4 @@
   * `EmailTextInput` -> `EmailInput`
   * `Overflow` -> `OverflowMenu`
   * `PlainTextInput` -> `TextInput`
+  * `RichText::Elements::Usergroup` -> `UserGroup`
