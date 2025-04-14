@@ -41,6 +41,37 @@ module BlockKit
         !!expand
       end
 
+      def mrkdwn(text:, verbatim: nil)
+        self.text = Composition::Mrkdwn.new(text: text, verbatim: verbatim)
+      end
+
+      def plain_text(text:, emoji: nil)
+        self.text = Composition::PlainText.new(text: text, emoji: emoji)
+      end
+
+      def mrkdwn_field(text:, verbatim: nil)
+        self.fields ||= []
+        self.fields << Composition::Mrkdwn.new(text: text, verbatim: verbatim)
+        self
+      end
+
+      def plain_text_field(text:, emoji: nil)
+        self.fields ||= []
+        self.fields << Composition::PlainText.new(text: text, emoji: emoji)
+        self
+      end
+
+      def field(text:, type: :mrkdwn, verbatim: nil, emoji: nil)
+        case type.to_sym
+        when :mrkdwn
+          mrkdwn_field(text: text, verbatim: verbatim)
+        when :plain_text
+          plain_text_field(text: text, emoji: emoji)
+        else
+          raise ArgumentError, "Invalid field type: #{type} (must be mrkdwn or plain_text)"
+        end
+      end
+
       def button(text: nil, value: nil, url: nil, style: nil, accessibility_label: nil, emoji: nil, action_id: nil)
         self.accessory = Elements::Button.new(
           text: text,

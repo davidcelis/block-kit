@@ -42,6 +42,141 @@ RSpec.describe BlockKit::Layout::Section, type: :model do
     end
   end
 
+  describe "#mrkdwn" do
+    let(:args) { {text: "Hello, world!"} }
+    subject { block.mrkdwn(**args) }
+
+    it "adds a mrkdwn text as the text" do
+      expect { subject }.to change { block.text }.to(instance_of(BlockKit::Composition::Mrkdwn))
+      expect(block.text.text).to eq("Hello, world!")
+    end
+
+    context "with optional args" do
+      let(:args) { super().merge(verbatim: false) }
+
+      it "creates a mrkdwn text with the given attributes" do
+        expect { subject }.to change { block.text }.to(instance_of(BlockKit::Composition::Mrkdwn))
+        expect(block.text.text).to eq("Hello, world!")
+        expect(block.text.verbatim).to be false
+      end
+    end
+  end
+
+  describe "#plain_text" do
+    let(:args) { {text: "Hello, world!"} }
+    subject { block.plain_text(**args) }
+
+    it "adds a plain_text text as the text" do
+      expect { subject }.to change { block.text }.to(instance_of(BlockKit::Composition::PlainText))
+      expect(block.text.text).to eq("Hello, world!")
+    end
+
+    context "with optional args" do
+      let(:args) { super().merge(emoji: false) }
+
+      it "creates a plain_text with the given attributes" do
+        expect { subject }.to change { block.text }.to(instance_of(BlockKit::Composition::PlainText))
+        expect(block.text.text).to eq("Hello, world!")
+        expect(block.text.emoji).to be false
+      end
+    end
+  end
+
+  describe "#mrkdwn_field" do
+    let(:args) { {text: "Hello, world!"} }
+    subject { block.mrkdwn_field(**args) }
+
+    it "adds a mrkdwn text to the section's fields" do
+      expect { subject }.to change { block.fields&.count }.from(nil).to(1)
+      expect(block.fields.last).to be_a(BlockKit::Composition::Mrkdwn)
+      expect(block.fields.last.text).to eq("Hello, world!")
+    end
+
+    context "with optional args" do
+      let(:args) { super().merge(verbatim: false) }
+
+      it "creates a mrkdwn field with the given attributes" do
+        expect { subject }.to change { block.fields&.count }.from(nil).to(1)
+        expect(block.fields.last).to be_a(BlockKit::Composition::Mrkdwn)
+        expect(block.fields.last.text).to eq("Hello, world!")
+        expect(block.fields.last.verbatim).to be false
+      end
+    end
+  end
+
+  describe "#plain_text_field" do
+    let(:args) { {text: "Hello, world!"} }
+    subject { block.plain_text_field(**args) }
+
+    it "adds a plain_text object to the section's fields" do
+      expect { subject }.to change { block.fields&.count }.from(nil).to(1)
+      expect(block.fields.last).to be_a(BlockKit::Composition::PlainText)
+      expect(block.fields.last.text).to eq("Hello, world!")
+    end
+
+    context "with optional args" do
+      let(:args) { super().merge(emoji: false) }
+
+      it "creates a plain_text field with the given attributes" do
+        expect { subject }.to change { block.fields&.count }.from(nil).to(1)
+        expect(block.fields.last).to be_a(BlockKit::Composition::PlainText)
+        expect(block.fields.last.text).to eq("Hello, world!")
+        expect(block.fields.last.emoji).to be false
+      end
+    end
+  end
+
+  describe "#field" do
+    let(:args) { {text: "Hello, world!"} }
+    subject { block.field(**args) }
+
+    it "adds a mrkdwn text to the section's fields" do
+      expect { subject }.to change { block.fields&.count }.from(nil).to(1)
+      expect(block.fields.last).to be_a(BlockKit::Composition::Mrkdwn)
+      expect(block.fields.last.text).to eq("Hello, world!")
+    end
+
+    context "with optional args" do
+      let(:args) { super().merge(verbatim: true, emoji: false) }
+
+      it "creates a mrkdwn field with the relevant attributes" do
+        expect { subject }.to change { block.fields&.count }.from(nil).to(1)
+        expect(block.fields.last).to be_a(BlockKit::Composition::Mrkdwn)
+        expect(block.fields.last.text).to eq("Hello, world!")
+        expect(block.fields.last.verbatim).to be true
+      end
+    end
+
+    context "with plain_text" do
+      let(:args) { super().merge(type: :plain_text) }
+
+      it "adds a plain_text object to the section's fields" do
+        expect { subject }.to change { block.fields&.count }.from(nil).to(1)
+        expect(block.fields.last).to be_a(BlockKit::Composition::PlainText)
+        expect(block.fields.last.text).to eq("Hello, world!")
+      end
+
+      context "with optional args" do
+        let(:args) { super().merge(emoji: true, verbatim: false) }
+
+        it "creates a plain_text field with the given attributes" do
+          expect { subject }.to change { block.fields&.count }.from(nil).to(1)
+          expect(block.fields.last).to be_a(BlockKit::Composition::PlainText)
+          expect(block.fields.last.text).to eq("Hello, world!")
+          expect(block.fields.last.emoji).to be true
+        end
+      end
+    end
+
+    context "with an invalid type" do
+      let(:args) { super().merge(type: :invalid_type) }
+
+      it "raises an ArgumentError" do
+        expect { subject }.to raise_error(ArgumentError, "Invalid field type: invalid_type (must be mrkdwn or plain_text)")
+      end
+    end
+  end
+
   describe "#button" do
     let(:args) { {} }
     subject { block.button(**args) }
