@@ -11,7 +11,6 @@ module BlockKit
       include Concerns::PlainTextEmojiAssignment.new(:placeholder)
 
       attribute :initial_date, :date
-
       validates :initial_date, presence: true, allow_nil: true
 
       def as_json(*)

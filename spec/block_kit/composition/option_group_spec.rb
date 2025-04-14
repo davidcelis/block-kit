@@ -51,6 +51,6 @@ RSpec.describe BlockKit::Composition::OptionGroup, type: :model do
   end
 
   context "attributes" do
-    it { is_expected.to have_attribute(:label).with_type(:block_kit_plain_text) }
+    it_behaves_like "a block that has plain text attributes", :label
   end
 end

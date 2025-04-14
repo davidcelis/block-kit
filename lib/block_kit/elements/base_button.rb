@@ -5,7 +5,7 @@ module BlockKit
     class BaseButton < Base
       self.type = :button
 
-      attribute :text, Types::Block.of_type(Composition::PlainText)
+      plain_text_attribute :text
       attribute :style, :string
       attribute :accessibility_label, :string
 

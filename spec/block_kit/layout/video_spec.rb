@@ -55,15 +55,14 @@ RSpec.describe BlockKit::Layout::Video, type: :model do
   context "attributes" do
     it { is_expected.to have_attribute(:alt_text).with_type(:string) }
     it { is_expected.to have_attribute(:author_name).with_type(:string) }
-    it { is_expected.to have_attribute(:description).with_type(:block_kit_plain_text) }
     it { is_expected.to have_attribute(:provider_icon_url).with_type(:string) }
     it { is_expected.to have_attribute(:provider_name).with_type(:string) }
-    it { is_expected.to have_attribute(:title).with_type(:block_kit_plain_text) }
     it { is_expected.to have_attribute(:title_url).with_type(:string) }
     it { is_expected.to have_attribute(:thumbnail_url).with_type(:string) }
     it { is_expected.to have_attribute(:video_url).with_type(:string) }
 
     it_behaves_like "a block with a block_id"
+    it_behaves_like "a block that has plain text attributes", :description, :title
     it_behaves_like "a block that has plain text emoji assignment", :description, :title
   end
 

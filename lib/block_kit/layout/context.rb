@@ -12,7 +12,6 @@ module BlockKit
       ].freeze
 
       attribute :elements, Types::Array.of(Types::Blocks.new(*SUPPORTED_ELEMENTS))
-
       validates :elements, presence: true, length: {maximum: 10, message: "is too long (maximum is %{count} elements)"}, "block_kit/validators/associated": true
 
       def image(alt_text:, image_url: nil, slack_file: nil)

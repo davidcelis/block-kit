@@ -6,7 +6,6 @@ module BlockKit
       self.type = :workflow_button
 
       attribute :workflow, Types::Block.of_type(Composition::Workflow)
-
       validates :workflow, presence: true, "block_kit/validators/associated": true
 
       def as_json(*)

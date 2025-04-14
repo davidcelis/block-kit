@@ -1,8 +1,6 @@
 require "spec_helper"
 
 RSpec.shared_examples_for "a block that has a placeholder" do
-  it { is_expected.to have_attribute(:placeholder).with_type(:block_kit_plain_text) }
-
   describe "#as_json" do
     it "serializes the placeholder in as JSON" do
       subject.placeholder = "Enter something here"
@@ -15,4 +13,7 @@ RSpec.shared_examples_for "a block that has a placeholder" do
 
   it { is_expected.to validate_presence_of(:placeholder).allow_nil }
   it { is_expected.to validate_length_of(:placeholder).is_at_most(150) }
+
+  it_behaves_like "a block that has plain text attributes", :placeholder
+  it_behaves_like "a block that has plain text emoji assignment", :placeholder
 end

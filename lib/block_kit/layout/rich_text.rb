@@ -19,7 +19,6 @@ module BlockKit
       ].freeze
 
       attribute :elements, Types::Array.of(Types::Blocks.new(*SUPPORTED_ELEMENTS))
-
       validates :elements, presence: true, "block_kit/validators/associated": true
 
       def list(style: nil, elements: nil, indent: nil, offset: nil, border: nil)

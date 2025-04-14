@@ -13,7 +13,6 @@ module BlockKit
       include Concerns::PlainTextEmojiAssignment.new(:placeholder)
 
       attribute :initial_value, :string
-
       validates :initial_value, presence: true, format: {with: URI::MailTo::EMAIL_REGEXP}, allow_nil: true
 
       def as_json(*)

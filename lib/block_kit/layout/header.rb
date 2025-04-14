@@ -5,7 +5,7 @@ module BlockKit
     class Header < Base
       self.type = :header
 
-      attribute :text, Types::Block.of_type(Composition::PlainText)
+      plain_text_attribute :text
 
       include Concerns::PlainTextEmojiAssignment.new(:text)
 

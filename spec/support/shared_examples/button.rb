@@ -1,7 +1,6 @@
 require "spec_helper"
 
 RSpec.shared_examples_for "a button" do
-  it { is_expected.to have_attribute(:text).with_type(:block_kit_plain_text) }
   it { is_expected.to have_attribute(:style).with_type(:string) }
   it { is_expected.to have_attribute(:accessibility_label).with_type(:string) }
 
@@ -31,5 +30,6 @@ RSpec.shared_examples_for "a button" do
   it { is_expected.to validate_length_of(:accessibility_label).is_at_most(75) }
 
   it_behaves_like "a block with an action_id"
+  it_behaves_like "a block that has plain text attributes", :text
   it_behaves_like "a block that has plain text emoji assignment", :text
 end

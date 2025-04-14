@@ -29,10 +29,10 @@ module BlockKit
         Elements::URLTextInput
       ].freeze
 
-      attribute :label, Types::Block.of_type(Composition::PlainText)
+      plain_text_attribute :label
       attribute :element, Types::Blocks.new(*SUPPORTED_ELEMENTS)
       attribute :dispatch_action, :boolean
-      attribute :hint, Types::Block.of_type(Composition::PlainText)
+      plain_text_attribute :hint
       attribute :optional, :boolean
 
       include Concerns::PlainTextEmojiAssignment.new(:label, :hint)

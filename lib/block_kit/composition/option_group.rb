@@ -7,8 +7,7 @@ module BlockKit
 
       include Concerns::HasOptions.new(limit: 100)
 
-      attribute :label, Types::Block.of_type(Composition::PlainText)
-
+      plain_text_attribute :label
       validates :label, presence: true, length: {maximum: 75}
 
       def option(text:, value:, description: nil, initial: nil, emoji: nil)

@@ -8,7 +8,6 @@ module BlockKit
       self.type = :overflow_option
 
       attribute :url, :string
-
       validates :url, presence: true, format: {with: URI::DEFAULT_PARSER.make_regexp, message: "is not a valid URI", allow_blank: true}, length: {maximum: 3000}, allow_nil: true
 
       def as_json(*)

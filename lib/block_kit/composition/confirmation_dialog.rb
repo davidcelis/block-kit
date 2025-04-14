@@ -5,10 +5,10 @@ module BlockKit
     class ConfirmationDialog < Block
       self.type = :confirmation_dialog
 
-      attribute :title, Types::Block.of_type(Composition::PlainText)
-      attribute :text, Types::Block.of_type(Composition::PlainText)
-      attribute :confirm, Types::Block.of_type(Composition::PlainText)
-      attribute :deny, Types::Block.of_type(Composition::PlainText)
+      plain_text_attribute :title
+      plain_text_attribute :text
+      plain_text_attribute :confirm
+      plain_text_attribute :deny
       attribute :style, :string
 
       validates :title, presence: true, length: {maximum: 100}

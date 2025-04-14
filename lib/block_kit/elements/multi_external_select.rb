@@ -8,7 +8,6 @@ module BlockKit
       include Concerns::External
 
       attribute :initial_options, Types::Array.of(Composition::Option)
-
       validates :initial_options, "block_kit/validators/associated": true, allow_nil: true
 
       def as_json(*)

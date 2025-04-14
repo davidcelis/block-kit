@@ -952,10 +952,8 @@ RSpec.describe BlockKit::Layout::Input, type: :model do
   end
 
   context "attributes" do
-    it { is_expected.to have_attribute(:label).with_type(:block_kit_plain_text) }
     it { is_expected.to have_attribute(:dispatch_action).with_type(:boolean) }
     it { is_expected.to have_attribute(:optional).with_type(:boolean) }
-    it { is_expected.to have_attribute(:hint).with_type(:block_kit_plain_text) }
 
     it do
       is_expected.to have_attribute(:element).with_type(:block_kit_block).containing(
@@ -984,6 +982,7 @@ RSpec.describe BlockKit::Layout::Input, type: :model do
     end
 
     it_behaves_like "a block with a block_id"
+    it_behaves_like "a block that has plain text attributes", :label, :hint
     it_behaves_like "a block that has plain text emoji assignment", :label, :hint
 
     it "does not allow unsupported elements" do

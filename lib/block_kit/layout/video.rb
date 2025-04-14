@@ -9,10 +9,10 @@ module BlockKit
 
       attribute :alt_text, :string
       attribute :author_name, :string
-      attribute :description, Types::Block.of_type(Composition::PlainText)
+      plain_text_attribute :description
       attribute :provider_icon_url, :string
       attribute :provider_name, :string
-      attribute :title, Types::Block.of_type(Composition::PlainText)
+      plain_text_attribute :title
       attribute :title_url, :string
       attribute :thumbnail_url, :string
       attribute :video_url, :string

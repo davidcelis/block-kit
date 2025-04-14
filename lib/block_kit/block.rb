@@ -10,6 +10,17 @@ module BlockKit
 
     class_attribute :type, default: nil
 
+    def self.plain_text_attribute(name)
+      attribute name, Types::Block.of_type(Composition::PlainText)
+
+      define_method(name) do |attributes = {}|
+        attributes = attributes.with_indifferent_access
+        return super() unless attributes.key?(:text) || attributes.key?(:emoji)
+
+        public_send(:"#{name}=", Composition::PlainText.new(attributes.slice(:text, :emoji)))
+      end
+    end
+
     def initialize(attributes = {})
       raise NotImplementedError, "#{self.class} is an abstract class and can't be instantiated." if instance_of?(Block)
 
@@ -18,6 +29,10 @@ module BlockKit
 
     def as_json(*)
       {type: self.class.type.to_s}
+    end
+
+    def ==(other)
+      other.instance_of?(self.class) && attributes == other.attributes
     end
 
     def self.inspect

@@ -28,7 +28,6 @@ module BlockKit
       ]
 
       attribute :elements, Types::Array.of(Types::Blocks.new(*SUPPORTED_ELEMENTS))
-
       validates :elements, presence: true, length: {maximum: 25, message: "is too long (maximum is %{count} elements)"}, "block_kit/validators/associated": true
 
       def button(text: nil, value: nil, url: nil, style: nil, accessibility_label: nil, emoji: nil, action_id: nil)

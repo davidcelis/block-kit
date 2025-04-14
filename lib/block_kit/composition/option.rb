@@ -5,12 +5,12 @@ module BlockKit
     class Option < Block
       self.type = :option
 
-      attribute :text, Types::Block.of_type(Composition::PlainText)
+      plain_text_attribute :text
       attribute :value, :string
-      attribute :description, Types::Block.of_type(Composition::PlainText)
+      plain_text_attribute :description
       attribute :initial, :boolean
 
-      include Concerns::PlainTextEmojiAssignment.new(:text)
+      include Concerns::PlainTextEmojiAssignment.new(:text, :description)
 
       validates :text, presence: true, length: {maximum: 75}
       validates :value, presence: true, length: {maximum: 150}
