@@ -11,6 +11,8 @@ module BlockKit
 
         validates :default_to_current_conversation, inclusion: {in: [true, false]}, allow_nil: true
         validates :filter, "block_kit/validators/associated": true, allow_nil: true
+
+        dsl_method :filter
       end
 
       def as_json(*)

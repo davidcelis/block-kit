@@ -1,4 +1,5 @@
 require "spec_helper"
+require "active_support/core_ext/object/inclusion"
 
 RSpec.shared_examples_for "a block that has options" do |limit:|
   it { is_expected.to have_attribute(:options).with_type(:array).containing(:block_kit_option) }

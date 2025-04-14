@@ -11,6 +11,8 @@ module BlockKit
       validates :label, presence: true, length: {maximum: 75}
 
       def option(text:, value:, description: nil, initial: nil, emoji: nil)
+        self.options ||= []
+
         options << Composition::Option.new(text: text, value: value, description: description, initial: initial, emoji: emoji)
 
         self

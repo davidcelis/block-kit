@@ -13,6 +13,17 @@ module BlockKit
       validates :url, presence: true, format: {with: URI::DEFAULT_PARSER.make_regexp(%w[http https]), message: "is not a valid URI", allow_blank: true}
       validates :customizable_input_parameters, presence: true, "block_kit/validators/associated": true, allow_nil: true
 
+      def customizable_input_parameter(name:, value:)
+        self.customizable_input_parameters ||= []
+
+        customizable_input_parameters << Composition::InputParameter.new(name: name, value: value)
+
+        self
+      end
+      alias_method :input_parameter, :customizable_input_parameter
+      alias_method :customizable_input_param, :customizable_input_parameter
+      alias_method :input_param, :customizable_input_parameter
+
       def as_json(*)
         {
           url: url,

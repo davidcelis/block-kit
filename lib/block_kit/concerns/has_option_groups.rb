@@ -16,6 +16,15 @@ module BlockKit
             validate :options_or_option_groups
           end
 
+          def option_group(label:, options: nil)
+            self.option_groups ||= []
+            self.option_groups << group = Composition::OptionGroup.new(label: label, options: options)
+
+            yield(group) if block_given?
+
+            group
+          end
+
           def as_json(*)
             super.merge(option_groups: option_groups&.map(&:as_json)).compact
           end

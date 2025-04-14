@@ -8,6 +8,8 @@ module BlockKit
       attribute :trigger, Types::Block.of_type(Composition::Trigger)
       validates :trigger, presence: true, "block_kit/validators/associated": true
 
+      dsl_method :trigger
+
       def as_json(*)
         {trigger: trigger&.as_json}.compact
       end

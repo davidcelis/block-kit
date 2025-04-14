@@ -4,6 +4,20 @@ RSpec.shared_examples_for "a block that is confirmable" do
   it { is_expected.to have_attribute(:confirm).with_type(:block_kit_confirmation_dialog) }
   it { is_expected.to validate_presence_of(:confirm).allow_nil }
 
+  it_behaves_like "a block that has a DSL method",
+    attribute: :confirm,
+    type: BlockKit::Composition::ConfirmationDialog,
+    actual_fields: {title: "Title", text: "Dialog Text", confirm: "Yes", deny: "No", style: "primary", emoji: true},
+    expected_fields: {
+      title: BlockKit::Composition::PlainText.new(text: "Title", emoji: true),
+      text: BlockKit::Composition::PlainText.new(text: "Dialog Text", emoji: true),
+      confirm: BlockKit::Composition::PlainText.new(text: "Yes", emoji: true),
+      deny: BlockKit::Composition::PlainText.new(text: "No", emoji: true),
+      style: "primary"
+    },
+    required_fields: [:title, :text, :confirm, :deny],
+    yields: false
+
   it "validates the associated confirmation dialog" do
     subject.confirm = BlockKit::Composition::ConfirmationDialog.new(
       title: "",

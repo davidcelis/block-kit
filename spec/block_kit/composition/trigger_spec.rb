@@ -6,6 +6,15 @@ RSpec.describe BlockKit::Composition::Trigger, type: :model do
   subject(:trigger) { described_class.new(**attributes) }
   let(:attributes) { {url: "https://example.com"} }
 
+  describe "#customizable_input_parameter" do
+    it "adds a customizable input parameter" do
+      expect { trigger.input_parameter(name: "greeting", value: "Hello, world!") }.to change { trigger.customizable_input_parameters&.size }.from(nil).to(1)
+      expect(trigger.customizable_input_parameters.last).to be_a(BlockKit::Composition::InputParameter)
+      expect(trigger.customizable_input_parameters.last.name).to eq("greeting")
+      expect(trigger.customizable_input_parameters.last.value).to eq("Hello, world!")
+    end
+  end
+
   describe "#as_json" do
     it "serializes to JSON" do
       expect(trigger.as_json).to eq({

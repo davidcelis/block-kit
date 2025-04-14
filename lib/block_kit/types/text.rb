@@ -36,39 +36,43 @@ module BlockKit
     end
 
     class PlainText < Text
+      def block_class = Composition::PlainText
+
       def type
         :block_kit_plain_text
       end
 
       def cast(value)
         case value
-        when Composition::PlainText, NilClass
+        when block_class, NilClass
           value
         when Composition::Mrkdwn
-          Composition::PlainText.new(text: value.text)
+          block_class.new(text: value.text)
         when Hash
-          Composition::PlainText.new(**value.with_indifferent_access.slice(*Composition::PlainText.attribute_names).symbolize_keys)
+          block_class.new(**value.with_indifferent_access.slice(*block_class.attribute_names).symbolize_keys)
         else
-          Composition::PlainText.new(text: value)
+          block_class.new(text: value)
         end
       end
     end
 
     class Mrkdwn < Text
+      def block_class = Composition::Mrkdwn
+
       def type
         :block_kit_mrkdwn
       end
 
       def cast(value)
         case value
-        when Composition::Mrkdwn, NilClass
+        when block_class, NilClass
           value
         when Composition::PlainText
-          Composition::Mrkdwn.new(text: value.text)
+          block_class.new(text: value.text)
         when Hash
-          Composition::Mrkdwn.new(**value.with_indifferent_access.slice(*Composition::Mrkdwn.attribute_names).symbolize_keys)
+          block_class.new(**value.with_indifferent_access.slice(*block_class.attribute_names).symbolize_keys)
         else
-          Composition::Mrkdwn.new(text: value)
+          block_class.new(text: value)
         end
       end
     end

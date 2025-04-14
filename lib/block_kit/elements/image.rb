@@ -13,8 +13,9 @@ module BlockKit
 
       validates :alt_text, presence: true, length: {maximum: 2000}
       validates :image_url, presence: true, length: {maximum: 3000}, format: {with: URI::DEFAULT_PARSER.make_regexp(%w[http https]), message: "is not a valid URI", allow_blank: true}, allow_nil: true
-
       validate :slack_file_or_url_present
+
+      dsl_method :slack_file
 
       def as_json(*)
         super.merge(

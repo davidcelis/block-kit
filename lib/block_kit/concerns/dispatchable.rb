@@ -10,6 +10,8 @@ module BlockKit
         alias_attribute :dispatch_action_configuration, :dispatch_action_config
 
         validates :dispatch_action_config, presence: true, "block_kit/validators/associated": true, allow_nil: true
+
+        dsl_method :dispatch_action_config
       end
 
       def as_json(*)

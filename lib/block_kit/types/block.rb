@@ -34,10 +34,10 @@ module BlockKit
 
       def cast(value)
         case value
-        when @block_class
+        when block_class
           value
         when Hash
-          @block_class.new(**value.with_indifferent_access.slice(*@block_class.attribute_names).symbolize_keys)
+          block_class.new(**value.with_indifferent_access.slice(*block_class.attribute_names).symbolize_keys)
         end
       end
     end
