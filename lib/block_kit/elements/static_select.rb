@@ -5,7 +5,8 @@ module BlockKit
     class StaticSelect < Select
       self.type = :static_select
 
-      include Concerns::HasOptions.new(limit: 100, select: :single, groups: 100)
+      include Concerns::HasOptionGroups.new(limit: 100, options_limit: 100)
+      include Concerns::HasInitialOption
     end
   end
 end

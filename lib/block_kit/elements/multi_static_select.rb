@@ -5,7 +5,8 @@ module BlockKit
     class MultiStaticSelect < MultiSelect
       self.type = :multi_static_select
 
-      include Concerns::HasOptions.new(limit: 100, select: :multi, groups: 100)
+      include Concerns::HasOptionGroups.new(limit: 100, options_limit: 100)
+      include Concerns::HasInitialOptions
     end
   end
 end

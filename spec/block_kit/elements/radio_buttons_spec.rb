@@ -27,7 +27,8 @@ RSpec.describe BlockKit::Elements::RadioButtons, type: :model do
 
   context "attributes" do
     it_behaves_like "a block with an action_id"
-    it_behaves_like "a block that has options", limit: 10, select: :single
+    it_behaves_like "a block that has options", limit: 10
+    it_behaves_like "a block that has one initial option"
     it_behaves_like "a block that is confirmable"
     it_behaves_like "a block that is focusable on load"
   end

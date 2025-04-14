@@ -6,7 +6,8 @@ module BlockKit
       self.type = :checkboxes
 
       include Concerns::Confirmable
-      include Concerns::HasOptions.new(limit: 10, select: :multi)
+      include Concerns::HasOptions.new(limit: 10)
+      include Concerns::HasInitialOptions
       include Concerns::FocusableOnLoad
     end
   end

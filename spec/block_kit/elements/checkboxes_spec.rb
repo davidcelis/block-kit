@@ -27,7 +27,8 @@ RSpec.describe BlockKit::Elements::Checkboxes, type: :model do
 
   context "attributes" do
     it_behaves_like "a block with an action_id"
-    it_behaves_like "a block that has options", limit: 10, select: :multi
+    it_behaves_like "a block that has options", limit: 10
+    it_behaves_like "a block that has initial options"
     it_behaves_like "a block that is confirmable"
     it_behaves_like "a block that is focusable on load"
   end

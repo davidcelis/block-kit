@@ -27,7 +27,8 @@ RSpec.describe BlockKit::Elements::StaticSelect, type: :model do
 
   context "attributes" do
     it_behaves_like "a block with an action_id"
-    it_behaves_like "a block that has options", limit: 100, select: :single, groups: 100
+    it_behaves_like "a block that has option groups", limit: 100, options_limit: 100
+    it_behaves_like "a block that has one initial option"
     it_behaves_like "a block that is confirmable"
     it_behaves_like "a block that is focusable on load"
     it_behaves_like "a block that has a placeholder"
