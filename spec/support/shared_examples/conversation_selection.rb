@@ -43,4 +43,12 @@ RSpec.shared_examples_for "a conversation selector" do
     expect(subject).not_to be_valid
     expect(subject.errors[:filter]).to include("is invalid: include contains invalid values: \"invalid\"")
   end
+
+  it_behaves_like "a block that fixes validation errors", attribute: :filter, associated: {
+    record: -> {
+      BlockKit::Composition::ConversationFilter.new(include: ["public", "invalid", "private"])
+    },
+    invalid_attribute: :include,
+    fixed_attribute_value: BlockKit::TypedSet.new(ActiveModel::Type::String.new, ["public", "private"])
+  }
 end
