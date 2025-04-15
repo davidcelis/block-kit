@@ -27,4 +27,12 @@ RSpec.shared_examples_for "a block that is dispatchable" do
     expect(subject).not_to be_valid
     expect(subject.errors[:dispatch_action_config]).to include("is invalid: trigger_actions_on can't be blank")
   end
+
+  it_behaves_like "a block that fixes validation errors", attribute: :dispatch_action_config, associated: {
+    record: -> {
+      BlockKit::Composition::DispatchActionConfig.new(trigger_actions_on: ["on_enter_pressed", "invalid"])
+    },
+    invalid_attribute: :trigger_actions_on,
+    fixed_attribute_value: BlockKit::TypedSet.new(ActiveModel::Type::String.new, ["on_enter_pressed"])
+  }
 end
