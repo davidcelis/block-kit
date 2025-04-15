@@ -12,6 +12,7 @@ module BlockKit
 
       attribute :trigger_actions_on, Types::Set.of(:string)
       validates :trigger_actions_on, presence: true, "block_kit/validators/array_inclusion": {in: VALID_TRIGGERS}
+      fixes :trigger_actions_on, null_value: {error_types: [:inclusion]}
 
       VALID_TRIGGERS.each do |value|
         define_method(:"trigger_actions_on_#{value}?") do

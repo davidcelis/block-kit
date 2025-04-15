@@ -34,4 +34,20 @@ RSpec.describe BlockKit::Composition::DispatchActionConfig, type: :model do
     it { is_expected.to validate_presence_of(:trigger_actions_on) }
     it { is_expected.to validate_array_inclusion_of(:trigger_actions_on).in_array(described_class::VALID_TRIGGERS) }
   end
+
+  context "fixers" do
+    it_behaves_like "a block that fixes validation errors", attribute: :trigger_actions_on, null_value: {
+      valid_values: [
+        described_class::VALID_TRIGGERS,
+        [described_class::VALID_TRIGGERS.sample]
+      ],
+      invalid_values: [
+        {before: ["on_enter_pressed", "invalid", "on_character_entered"], after: BlockKit::TypedSet.new(ActiveModel::Type::String.new, ["on_enter_pressed", "on_character_entered"])},
+        {before: ["on_character_entered", "nope", "on_enter_pressed"], after: BlockKit::TypedSet.new(ActiveModel::Type::String.new, ["on_enter_pressed", "on_character_entered"])},
+        {before: ["invalid"], after: BlockKit::TypedSet.new(ActiveModel::Type::String.new), still_invalid: true},
+        {before: [""], after: BlockKit::TypedSet.new(ActiveModel::Type::String.new), still_invalid: true},
+        {before: [], after: BlockKit::TypedSet.new(ActiveModel::Type::String.new), still_invalid: true}
+      ]
+    }
+  end
 end

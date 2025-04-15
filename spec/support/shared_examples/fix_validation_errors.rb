@@ -24,15 +24,20 @@ RSpec.shared_examples_for "a block that fixes validation errors" do |attribute:,
     end
 
     Array(nullifier[:invalid_values]).each do |scenario|
-      old_value, new_value = scenario.values_at(:before, :after)
+      old_value, new_value, still_invalid = scenario.values_at(:before, :after, :still_invalid)
 
-      it "replaces invalid value #{old_value.inspect} with #{new_value.inspect}" do
+      it "replaces invalid value #{old_value.inspect}#{" with #{new_value.inspect}" unless still_invalid}" do
         subject.assign_attributes(attribute => old_value)
         expect(subject).not_to be_valid
 
         subject.fix_validation_errors
-        expect(subject).to be_valid
+
         expect(subject.attributes[attribute.to_s]).to eq(new_value)
+        if still_invalid
+          expect(subject).not_to be_valid
+        else
+          expect(subject).to be_valid
+        end
       end
     end
   end
