@@ -56,39 +56,4 @@ RSpec.describe BlockKit::Composition::SlackFile, type: :model do
     it { is_expected.to have_attribute(:id).with_type(:string) }
     it { is_expected.to have_attribute(:url).with_type(:string) }
   end
-
-  context "fixers" do
-    it_behaves_like "a block that fixes validation errors", attribute: :id, null_value: {
-      valid_values: [
-        "F12345678",
-        "F1A2B3C4D5E",
-        nil
-      ],
-      invalid_values: [
-        {before: "F1234567", after: nil},
-        {before: "f12345678", after: nil},
-        {before: "F1a2b3c4d5e", after: nil},
-        {before: "", after: nil}
-      ]
-    }
-
-    it_behaves_like "a block that fixes validation errors",
-      attribute: :url,
-      truncate: {
-        maximum: described_class::MAX_URL_LENGTH,
-        invalid_value: "https://example.com/#{"a" * described_class::MAX_URL_LENGTH}"
-      },
-      null_value: {
-        valid_values: [
-          "https://example.com/",
-          "http://example.com/",
-          nil
-        ],
-        invalid_values: [
-          {before: "this://kind.of.url/", after: nil},
-          {before: "invalid_url", after: nil},
-          {before: "", after: nil}
-        ]
-      }
-  end
 end

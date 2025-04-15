@@ -44,4 +44,19 @@ RSpec.shared_examples_for "a block that fixes validation errors" do |attribute:,
       end
     end
   end
+
+  if (associated = options[:associated])
+    it "fixes the associated #{attribute}" do
+      associated_model = associated.call
+      subject.assign_attributes(attribute => associated_model)
+
+      expect(associated_model).not_to be_valid
+      expect(subject).not_to be_valid
+
+      subject.fix_validation_errors
+      expect(associated_model).to be_valid
+      expect(subject).to be_valid
+      expect(subject.attributes[attribute.to_s].url).not_to be_empty
+    end
+  end
 end

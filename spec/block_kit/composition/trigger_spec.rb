@@ -68,24 +68,4 @@ RSpec.describe BlockKit::Composition::Trigger, type: :model do
 
     it { is_expected.to have_attribute(:customizable_input_parameters).with_type(:array).containing(:block_kit_input_parameter) }
   end
-
-  context "fixers" do
-    it_behaves_like "a block that fixes validation errors",
-      attribute: :url,
-      truncate: {
-        maximum: described_class::MAX_URL_LENGTH,
-        invalid_value: "https://example.com/#{"a" * described_class::MAX_URL_LENGTH}"
-      },
-      null_value: {
-        valid_values: [
-          "https://example.com/",
-          "http://example.com/"
-        ],
-        invalid_values: [
-          {before: "this://kind.of.url/", after: nil, still_invalid: true},
-          {before: "invalid_url", after: nil, still_invalid: true},
-          {before: "", after: nil, still_invalid: true}
-        ]
-      }
-  end
 end
