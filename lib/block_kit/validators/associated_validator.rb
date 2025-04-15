@@ -9,6 +9,10 @@ module BlockKit
     class AssociatedValidator < ActiveModel::EachValidator
       def validate_each(record, attribute, value)
         if value.is_a?(Array)
+          if value.any?(&:invalid?)
+            record.errors.add(attribute, :invalid, **options, value: value, invalid_values: value.select(&:invalid?))
+          end
+
           value.each_with_index do |item, i|
             unless item.valid?
               error_messages = build_error_messages(item.errors)

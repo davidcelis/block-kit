@@ -6,6 +6,7 @@ module BlockKit
   autoload :Composition, "block_kit/composition"
   autoload :Concerns, "block_kit/concerns"
   autoload :Elements, "block_kit/elements"
+  autoload :Fixers, "block_kit/fixers"
   autoload :Layout, "block_kit/layout"
   autoload :TypedArray, "block_kit/typed_array"
   autoload :TypedSet, "block_kit/typed_set"

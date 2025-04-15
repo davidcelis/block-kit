@@ -9,11 +9,38 @@ module BlockKit
     include ActiveModel::Validations
 
     class_attribute :type, default: nil
+    class_attribute :attribute_fixers, default: Hash.new { |h, k| h[k] = [] }
+
+    def self.fixes(attribute, fixers)
+      fixers.each do |name, options|
+        options = {} if !options.is_a?(Hash)
+        fixer_class = BlockKit::Fixers.const_get(name.to_s.camelize)
+        fixer = fixer_class.new(attribute: attribute, **options)
+
+        attribute_fixers[attribute] << fixer
+      end
+    end
 
     def initialize(attributes = {})
       raise NotImplementedError, "#{self.class} is an abstract class and can't be instantiated." if instance_of?(Block)
 
       super
+    end
+
+    def fix_validation_errors
+      return if valid?
+
+      attribute_fixers.each do |attribute, fixers|
+        fixers.each { |fixer| fixer.fix(self) }
+      end
+
+      validate
+    end
+
+    def fix_validation_errors!
+      fix_validation_errors
+
+      validate!
     end
 
     def as_json(*)

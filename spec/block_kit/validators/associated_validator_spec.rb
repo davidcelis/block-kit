@@ -177,8 +177,8 @@ RSpec.describe BlockKit::Validators::AssociatedValidator do
       expect(nested_2.errors["deeply_nested[0]"]).to include("is invalid: deeply_nested_attr_2 can't be blank")
       expect(nested_2.errors["deeply_nested[1]"]).to include("is invalid: deeply_nested_attr_1 can't be blank")
       expect(top_model).not_to be_valid
-      expect(top_model.errors["nested[0]"]).to include("is invalid: deeply_nested[0].deeply_nested_attr_2 can't be blank, deeply_nested[1].deeply_nested_attr_1 can't be blank")
-      expect(top_model.errors["nested[1]"]).to include("is invalid: deeply_nested[0].deeply_nested_attr_2 can't be blank, deeply_nested[1].deeply_nested_attr_1 can't be blank")
+      expect(top_model.errors["nested[0]"]).to include("is invalid: deeply_nested is invalid, deeply_nested[0].deeply_nested_attr_2 can't be blank, deeply_nested[1].deeply_nested_attr_1 can't be blank")
+      expect(top_model.errors["nested[1]"]).to include("is invalid: deeply_nested is invalid, deeply_nested[0].deeply_nested_attr_2 can't be blank, deeply_nested[1].deeply_nested_attr_1 can't be blank")
     end
   end
 end
