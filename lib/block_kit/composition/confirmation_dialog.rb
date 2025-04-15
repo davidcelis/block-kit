@@ -6,7 +6,10 @@ module BlockKit
       MAX_TITLE_TEXT_LENGTH = 100
       MAX_TEXT_LENGTH = 300
       MAX_BUTTON_TEXT_LENGTH = 30
-      VALID_STYLES = %w[primary danger].freeze
+      VALID_STYLES = [
+        PRIMARY = "primary",
+        DANGER = "danger"
+      ].freeze
 
       self.type = :confirmation_dialog
 

@@ -50,22 +50,20 @@ RSpec.describe BlockKit::Composition::ConversationFilter, type: :model do
     it { is_expected.to validate_array_inclusion_of(:include).in_array(described_class::VALID_INCLUDES) }
   end
 
-  describe "array mutation" do
-    let(:attributes) { super().merge(include: ["im"]) }
-
-    it "handles pushing new values" do
-      conversation_filter.include << :mpim
-      expect(conversation_filter.include.to_a).to eq(["im", "mpim"])
-    end
-
-    it "handles assignment with symbols" do
-      conversation_filter.include = [:public, :private]
-      expect(conversation_filter.include.to_a).to eq(["public", "private"])
-    end
-
-    it "handles appending arrays" do
-      conversation_filter.include += [:public, :private]
-      expect(conversation_filter.include.to_a).to eq(["im", "public", "private"])
-    end
+  context "fixers" do
+    it_behaves_like "a block that fixes validation errors", attribute: :include, null_value: {
+      valid_values: [
+        described_class::VALID_INCLUDES,
+        described_class::VALID_INCLUDES.sample(rand(1..3)),
+        nil
+      ],
+      invalid_values: [
+        {before: ["im", "invalid", "mpim"], after: BlockKit::TypedSet.new(ActiveModel::Type::String.new, ["im", "mpim"])},
+        {before: ["mpim", "nope", "public"], after: BlockKit::TypedSet.new(ActiveModel::Type::String.new, ["mpim", "public"])},
+        {before: ["invalid"], after: nil},
+        {before: [""], after: nil},
+        {before: [], after: nil}
+      ]
+    }
   end
 end

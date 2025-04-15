@@ -58,6 +58,12 @@ RSpec.describe BlockKit::Composition::ConfirmationDialog, type: :model do
     it_behaves_like "a block that fixes validation errors", attribute: :text, truncate: {maximum: described_class::MAX_TEXT_LENGTH}
     it_behaves_like "a block that fixes validation errors", attribute: :confirm, truncate: {maximum: described_class::MAX_BUTTON_TEXT_LENGTH}
     it_behaves_like "a block that fixes validation errors", attribute: :deny, truncate: {maximum: described_class::MAX_BUTTON_TEXT_LENGTH}
-    it_behaves_like "a block that fixes validation errors", attribute: :style, null_value: {invalid_values: ["", "invalid"], valid_values: described_class::VALID_STYLES}
+    it_behaves_like "a block that fixes validation errors", attribute: :style, null_value: {
+      valid_values: described_class::VALID_STYLES + [nil],
+      invalid_values: [
+        {before: "", after: nil},
+        {before: "invalid", after: nil}
+      ]
+    }
   end
 end
