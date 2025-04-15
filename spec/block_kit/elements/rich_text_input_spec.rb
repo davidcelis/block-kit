@@ -69,7 +69,7 @@ RSpec.describe BlockKit::Elements::RichTextInput, type: :model do
         elements: [BlockKit::Layout::RichText::Section.new]
       )
       expect(input).not_to be_valid
-      expect(input.errors[:initial_value]).to include("is invalid: elements[0].elements can't be blank")
+      expect(input.errors[:initial_value]).to include("is invalid: elements is invalid, elements[0].elements can't be blank")
     end
   end
 end

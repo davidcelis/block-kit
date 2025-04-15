@@ -3,12 +3,23 @@
 module BlockKit
   module Composition
     class Text < Block
+      MAX_LENGTH = 3000
+
       attribute :text, :string
 
-      delegate :blank?, :present?, :truncate, to: :text
+      validates :text, presence: true, length: {maximum: MAX_LENGTH}
+      fixes :text, truncate: {maximum: MAX_LENGTH}
+
+      delegate :blank?, :present?, to: :text
 
       def length
         text&.length || 0
+      end
+
+      def truncate(*)
+        dup.tap do |copy|
+          copy.text = text.truncate(*)
+        end
       end
 
       def as_json(*)

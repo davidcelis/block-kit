@@ -2,12 +2,22 @@
 
 require "spec_helper"
 
-RSpec.describe BlockKit::Composition::PlainText do
+RSpec.describe BlockKit::Composition::PlainText, type: :model do
   subject(:plain_text_block) { described_class.new(**attributes) }
   let(:attributes) { {text: "Hello, world!"} }
 
-  it "has a type" do
-    expect(described_class.type.to_s).to eq("plain_text")
+  describe "#truncate" do
+    it "copies itself and truncates the copy's text" do
+      plain_text_block.emoji = true
+
+      new_block = plain_text_block.truncate(8)
+      expect(new_block).not_to eq(plain_text_block)
+      expect(new_block.text).to eq("Hello...")
+      expect(new_block.emoji).to eq(true)
+
+      expect(plain_text_block.text).to eq("Hello, world!")
+      expect(plain_text_block.emoji).to eq(true)
+    end
   end
 
   describe "#as_json" do
@@ -33,6 +43,9 @@ RSpec.describe BlockKit::Composition::PlainText do
 
   context "validations" do
     it { is_expected.to be_valid }
+
+    it { is_expected.to validate_presence_of(:text) }
+    it { is_expected.to validate_length_of(:text).is_at_most(described_class::MAX_LENGTH) }
   end
 
   context "attributes" do
