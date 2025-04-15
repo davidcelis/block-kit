@@ -56,4 +56,10 @@ RSpec.describe BlockKit::Composition::Option, type: :model do
     it_behaves_like "a block that has plain text attributes", :text, :description
     it_behaves_like "a block that has plain text emoji assignment", :text, :description
   end
+
+  context "fixers" do
+    it_behaves_like "a block that fixes validation errors", attribute: :text, truncate: {maximum: described_class::MAX_TEXT_LENGTH}
+    it_behaves_like "a block that fixes validation errors", attribute: :value, truncate: {maximum: described_class::MAX_VALUE_LENGTH}
+    it_behaves_like "a block that fixes validation errors", attribute: :description, truncate: {maximum: described_class::MAX_DESCRIPTION_LENGTH}
+  end
 end

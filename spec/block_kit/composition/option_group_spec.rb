@@ -46,4 +46,8 @@ RSpec.describe BlockKit::Composition::OptionGroup, type: :model do
   context "attributes" do
     it_behaves_like "a block that has plain text attributes", :label
   end
+
+  context "fixers" do
+    it_behaves_like "a block that fixes validation errors", attribute: :label, truncate: {maximum: described_class::MAX_LABEL_LENGTH}
+  end
 end

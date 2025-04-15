@@ -3,12 +3,14 @@ require "spec_helper"
 RSpec.shared_examples_for "a block that fixes validation errors" do |attribute:, **options|
   if (truncater = options[:truncate])
     it "automatically truncates the #{attribute} attribute" do
-      subject.assign_attributes(attribute => "a" * (truncater[:maximum] + 1))
+      invalid_value = truncater.fetch(:invalid_value) { "a" * (truncater[:maximum] + 1) }
+
+      subject.assign_attributes(attribute => invalid_value)
       expect(subject).not_to be_valid
 
       subject.fix_validation_errors
       expect(subject).to be_valid
-      expect(subject.public_send(attribute).text.length).to be <= truncater[:maximum]
+      expect(subject.attributes[attribute.to_s].length).to be <= truncater[:maximum]
     end
   end
 

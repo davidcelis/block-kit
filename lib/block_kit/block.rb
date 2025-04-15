@@ -21,6 +21,10 @@ module BlockKit
       end
     end
 
+    def self.inherited(base)
+      base.attribute_fixers = attribute_fixers.dup
+    end
+
     def initialize(attributes = {})
       raise NotImplementedError, "#{self.class} is an abstract class and can't be instantiated." if instance_of?(Block)
 
