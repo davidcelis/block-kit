@@ -24,6 +24,7 @@ RSpec.describe BlockKit::Composition::SlackFile, type: :model do
     it { is_expected.to be_valid }
 
     it { is_expected.to validate_presence_of(:url).allow_nil }
+    it { is_expected.to validate_length_of(:url).is_at_most(3000) }
     it { is_expected.to allow_value("http://example.com/").for(:url) }
     it { is_expected.to allow_value("https://example.com/").for(:url) }
     it { is_expected.not_to allow_value("this://kind.of.url/").for(:url).with_message("is not a valid URI") }
@@ -54,5 +55,40 @@ RSpec.describe BlockKit::Composition::SlackFile, type: :model do
   context "attributes" do
     it { is_expected.to have_attribute(:id).with_type(:string) }
     it { is_expected.to have_attribute(:url).with_type(:string) }
+  end
+
+  context "fixers" do
+    it_behaves_like "a block that fixes validation errors", attribute: :id, null_value: {
+      valid_values: [
+        "F12345678",
+        "F1A2B3C4D5E",
+        nil
+      ],
+      invalid_values: [
+        {before: "F1234567", after: nil},
+        {before: "f12345678", after: nil},
+        {before: "F1a2b3c4d5e", after: nil},
+        {before: "", after: nil}
+      ]
+    }
+
+    it_behaves_like "a block that fixes validation errors",
+      attribute: :url,
+      truncate: {
+        maximum: described_class::MAX_URL_LENGTH,
+        invalid_value: "https://example.com/#{"a" * described_class::MAX_URL_LENGTH}"
+      },
+      null_value: {
+        valid_values: [
+          "https://example.com/",
+          "http://example.com/",
+          nil
+        ],
+        invalid_values: [
+          {before: "this://kind.of.url/", after: nil},
+          {before: "invalid_url", after: nil},
+          {before: "", after: nil}
+        ]
+      }
   end
 end
