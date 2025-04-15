@@ -52,4 +52,12 @@ RSpec.describe BlockKit::Composition::ConfirmationDialog, type: :model do
     it { is_expected.to validate_presence_of(:style).allow_nil }
     it { is_expected.to validate_inclusion_of(:style).in_array(%w[primary danger]) }
   end
+
+  context "fixers" do
+    it_behaves_like "a block that fixes validation errors", attribute: :title, truncate: {maximum: described_class::MAX_TITLE_TEXT_LENGTH}
+    it_behaves_like "a block that fixes validation errors", attribute: :text, truncate: {maximum: described_class::MAX_TEXT_LENGTH}
+    it_behaves_like "a block that fixes validation errors", attribute: :confirm, truncate: {maximum: described_class::MAX_BUTTON_TEXT_LENGTH}
+    it_behaves_like "a block that fixes validation errors", attribute: :deny, truncate: {maximum: described_class::MAX_BUTTON_TEXT_LENGTH}
+    it_behaves_like "a block that fixes validation errors", attribute: :style, null_value: {invalid_values: ["", "invalid"], valid_values: described_class::VALID_STYLES}
+  end
 end
