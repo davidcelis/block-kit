@@ -8,6 +8,7 @@ module BlockKit
       included do
         attribute :min_query_length, :integer
         validates :min_query_length, presence: true, numericality: {only_integer: true, greater_than_or_equal_to: 0}, allow_nil: true
+        fixes :min_query_length, null_value: {error_types: [:greater_than_or_equal_to]}
       end
 
       def as_json(*)
