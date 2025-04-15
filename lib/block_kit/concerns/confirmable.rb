@@ -8,6 +8,7 @@ module BlockKit
       included do
         attribute :confirm, Types::Block.of_type(Composition::ConfirmationDialog)
         validates :confirm, "block_kit/validators/associated": true, allow_nil: true
+        fixes :confirm, associated: true
 
         dsl_method :confirm, required_fields: [:title, :text, :confirm, :deny], yields: false
       end

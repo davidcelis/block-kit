@@ -47,7 +47,10 @@ RSpec.shared_examples_for "a block that fixes validation errors" do |attribute:,
 
   if (associated = options[:associated])
     it "fixes the associated #{attribute}" do
-      associated_model = associated.call
+      associated_model = associated[:record].call
+      invalid_attribute = associated[:invalid_attribute].to_s
+      fixed_attribute_value = associated[:fixed_attribute_value]
+
       subject.assign_attributes(attribute => associated_model)
 
       expect(associated_model).not_to be_valid
@@ -55,8 +58,8 @@ RSpec.shared_examples_for "a block that fixes validation errors" do |attribute:,
 
       subject.fix_validation_errors
       expect(associated_model).to be_valid
+      expect(associated_model.attributes[invalid_attribute]).to eq(fixed_attribute_value)
       expect(subject).to be_valid
-      expect(subject.attributes[attribute.to_s].url).not_to be_empty
     end
   end
 end

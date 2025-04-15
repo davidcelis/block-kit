@@ -42,4 +42,18 @@ RSpec.shared_examples_for "a block that is confirmable" do
       deny: {type: "plain_text", text: "No"}
     })
   end
+
+  it_behaves_like "a block that fixes validation errors", attribute: :confirm, associated: {
+    record: -> {
+      BlockKit::Composition::ConfirmationDialog.new(
+        title: "Dialog Title",
+        text: "Dialog Text",
+        confirm: "Yes",
+        deny: "No",
+        style: "invalid"
+      )
+    },
+    invalid_attribute: :style,
+    fixed_attribute_value: nil
+  }
 end
