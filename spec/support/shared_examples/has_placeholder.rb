@@ -16,4 +16,5 @@ RSpec.shared_examples_for "a block that has a placeholder" do
 
   it_behaves_like "a block that has plain text attributes", :placeholder
   it_behaves_like "a block that has plain text emoji assignment", :placeholder
+  it_behaves_like "a block that fixes validation errors", attribute: :placeholder, truncate: {maximum: BlockKit::Concerns::HasPlaceholder::MAX_TEXT_LENGTH}
 end
