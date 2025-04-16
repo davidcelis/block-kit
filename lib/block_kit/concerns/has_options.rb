@@ -13,6 +13,7 @@ module BlockKit
               presence: {unless: ->(block) { block.respond_to?(:option_groups) }},
               length: {maximum: limit, message: "is too long (maximum is %{count} options)"},
               "block_kit/validators/associated": true
+            fixes :options, associated: true
 
             dsl_method :options, as: :option, required_fields: [:text, :value], yields: false
           end

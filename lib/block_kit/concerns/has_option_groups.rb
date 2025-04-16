@@ -12,6 +12,7 @@ module BlockKit
 
             attribute :option_groups, Types::Array.of(Composition::OptionGroup)
             validates :option_groups, length: {maximum: limit, message: "is too long (maximum is %{count} groups)"}, "block_kit/validators/associated": true
+            fixes :option_groups, associated: true
 
             validate :options_or_option_groups
 

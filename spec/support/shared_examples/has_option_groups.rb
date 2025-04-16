@@ -56,4 +56,28 @@ RSpec.shared_examples_for "a block that has option groups" do |limit:, options_l
     expect(subject).not_to be_valid
     expect(subject.errors[:base]).to include("must have either options or option groups, not both")
   end
+
+  it "automatically fixes invalid option_groups" do
+    option_1 = BlockKit::Composition::Option.new(text: "Option 1", value: "option_1")
+    option_2 = BlockKit::Composition::Option.new(text: "2" * (BlockKit::Composition::Option::MAX_TEXT_LENGTH + 2), value: "option_2")
+    option_3 = BlockKit::Composition::Option.new(text: "Option 3", value: "option_3", description: "3" * (BlockKit::Composition::Option::MAX_DESCRIPTION_LENGTH + 3))
+    option_group = BlockKit::Composition::OptionGroup.new(
+      label: "a" * (BlockKit::Composition::OptionGroup::MAX_LABEL_LENGTH + 1),
+      options: [option_1, option_2, option_3]
+    )
+
+    subject.options = nil
+    subject.option_groups = [option_group]
+    expect(option_group).not_to be_valid
+
+    expect {
+      subject.fix_validation_errors
+    }.to change {
+      option_group.label.length
+    }.by(-1).and change {
+      option_2.text.length
+    }.by(-2).and change {
+      option_3.description.length
+    }.by(-3)
+  end
 end
