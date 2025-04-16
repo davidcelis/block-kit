@@ -3,6 +3,13 @@
 module BlockKit
   module Elements
     class BaseButton < Base
+      MAX_TEXT_LENGTH = 75
+      MAX_ACCESSIBILITY_LABEL_LENGTH = 75
+      VALID_STYLES = [
+        PRIMARY = "primary",
+        DANGER = "danger"
+      ].freeze
+
       self.type = :button
 
       plain_text_attribute :text
@@ -11,9 +18,14 @@ module BlockKit
 
       include Concerns::PlainTextEmojiAssignment.new(:text)
 
-      validates :text, presence: true, length: {maximum: 75}
-      validates :style, presence: true, inclusion: {in: %w[primary danger]}, allow_nil: true
-      validates :accessibility_label, presence: true, length: {maximum: 75}, allow_nil: true
+      validates :text, presence: true, length: {maximum: MAX_TEXT_LENGTH}
+      fixes :text, truncate: {maximum: MAX_TEXT_LENGTH}
+
+      validates :style, presence: true, inclusion: {in: VALID_STYLES}, allow_nil: true
+      fixes :style, null_value: {error_types: [:inclusion]}
+
+      validates :accessibility_label, presence: true, length: {maximum: MAX_ACCESSIBILITY_LABEL_LENGTH}, allow_nil: true
+      fixes :accessibility_label, truncate: {maximum: MAX_ACCESSIBILITY_LABEL_LENGTH}, null_value: {error_types: [:blank]}
 
       def initialize(attributes = {})
         raise NotImplementedError, "#{self.class} is an abstract class and can't be instantiated." if instance_of?(BaseButton)

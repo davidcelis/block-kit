@@ -54,4 +54,19 @@ RSpec.describe BlockKit::Elements::Button, type: :model do
     it { is_expected.to validate_presence_of(:value).allow_nil }
     it { is_expected.to validate_length_of(:value).is_at_most(2000).allow_nil }
   end
+
+  context "fixers" do
+    it_behaves_like "a block that fixes validation errors", attribute: :url, null_value: {
+      valid_values: ["http://example.com/", "https://example.com/", "anything://is.fine/", nil],
+      invalid_values: [
+        {before: "invalid_url", after: "invalid_url", still_invalid: true},
+        {before: "", after: nil}
+      ]
+    }
+
+    it_behaves_like "a block that fixes validation errors", attribute: :value, null_value: {
+      valid_values: ["anything", nil],
+      invalid_values: [{before: "", after: nil}]
+    }
+  end
 end

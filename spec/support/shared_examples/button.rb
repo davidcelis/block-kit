@@ -32,4 +32,22 @@ RSpec.shared_examples_for "a button" do
   it_behaves_like "a block with an action_id"
   it_behaves_like "a block that has plain text attributes", :text
   it_behaves_like "a block that has plain text emoji assignment", :text
+
+  it_behaves_like "a block that fixes validation errors", attribute: :text, truncate: {maximum: BlockKit::Elements::BaseButton::MAX_TEXT_LENGTH}
+  it_behaves_like "a block that fixes validation errors",
+    attribute: :style,
+    null_value: {
+      valid_values: BlockKit::Elements::BaseButton::VALID_STYLES + [nil],
+      invalid_values: [
+        {before: "invalid", after: nil},
+        {before: "", after: nil}
+      ]
+    }
+  it_behaves_like "a block that fixes validation errors",
+    attribute: :accessibility_label,
+    truncate: {maximum: BlockKit::Elements::BaseButton::MAX_ACCESSIBILITY_LABEL_LENGTH},
+    null_value: {
+      valid_values: ["An accessible label", nil],
+      invalid_values: [{before: "", after: nil}]
+    }
 end
