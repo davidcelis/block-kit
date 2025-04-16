@@ -15,4 +15,20 @@ module BlockKit
   autoload :Validators, "block_kit/validators"
 
   autoload :VERSION, "block_kit/version"
+
+  def self.blocks(&block)
+    Blocks.new(&block)
+  end
+
+  def self.home(&block)
+    Surfaces::Home.new(&block)
+  end
+
+  def self.modal(&block)
+    Surfaces::Modal.new(&block)
+  end
+
+  def self.message(&block)
+    Surfaces::Message.new(&block)
+  end
 end

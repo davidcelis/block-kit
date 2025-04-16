@@ -1,28 +1,134 @@
-# Block::Kit
+# Block Kit
 
-TODO: Delete this and the text below, and describe your gem
-
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/block/kit`. To experiment with that code, run `bin/console` for an interactive prompt.
+`block-kit` is a Ruby library for Slack's [Block Kit](https://api.slack.com/block-kit) framework built on ActiveModel, providing a powerful DSL for building surfaces like modals, home tabs, messages, or even just blocks themselves.
 
 ## Installation
-
-TODO: Replace `UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG` with your gem name right after releasing it to RubyGems.org. Please do not do it earlier due to security reasons. Alternatively, replace this section with instructions to install your gem from git if you don't plan to release to RubyGems.org.
 
 Install the gem and add to the application's Gemfile by executing:
 
 ```bash
-bundle add UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+bundle add block-kit
 ```
 
-If bundler is not being used to manage dependencies, install the gem by executing:
+Or just install it globally:
 
 ```bash
-gem install UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+gem install block-kit
 ```
 
 ## Usage
 
-TODO: Write usage instructions here
+Blocks can be built individually or as a surface or collection of blocks, which each block able to initialize with a simple Hash or attributes or via a block-based DSL. For example, each of the following declarations would result in the same `section` block:
+
+```ruby
+require "block-kit"
+
+section = BlockKit::Layout::Section.new(text: BlockKit::Composition::Mrkdwn.new(text: "Hello, world!"))
+section = BlockKit::Layout::Section.new(text: "Hello, world!")
+section = BlockKit::Layout::Section.new do |s|
+  # With one of any of the following:
+  s.mrkdwn(text: "Hello, world!")
+  s.text("Hello, world!")
+  s.text = BlockKit::Composition::Mrkdwn.new(text: "Hello, world!")
+  s.text = {type: "mrkdwn", text: "Hello, world!"}
+  s.text = "Hello, world!" # Defaults to `mrkdwn` for section blocks
+end
+```
+
+Because each block is built using ActiveModel, attributes are cast to their appropriate types from a variety of inputs. If a block contains another block, you can even assign that nested block as a Hash, which means you should be able to completely reconstruct views or messages from the JSON they serialize to. Additionally, like other ActiveModel classes, values that cannot be cast simply result in `nil`, including when you attempt to do something like add an element to a block that doesn't support it.
+
+ActiveModel and the extensive DSL provides a powerful and flexible way to build UI in Slack. Here's an end-to-end example of building a message and a modal and sending them to Slack:
+
+```ruby
+require "slack-ruby-client"
+require "block-kit"
+
+footer = BlockKit::Layout::Context.new do |c|
+  c.mrkdwn(text: "_Made with :heart: in Portland, OR_")
+end
+
+# Or `BlockKit::Blocks.new do |b|`
+blocks = BlockKit.blocks do |b|
+  b.header(text: "Hello, :earth_americas:!", emoji: true)
+
+  b.divider
+
+  b.section(block_id: "content") do |s|
+    s.mrkdwn(text: "Welcome to Block Kit!")
+    s.button(text: "Learn more", style: "primary", url: "https://api.slack.com/block-kit")
+  end
+
+  b.append(footer)
+end
+
+client = Slack::Web::Client.new
+client.chat_postMessage(
+  channel: "#general",
+  blocks: blocks.to_json,
+  text: "Hello, world!"
+)
+
+modal = BlockKit.modal(blocks: blocks) do |m|
+  m.title(text: "Hello, :earth_americas:!", emoji: true)
+  m.close(text: "Close", emoji: true)
+end
+
+client.views_open(
+  trigger_id: "trigger_id",
+  view: modal.to_json
+)
+```
+
+Another benefit of being built on ActiveModel is that all documented limitations of BlockKit are enforced as model validations, with surfaces and collections validating all blocks within them. For example:
+
+```ruby
+modal = BlockKit.modal do |m|
+  m.title(text: "Hello, world! Welcome to Block Kit!")
+
+  m.section(block_id: "content") do |s|
+    s.mrkdwn(text: "Welcome to Block Kit!")
+    s.button(text: "Learn more", style: "primary", url: "invalid.url")
+  end
+
+  m.append(footer)
+end
+
+modal.valid?
+# => false
+
+modal.errors.full_messages
+["Blocks is invalid", "Blocks[0] is invalid: accessory.url is not a valid URI", "Title is too long (maximum is 24 characters)"]
+```
+
+This allows you to catch most issues that would result in an `invalid_blocks` error from Slack before you even send the request. Better yet, `block-kit` provides a way to automatically fix any validation error that wouldn't result in changing the behavior of your view. Currently this includes fixing most text length errors via truncation (this notably excludes URLs, which cannot be truncated safely) and nulling out ptional fields that are accidentally set to blank values:
+
+```ruby
+modal = BlockKit.modal do |m|
+  m.title(text: "Hello, world! Welcome to Block Kit!")
+
+  m.section(block_id: "content") do |s|
+    s.mrkdwn(text: "Welcome to Block Kit!")
+    s.button(text: "Learn more", style: "", url: "https://api.slack.com/block-kit")
+  end
+
+  m.append(footer)
+end
+
+modal.valid?
+# => false
+
+modal.errors.full_messages
+# => ["Blocks is invalid", "Blocks[0] is invalid: accessory.style can't be blank", "Title is too long (maximum is 24 characters)"]
+
+modal.fix_validation_errors
+# => true # or false if any errors couldn't be fixed
+
+modal.title
+# => #<BlockKit::Composition::PlainText text: "Hello, world! Welcome...", emoji: nil>
+
+modal.blocks.first.accessory
+# => #<BlockKit::Elements::Button text: #<BlockKit::Composition::PlainText text: "Learn more", emoji: nil>, style: nil, ...>
+```
 
 ## Development
 

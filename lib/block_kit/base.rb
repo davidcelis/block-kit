@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "active_model"
+require "json"
 
 module BlockKit
   class Base
@@ -59,6 +60,10 @@ module BlockKit
 
     def as_json(*)
       {type: self.class.type.to_s}
+    end
+
+    def to_json(*)
+      as_json.to_json
     end
 
     def ==(other)
