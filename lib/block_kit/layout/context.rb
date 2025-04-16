@@ -18,6 +18,13 @@ module BlockKit
       dsl_method :elements, as: :mrkdwn, type: Composition::Mrkdwn, required_fields: [:text], yields: false
       dsl_method :elements, as: :plain_text, type: Composition::PlainText, required_fields: [:text], yields: false
 
+      def initialize(attributes = {})
+        attributes = attributes.with_indifferent_access
+        attributes[:elements] ||= []
+
+        super
+      end
+
       def image(alt_text:, image_url: nil, slack_file: nil)
         if (image_url.nil? && slack_file.nil?) || (image_url && slack_file)
           raise ArgumentError, "Must provide either image_url or slack_file, but not both."

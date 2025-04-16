@@ -21,9 +21,10 @@ module BlockKit
     delegate_missing_to :blocks
 
     def initialize(attributes = {})
-      super
+      attributes = attributes.with_indifferent_access
+      attributes[:blocks] ||= []
 
-      self.blocks ||= []
+      super
     end
 
     def image(alt_text:, image_url: nil, slack_file: nil, title: nil, emoji: nil, block_id: nil)

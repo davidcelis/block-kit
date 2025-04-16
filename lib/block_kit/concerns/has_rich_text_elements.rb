@@ -16,6 +16,13 @@ module BlockKit
         dsl_method :elements, as: :emoji, type: Layout::RichText::Elements::Emoji, required_fields: [:name], yields: false
       end
 
+      def initialize(attributes = {})
+        attributes = attributes.with_indifferent_access
+        attributes[:elements] ||= []
+
+        super
+      end
+
       def channel(channel_id:, styles: [])
         style = if styles.present?
           styles = Array(styles).map { |s| [s.to_s, true] }.to_h

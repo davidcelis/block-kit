@@ -28,9 +28,10 @@ module BlockKit
       ]
 
       def initialize(attributes = {})
-        super
+        attributes = attributes.with_indifferent_access
+        attributes[:elements] ||= []
 
-        self.elements ||= []
+        super
       end
 
       attribute :elements, Types::Array.of(Types::Blocks.new(*SUPPORTED_ELEMENTS))

@@ -8,6 +8,7 @@ module BlockKit
   autoload :Elements, "block_kit/elements"
   autoload :Fixers, "block_kit/fixers"
   autoload :Layout, "block_kit/layout"
+  autoload :Surfaces, "block_kit/surfaces"
   autoload :TypedArray, "block_kit/typed_array"
   autoload :TypedSet, "block_kit/typed_set"
   autoload :Types, "block_kit/types"

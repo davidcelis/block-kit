@@ -32,6 +32,13 @@ module BlockKit
       alias_method :rich_text_quote, :quote
       alias_method :rich_text_section, :section
 
+      def initialize(attributes = {})
+        attributes = attributes.with_indifferent_access
+        attributes[:elements] ||= []
+
+        super
+      end
+
       def append(element)
         elements << element
 
