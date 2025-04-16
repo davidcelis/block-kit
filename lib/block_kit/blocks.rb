@@ -107,6 +107,31 @@ module BlockKit
       self
     end
 
+    def valid?
+      blocks.all?(&:valid?)
+    end
+    alias_method :validate, :valid?
+
+    def validate!
+      validate || raise(ActiveModel::ValidationError)
+    end
+
+    def invalid?
+      !valid?
+    end
+
+    def fix_validation_errors
+      blocks.each(&:fix_validation_errors)
+
+      valid?
+    end
+
+    def fix_validation_errors!
+      blocks.each(&:fix_validation_errors)
+
+      validate!
+    end
+
     def as_json(*)
       @blocks.map(&:as_json)
     end

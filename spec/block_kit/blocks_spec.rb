@@ -393,4 +393,25 @@ RSpec.describe BlockKit::Blocks do
       ])
     end
   end
+
+  it "fixes individually-contained blocks" do
+    blocks.header(text: "Some very long text" * BlockKit::Layout::Header::MAX_LENGTH)
+    blocks.divider
+    blocks.section(text: "More long text" * BlockKit::Layout::Section::MAX_TEXT_LENGTH)
+
+    expect(blocks.fix_validation_errors).to be true
+
+    expect(blocks.first.text.length).to be <= BlockKit::Layout::Header::MAX_LENGTH
+    expect(blocks.last.text.length).to be <= BlockKit::Layout::Section::MAX_TEXT_LENGTH
+  end
+
+  it "can raise unfixed validation errors" do
+    blocks.header(text: "")
+    blocks.divider
+    blocks.section(text: "Long text" * BlockKit::Layout::Section::MAX_TEXT_LENGTH)
+
+    expect { blocks.fix_validation_errors! }.to raise_error(ActiveModel::ValidationError)
+
+    expect(blocks.last.text.length).to be <= BlockKit::Layout::Section::MAX_TEXT_LENGTH
+  end
 end
