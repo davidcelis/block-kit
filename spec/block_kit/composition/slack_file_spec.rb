@@ -20,6 +20,11 @@ RSpec.describe BlockKit::Composition::SlackFile, type: :model do
     end
   end
 
+  context "attributes" do
+    it { is_expected.to have_attribute(:id).with_type(:string) }
+    it { is_expected.to have_attribute(:url).with_type(:string) }
+  end
+
   context "validations" do
     it { is_expected.to be_valid }
 
@@ -52,8 +57,22 @@ RSpec.describe BlockKit::Composition::SlackFile, type: :model do
     end
   end
 
-  context "attributes" do
-    it { is_expected.to have_attribute(:id).with_type(:string) }
-    it { is_expected.to have_attribute(:url).with_type(:string) }
+  context "fixers" do
+    it_behaves_like "a block that fixes validation errors", attribute: :id, null_value: {
+      valid_values: ["F12345678", nil],
+      invalid_values: [
+        {before: "anything", after: "anything", still_invalid: true},
+        {before: "", after: nil}
+      ]
+    }
+
+    it_behaves_like "a block that fixes validation errors", attribute: :url, null_value: {
+      valid_values: ["http://example.com/", "https://example.com/", nil],
+      invalid_values: [
+        {before: "anything://is.fine/", after: "anything://is.fine/", still_invalid: true},
+        {before: "invalid_url", after: "invalid_url", still_invalid: true},
+        {before: "", after: nil}
+      ]
+    }
   end
 end

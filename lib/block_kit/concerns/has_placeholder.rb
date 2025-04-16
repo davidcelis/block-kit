@@ -10,7 +10,7 @@ module BlockKit
       included do
         plain_text_attribute :placeholder
         validates :placeholder, presence: true, length: {maximum: MAX_TEXT_LENGTH}, allow_nil: true
-        fixes :placeholder, truncate: {maximum: MAX_TEXT_LENGTH}
+        fixes :placeholder, truncate: {maximum: MAX_TEXT_LENGTH}, null_value: {error_types: [:blank]}
       end
 
       def as_json(*)

@@ -59,4 +59,24 @@ RSpec.describe BlockKit::Layout::RichText::Elements::Date, type: :model do
     it { is_expected.not_to allow_value("").for(:url).with_message("can't be blank") }
     it { is_expected.to validate_presence_of(:fallback).allow_nil }
   end
+
+  context "fixers" do
+    it_behaves_like "a block that fixes validation errors", attribute: :url, null_value: {
+      valid_values: [
+        "http://example.com/",
+        "https://example.com/",
+        "anything://is.fine/",
+        nil
+      ],
+      invalid_values: [
+        {before: "invalid_url", after: "invalid_url", still_invalid: true},
+        {before: "", after: nil}
+      ]
+    }
+
+    it_behaves_like "a block that fixes validation errors", attribute: :fallback, null_value: {
+      valid_values: ["anything", nil],
+      invalid_values: [{before: "", after: nil}]
+    }
+  end
 end

@@ -8,6 +8,7 @@ module BlockKit
       included do
         attribute :elements, Types::Array.of(Types::Blocks.new(*Layout::RichText::Elements.all))
         validates :elements, presence: true, "block_kit/validators/associated": true
+        fixes :elements, associated: true
 
         dsl_method :elements, as: :broadcast, type: Layout::RichText::Elements::Broadcast, required_fields: [:range], yields: false
         dsl_method :elements, as: :color, type: Layout::RichText::Elements::Color, required_fields: [:value], yields: false

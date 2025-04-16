@@ -21,7 +21,7 @@ RSpec.describe BlockKit::Layout::RichText::Elements::Emoji, type: :model do
         expect(element.as_json).to eq({
           type: described_class.type.to_s,
           name: "hotdog",
-          unicode: "1F32D"
+          unicode: "1f32d"
         })
       end
     end
@@ -37,5 +37,18 @@ RSpec.describe BlockKit::Layout::RichText::Elements::Emoji, type: :model do
 
     it { is_expected.to validate_presence_of(:name) }
     it { is_expected.to validate_presence_of(:unicode).allow_nil }
+    it { is_expected.to allow_value("1f2d").for(:unicode) }
+    it { is_expected.to allow_value("1F32D-1f32e").for(:unicode) }
+    it { is_expected.not_to allow_value("invalid").for(:unicode).with_message("is invalid") }
+  end
+
+  context "fixers" do
+    it_behaves_like "a block that fixes validation errors", attribute: :unicode, null_value: {
+      valid_values: ["1F32D-1f32e", "1f2d", nil],
+      invalid_values: [
+        {before: "invalid", after: "invalid", still_invalid: true},
+        {before: "", after: nil}
+      ]
+    }
   end
 end

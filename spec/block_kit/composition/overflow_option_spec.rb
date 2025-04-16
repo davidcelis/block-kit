@@ -28,6 +28,10 @@ RSpec.describe BlockKit::Composition::OverflowOption, type: :model do
     end
   end
 
+  context "attributes" do
+    it { is_expected.to have_attribute(:url).with_type(:string) }
+  end
+
   context "validations" do
     it { is_expected.to be_valid }
 
@@ -40,7 +44,13 @@ RSpec.describe BlockKit::Composition::OverflowOption, type: :model do
     it { is_expected.not_to allow_value("invalid_url").for(:url).with_message("is not a valid URI") }
   end
 
-  context "attributes" do
-    it { is_expected.to have_attribute(:url).with_type(:string) }
+  context "fixers" do
+    it_behaves_like "a block that fixes validation errors", attribute: :url, null_value: {
+      valid_values: ["http://example.com/", "https://example.com/", "anything://is.fine/", nil],
+      invalid_values: [
+        {before: "invalid_url", after: "invalid_url", still_invalid: true},
+        {before: "", after: nil}
+      ]
+    }
   end
 end

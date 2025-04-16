@@ -14,8 +14,12 @@ module BlockKit
 
       validates :timestamp, presence: true
       validates :format, presence: true
+
       validates :url, presence: true, format: {with: URI::DEFAULT_PARSER.make_regexp, message: "is not a valid URI", allow_blank: true}, allow_nil: true
+      fixes :url, null_value: {error_types: [:blank]}
+
       validates :fallback, presence: true, allow_nil: true
+      fixes :fallback, null_value: {error_types: [:blank]}
 
       def as_json(*)
         super.merge(

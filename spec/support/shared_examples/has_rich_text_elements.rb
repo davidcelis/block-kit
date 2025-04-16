@@ -61,7 +61,7 @@ RSpec.shared_examples_for "a block that has rich text elements" do
 
       expect(subject.elements.last).to be_a(BlockKit::Layout::RichText::Elements::Emoji)
       expect(subject.elements.last.name).to eq("smile")
-      expect(subject.elements.last.unicode).to eq("1F600")
+      expect(subject.elements.last.unicode).to eq("1f600")
     end
   end
 
@@ -137,6 +137,26 @@ RSpec.shared_examples_for "a block that has rich text elements" do
 
       expect(subject).not_to be_valid
       expect(subject.errors["elements[0]"]).to include("is invalid: text can't be blank")
+    end
+  end
+
+  context "fixers" do
+    it "fixes associated elements" do
+      element_1 = BlockKit::Layout::RichText::Elements::Date.new(timestamp: 1234567890, format: "{date_long_pretty}", url: "", fallback: "")
+      element_2 = BlockKit::Layout::RichText::Elements::Emoji.new(name: "smile", unicode: "1F600")
+      element_3 = BlockKit::Layout::RichText::Elements::Emoji.new(name: "hotdog", unicode: "")
+
+      subject.elements = [element_1, element_2, element_3]
+
+      expect {
+        subject.fix_validation_errors
+      }.to change {
+        element_1.url
+      }.from("").to(nil).and change {
+        element_1.fallback
+      }.from("").to(nil).and change {
+        element_3.unicode
+      }.from("").to(nil)
     end
   end
 end

@@ -12,7 +12,6 @@ module BlockKit
       ].freeze
 
       attribute :range, :string
-
       validates :range, presence: true, inclusion: {in: VALID_RANGES}
 
       def as_json(*)
