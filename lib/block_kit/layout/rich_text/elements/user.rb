@@ -2,7 +2,7 @@
 
 module BlockKit
   module Layout
-    class RichText::Elements::User < Block
+    class RichText::Elements::User < BlockKit::Base
       self.type = :user
 
       attribute :user_id, :string

@@ -2,7 +2,7 @@
 
 module BlockKit
   module Composition
-    class ConversationFilter < Block
+    class ConversationFilter < Base
       self.type = :conversation_filter
 
       VALID_INCLUDES = [

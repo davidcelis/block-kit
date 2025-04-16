@@ -2,7 +2,7 @@
 
 module BlockKit
   module Layout
-    class RichText::Elements::Channel < Block
+    class RichText::Elements::Channel < BlockKit::Base
       self.type = :channel
 
       attribute :channel_id, :string

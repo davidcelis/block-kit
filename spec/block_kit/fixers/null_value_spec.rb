@@ -4,7 +4,7 @@ require "spec_helper"
 
 RSpec.describe BlockKit::Fixers::NullValue do
   let(:block_class) do
-    Class.new(BlockKit::Block) do
+    Class.new(BlockKit::Base) do
       def self.name = "TestBlock"
 
       attribute :color, :string
@@ -44,7 +44,7 @@ RSpec.describe BlockKit::Fixers::NullValue do
 
       context "for enumerable attributes" do
         let(:block_class) do
-          Class.new(BlockKit::Block) do
+          Class.new(BlockKit::Base) do
             def self.name = "TestBlock"
 
             attribute :colors, BlockKit::Types::Array.of(:string)
@@ -89,7 +89,7 @@ RSpec.describe BlockKit::Fixers::NullValue do
 
     context "blank errors" do
       let(:block_class) do
-        Class.new(BlockKit::Block) do
+        Class.new(BlockKit::Base) do
           def self.name = "TestBlock"
 
           attribute :color, :string
@@ -124,7 +124,7 @@ RSpec.describe BlockKit::Fixers::NullValue do
 
       context "for enumerable attributes" do
         let(:block_class) do
-          Class.new(BlockKit::Block) do
+          Class.new(BlockKit::Base) do
             def self.name = "TestBlock"
 
             attribute :colors, BlockKit::Types::Array.of(:string)

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module BlockKit
-  autoload :Block, "block_kit/block"
+  autoload :Base, "block_kit/base"
   autoload :Blocks, "block_kit/blocks"
   autoload :Composition, "block_kit/composition"
   autoload :Concerns, "block_kit/concerns"

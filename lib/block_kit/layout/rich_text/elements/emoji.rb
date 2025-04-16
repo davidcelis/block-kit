@@ -2,7 +2,7 @@
 
 module BlockKit
   module Layout
-    class RichText::Elements::Emoji < Block
+    class RichText::Elements::Emoji < BlockKit::Base
       self.type = :emoji
 
       attribute :name, :string

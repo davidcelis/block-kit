@@ -3,7 +3,7 @@
 require "active_model"
 
 module BlockKit
-  class Block
+  class Base
     include ActiveModel::Model
     include ActiveModel::Attributes
     include ActiveModel::Validations
@@ -30,7 +30,7 @@ module BlockKit
     end
 
     def initialize(attributes = {})
-      raise NotImplementedError, "#{self.class} is an abstract class and can't be instantiated." if instance_of?(Block)
+      raise NotImplementedError, "#{self.class} is an abstract class and can't be instantiated." if instance_of?(Base)
 
       super
 
@@ -92,7 +92,7 @@ module BlockKit
 
     def self.dsl_method(attribute, as: nil, type: nil, required_fields: [], mutually_exclusive_fields: [], yields: true)
       type ||= attribute_types[attribute.to_s]
-      type = Types::Block.of_type(type) if type.is_a?(Class) && type < BlockKit::Block
+      type = Types::Block.of_type(type) if type.is_a?(Class) && type < BlockKit::Base
       raise ArgumentError, "attribute #{attribute} does not exist" if type.instance_of?(ActiveModel::Type::Value)
 
       is_array_attribute = false

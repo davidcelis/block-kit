@@ -2,7 +2,7 @@
 
 module BlockKit
   module Layout
-    class RichText::Preformatted < Block
+    class RichText::Preformatted < BlockKit::Base
       self.type = :rich_text_preformatted
 
       include Concerns::HasRichTextElements

@@ -2,7 +2,7 @@
 
 module BlockKit
   module Composition
-    class OptionGroup < Block
+    class OptionGroup < Base
       MAX_LABEL_LENGTH = 75
       MAX_OPTIONS = 100
 

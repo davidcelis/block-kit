@@ -4,7 +4,7 @@ require "spec_helper"
 
 RSpec.describe BlockKit::Fixers::Truncate do
   let(:block_class) do
-    Class.new(BlockKit::Block) do
+    Class.new(BlockKit::Base) do
       attribute :text, :string
       validates :text, length: {maximum: 100}
     end
@@ -50,7 +50,7 @@ RSpec.describe BlockKit::Fixers::Truncate do
 
     context "when the attribute is enumerable" do
       let(:block_class) do
-        Class.new(BlockKit::Block) do
+        Class.new(BlockKit::Base) do
           attribute :values, BlockKit::Types::Array.of(:string)
           validates :values, length: {maximum: 3}
         end

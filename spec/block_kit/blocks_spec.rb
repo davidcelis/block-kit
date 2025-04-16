@@ -13,12 +13,6 @@ RSpec.describe BlockKit::Blocks do
       expect(blocks.blocks.item_type.block_classes).to match_array(BlockKit::Layout.all)
     end
 
-    it "allows specifying supported blocks" do
-      blocks = described_class.new(allow: [BlockKit::Layout::Actions])
-
-      expect(blocks.blocks.item_type.block_classes).to match_array([BlockKit::Layout::Actions])
-    end
-
     it "yields self" do
       described_class.new do |blocks|
         expect(blocks).to be_a(described_class)

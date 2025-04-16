@@ -4,7 +4,7 @@ require "uri"
 
 module BlockKit
   module Layout
-    class RichText::Elements::Date < Block
+    class RichText::Elements::Date < BlockKit::Base
       self.type = :date
 
       attribute :timestamp, :datetime

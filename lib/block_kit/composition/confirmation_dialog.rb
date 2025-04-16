@@ -2,7 +2,7 @@
 
 module BlockKit
   module Composition
-    class ConfirmationDialog < Block
+    class ConfirmationDialog < Base
       MAX_TITLE_TEXT_LENGTH = 100
       MAX_TEXT_LENGTH = 300
       MAX_BUTTON_TEXT_LENGTH = 30

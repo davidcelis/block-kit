@@ -2,7 +2,7 @@
 
 module BlockKit
   module Layout
-    class RichText::List < Block
+    class RichText::List < BlockKit::Base
       self.type = :rich_text_list
 
       VALID_STYLES = [

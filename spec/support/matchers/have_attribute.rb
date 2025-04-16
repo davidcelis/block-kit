@@ -32,7 +32,7 @@ RSpec::Matchers.define :have_attribute do |attribute_name|
       end
 
       @actual_item_types = @actual_item_types.map do |item_type|
-        if item_type.is_a?(Class) && item_type < BlockKit::Block
+        if item_type.is_a?(Class) && item_type < BlockKit::Base
           :"block_kit_#{item_type.type}"
         else
           item_type.type

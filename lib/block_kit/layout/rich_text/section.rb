@@ -2,7 +2,7 @@
 
 module BlockKit
   module Layout
-    class RichText::Section < Block
+    class RichText::Section < BlockKit::Base
       self.type = :rich_text_section
 
       include Concerns::HasRichTextElements

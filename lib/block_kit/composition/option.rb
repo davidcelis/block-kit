@@ -2,7 +2,7 @@
 
 module BlockKit
   module Composition
-    class Option < Block
+    class Option < Base
       MAX_TEXT_LENGTH = 75
       MAX_VALUE_LENGTH = 150
       MAX_DESCRIPTION_LENGTH = 75

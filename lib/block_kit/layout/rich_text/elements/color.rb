@@ -2,7 +2,7 @@
 
 module BlockKit
   module Layout
-    class RichText::Elements::Color < Block
+    class RichText::Elements::Color < BlockKit::Base
       self.type = :color
 
       attribute :value, :string

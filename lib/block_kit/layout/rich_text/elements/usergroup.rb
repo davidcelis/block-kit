@@ -2,7 +2,7 @@
 
 module BlockKit
   module Layout
-    class RichText::Elements::Usergroup < Block
+    class RichText::Elements::Usergroup < BlockKit::Base
       self.type = :Usergroup
 
       attribute :usergroup_id, :string

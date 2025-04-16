@@ -4,7 +4,7 @@ require "uri"
 
 module BlockKit
   module Elements
-    class Image < Block
+    class Image < BlockKit::Base
       MAX_ALT_TEXT_LENGTH = 2000
       MAX_IMAGE_URL_LENGTH = 3000
 

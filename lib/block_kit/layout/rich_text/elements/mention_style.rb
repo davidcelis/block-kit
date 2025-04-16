@@ -2,7 +2,7 @@
 
 module BlockKit
   module Layout
-    class RichText::Elements::MentionStyle < Block
+    class RichText::Elements::MentionStyle < BlockKit::Base
       self.type = :rich_text_element_mention_style
 
       attribute :bold, :boolean

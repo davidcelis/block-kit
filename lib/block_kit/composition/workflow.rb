@@ -2,7 +2,7 @@
 
 module BlockKit
   module Composition
-    class Workflow < Block
+    class Workflow < Base
       self.type = :workflow
 
       attribute :trigger, Types::Block.of_type(Composition::Trigger)

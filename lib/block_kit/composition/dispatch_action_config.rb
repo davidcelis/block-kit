@@ -2,7 +2,7 @@
 
 module BlockKit
   module Composition
-    class DispatchActionConfig < Block
+    class DispatchActionConfig < Base
       self.type = :dispatch_action_config
 
       VALID_TRIGGERS = [

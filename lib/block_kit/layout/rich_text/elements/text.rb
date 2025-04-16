@@ -4,7 +4,7 @@ require "uri"
 
 module BlockKit
   module Layout
-    class RichText::Elements::Text < Block
+    class RichText::Elements::Text < BlockKit::Base
       self.type = :text
 
       attribute :text, :string

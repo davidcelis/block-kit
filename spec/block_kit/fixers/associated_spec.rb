@@ -4,7 +4,7 @@ require "spec_helper"
 
 RSpec.describe BlockKit::Fixers::Associated do
   let(:block_class) do
-    Class.new(BlockKit::Block) do
+    Class.new(BlockKit::Base) do
       def self.name = "TestBlock"
 
       attr_accessor :nested
@@ -19,7 +19,7 @@ RSpec.describe BlockKit::Fixers::Associated do
   end
 
   let(:nested_block_class) do
-    Class.new(BlockKit::Block) do
+    Class.new(BlockKit::Base) do
       def self.name = "NestedBlock"
 
       attribute :nested_attribute_1, :string
@@ -43,7 +43,7 @@ RSpec.describe BlockKit::Fixers::Associated do
   end
 
   let(:deeply_nested_block_class) do
-    Class.new(BlockKit::Block) do
+    Class.new(BlockKit::Base) do
       def self.name = "DeeplyNestedBlock"
 
       attribute :deeply_nested_attribute_1, :string

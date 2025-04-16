@@ -2,7 +2,7 @@
 
 module BlockKit
   module Layout
-    class RichText::Elements::TextStyle < Block
+    class RichText::Elements::TextStyle < BlockKit::Base
       self.type = :rich_text_element_text_style
 
       attribute :bold, :boolean

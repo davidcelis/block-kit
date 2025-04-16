@@ -2,7 +2,7 @@
 
 module BlockKit
   module Composition
-    class Text < Block
+    class Text < Base
       MAX_LENGTH = 3000
 
       attribute :text, :string

@@ -3,39 +3,31 @@
 require "active_support/core_ext/module/delegation"
 
 module BlockKit
-  class Blocks
-    attr_reader :blocks
+  class Blocks < Base
+    attribute :blocks, Types::Array.of(Types::Blocks.new(*Layout.all))
+    validates :blocks, "block_kit/validators/associated": true
+    fixes :blocks, associated: true
+
+    dsl_method :blocks, as: :actions, type: Layout::Actions
+    dsl_method :blocks, as: :context, type: Layout::Context
+    dsl_method :blocks, as: :divider, type: Layout::Divider, yields: false
+    dsl_method :blocks, as: :input, type: Layout::Input
+    dsl_method :blocks, as: :header, type: Layout::Header, required_fields: [:text], yields: false
+    dsl_method :blocks, as: :markdown, type: Layout::Markdown, required_fields: [:text], yields: false
+    dsl_method :blocks, as: :rich_text, type: Layout::RichText
+    dsl_method :blocks, as: :section, type: Layout::Section
+    dsl_method :blocks, as: :video, type: Layout::Video, required_fields: [:alt_text, :title, :thumbnail_url, :video_url], yields: false
 
     delegate_missing_to :blocks
 
-    def initialize(allow: Layout.all)
-      @blocks = TypedArray.new(Types::Blocks.new(*allow))
+    def initialize(attributes = {})
+      super
 
-      yield(self) if block_given?
-    end
-
-    def actions(elements: nil, block_id: nil)
-      block = Layout::Actions.new(elements: elements, block_id: block_id)
-
-      yield(block) if block_given?
-
-      append(block)
-    end
-
-    def context(elements: nil, block_id: nil)
-      block = Layout::Context.new(elements: elements, block_id: block_id)
-
-      yield(block) if block_given?
-
-      append(block)
+      self.blocks ||= []
     end
 
     def divider(block_id: nil)
       append(Layout::Divider.new(block_id: block_id))
-    end
-
-    def header(text:, emoji: nil, block_id: nil)
-      append(Layout::Header.new(text: text, block_id: block_id, emoji: emoji))
     end
 
     def image(alt_text:, image_url: nil, slack_file: nil, title: nil, emoji: nil, block_id: nil)
@@ -46,94 +38,15 @@ module BlockKit
       append(Layout::Image.new(image_url: image_url, slack_file: slack_file, alt_text: alt_text, title: title, block_id: block_id, emoji: emoji))
     end
 
-    def input(label: nil, hint: nil, element: nil, optional: nil, dispatch_action: nil, emoji: nil, block_id: nil)
-      block = Layout::Input.new(
-        label: label,
-        hint: hint,
-        element: element,
-        optional: optional,
-        dispatch_action: dispatch_action,
-        emoji: emoji,
-        block_id: block_id
-      )
-
-      yield(block) if block_given?
-
-      append(block)
-    end
-
-    def markdown(text:, block_id: nil)
-      append(Layout::Markdown.new(text: text, block_id: block_id))
-    end
-
-    def rich_text(elements: nil, block_id: nil)
-      block = Layout::RichText.new(elements: elements, block_id: block_id)
-
-      yield(block) if block_given?
-
-      append(block)
-    end
-
-    def section(text: nil, fields: nil, accessory: nil, expand: nil, block_id: nil)
-      block = Layout::Section.new(text: text, fields: fields, accessory: accessory, expand: expand, block_id: block_id)
-
-      yield(block) if block_given?
-
-      append(block)
-    end
-
-    def video(alt_text:, title:, thumbnail_url:, video_url:, author_name: nil, description: nil, provider_icon_url: nil, provider_name: nil, title_url: nil, emoji: nil, block_id: nil)
-      block = Layout::Video.new(
-        alt_text: alt_text,
-        title: title,
-        thumbnail_url: thumbnail_url,
-        video_url: video_url,
-        author_name: author_name,
-        description: description,
-        provider_icon_url: provider_icon_url,
-        provider_name: provider_name,
-        title_url: title_url,
-        emoji: emoji,
-        block_id: block_id
-      )
-
-      append(block)
-    end
-
     # Overridden to return `self`, allowing chaining.
     def append(block)
-      @blocks << block
+      blocks << block
 
       self
     end
 
-    def valid?
-      blocks.all?(&:valid?)
-    end
-    alias_method :validate, :valid?
-
-    def validate!
-      validate || raise(ActiveModel::ValidationError)
-    end
-
-    def invalid?
-      !valid?
-    end
-
-    def fix_validation_errors
-      blocks.each(&:fix_validation_errors)
-
-      valid?
-    end
-
-    def fix_validation_errors!
-      blocks.each(&:fix_validation_errors)
-
-      validate!
-    end
-
     def as_json(*)
-      @blocks.map(&:as_json)
+      blocks&.map(&:as_json)
     end
   end
 end

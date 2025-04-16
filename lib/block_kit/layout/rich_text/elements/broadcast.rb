@@ -2,7 +2,7 @@
 
 module BlockKit
   module Layout
-    class RichText::Elements::Broadcast < Block
+    class RichText::Elements::Broadcast < BlockKit::Base
       self.type = :broadcast
 
       VALID_RANGES = [

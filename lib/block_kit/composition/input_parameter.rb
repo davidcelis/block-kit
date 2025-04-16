@@ -2,7 +2,7 @@
 
 module BlockKit
   module Composition
-    class InputParameter < Block
+    class InputParameter < Base
       self.type = :input_parameter
 
       attribute :name, :string

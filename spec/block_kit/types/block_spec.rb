@@ -3,7 +3,7 @@
 require "spec_helper"
 
 RSpec.describe BlockKit::Types::Block do
-  block_class = Class.new(BlockKit::Block) do
+  block_class = Class.new(BlockKit::Base) do
     self.type = :person
 
     attribute :name, :string

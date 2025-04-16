@@ -2,7 +2,7 @@
 
 module BlockKit
   module Layout
-    class RichText::Quote < Block
+    class RichText::Quote < BlockKit::Base
       self.type = :rich_text_quote
 
       include Concerns::HasRichTextElements

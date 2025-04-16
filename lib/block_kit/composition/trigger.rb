@@ -4,7 +4,7 @@ require "uri"
 
 module BlockKit
   module Composition
-    class Trigger < Block
+    class Trigger < Base
       MAX_URL_LENGTH = 3000
 
       self.type = :trigger
