@@ -10,7 +10,7 @@ module BlockKit
 
       def initialize(*block_classes)
         @block_classes = block_classes
-        @block_types = block_classes.map { |block_class| Types::Block.of_type(block_class) }
+        @block_types = block_classes.map { |block_class| Types::Generic.of_type(block_class) }
       end
 
       def type

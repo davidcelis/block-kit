@@ -6,7 +6,7 @@ module BlockKit
       self.type = :Usergroup
 
       attribute :usergroup_id, :string
-      attribute :style, Types::Block.of_type(RichText::Elements::MentionStyle)
+      attribute :style, Types::Generic.of_type(RichText::Elements::MentionStyle)
 
       validates :usergroup_id, presence: true
 

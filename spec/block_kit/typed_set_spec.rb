@@ -52,7 +52,7 @@ RSpec.describe BlockKit::TypedSet do
   end
 
   context "with a block type" do
-    let(:set) { described_class.new(BlockKit::Types::Block.of_type(BlockKit::Composition::Option)) }
+    let(:set) { described_class.new(BlockKit::Types::Generic.of_type(BlockKit::Composition::Option)) }
 
     it "raises an ArgumentError on initialize" do
       expect { set }.to raise_error(ArgumentError, "Only scalar item types are supported")

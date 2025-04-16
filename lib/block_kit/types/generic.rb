@@ -7,7 +7,7 @@ module BlockKit
     # Provides a way to generate generic ActiveModel types for individual block types.
     # Most block types can simply be cast from an object of the same type or a Hash with
     # the object's attributes.
-    class Block < ActiveModel::Type::Value
+    class Generic < ActiveModel::Type::Value
       class_attribute :instances, default: {}
 
       def self.new(block_class)

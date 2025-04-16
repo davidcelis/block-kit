@@ -6,7 +6,7 @@ module BlockKit
       self.type = :channel
 
       attribute :channel_id, :string
-      attribute :style, Types::Block.of_type(RichText::Elements::MentionStyle)
+      attribute :style, Types::Generic.of_type(RichText::Elements::MentionStyle)
 
       validates :channel_id, presence: true
 

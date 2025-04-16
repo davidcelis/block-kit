@@ -10,7 +10,7 @@ module BlockKit
 
         def dsl_method(attribute, as: nil, type: nil, required_fields: [], mutually_exclusive_fields: [], yields: true)
           type ||= attribute_types[attribute.to_s]
-          type = Types::Block.of_type(type) if type.is_a?(Class) && type < BlockKit::Base
+          type = Types::Generic.of_type(type) if type.is_a?(Class) && type < BlockKit::Base
           raise ArgumentError, "attribute #{attribute} does not exist" if type.instance_of?(ActiveModel::Type::Value)
 
           is_array_attribute = false

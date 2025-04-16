@@ -6,7 +6,7 @@ module BlockKit
       extend ActiveSupport::Concern
 
       included do
-        attribute :dispatch_action_config, Types::Block.of_type(Composition::DispatchActionConfig)
+        attribute :dispatch_action_config, Types::Generic.of_type(Composition::DispatchActionConfig)
 
         validates :dispatch_action_config, presence: true, "block_kit/validators/associated": true, allow_nil: true
         fixes :dispatch_action_config, associated: true

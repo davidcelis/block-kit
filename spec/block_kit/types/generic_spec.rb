@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe BlockKit::Types::Block do
+RSpec.describe BlockKit::Types::Generic do
   block_class = Class.new(BlockKit::Base) do
     self.type = :person
 

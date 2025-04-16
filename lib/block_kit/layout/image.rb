@@ -13,7 +13,7 @@ module BlockKit
 
       attribute :alt_text, :string
       attribute :image_url, :string
-      attribute :slack_file, Types::Block.of_type(Composition::SlackFile)
+      attribute :slack_file, Types::Generic.of_type(Composition::SlackFile)
       plain_text_attribute :title
 
       include Concerns::PlainTextEmojiAssignment.new(:title)

@@ -10,7 +10,7 @@ module BlockKit
       attribute :url, :string
       attribute :text, :string
       attribute :unsafe, :boolean
-      attribute :style, Types::Block.of_type(RichText::Elements::TextStyle)
+      attribute :style, Types::Generic.of_type(RichText::Elements::TextStyle)
 
       validates :url, presence: true, format: {with: URI::DEFAULT_PARSER.make_regexp, message: "is not a valid URI", allow_blank: true}
       validates :text, presence: true

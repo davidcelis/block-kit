@@ -5,7 +5,7 @@ module BlockKit
     class WorkflowButton < BaseButton
       self.type = :workflow_button
 
-      attribute :workflow, Types::Block.of_type(Composition::Workflow)
+      attribute :workflow, Types::Generic.of_type(Composition::Workflow)
       validates :workflow, presence: true, "block_kit/validators/associated": true
 
       dsl_method :workflow

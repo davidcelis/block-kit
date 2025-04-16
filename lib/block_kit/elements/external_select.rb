@@ -7,7 +7,7 @@ module BlockKit
 
       include Concerns::External
 
-      attribute :initial_option, Types::Block.of_type(Composition::Option)
+      attribute :initial_option, Types::Generic.of_type(Composition::Option)
       validates :initial_option, "block_kit/validators/associated": true, allow_nil: true
       fixes :initial_option, associated: true
 

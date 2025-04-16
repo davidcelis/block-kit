@@ -12,7 +12,7 @@ module BlockKit
       include Concerns::HasPlaceholder
       include Concerns::PlainTextEmojiAssignment.new(:placeholder)
 
-      attribute :initial_value, Types::Block.of_type(Layout::RichText)
+      attribute :initial_value, Types::Generic.of_type(Layout::RichText)
       validates :initial_value, "block_kit/validators/associated": true, allow_nil: true
       fixes :initial_value, associated: true
 

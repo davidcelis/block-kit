@@ -8,7 +8,7 @@ module BlockKit
       self.type = :text
 
       attribute :text, :string
-      attribute :style, Types::Block.of_type(RichText::Elements::TextStyle)
+      attribute :style, Types::Generic.of_type(RichText::Elements::TextStyle)
 
       validates :text, presence: true
 

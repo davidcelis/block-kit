@@ -5,7 +5,7 @@ module BlockKit
     class Workflow < Base
       self.type = :workflow
 
-      attribute :trigger, Types::Block.of_type(Composition::Trigger)
+      attribute :trigger, Types::Generic.of_type(Composition::Trigger)
       validates :trigger, presence: true, "block_kit/validators/associated": true
 
       dsl_method :trigger

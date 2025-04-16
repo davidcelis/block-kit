@@ -2,9 +2,10 @@
 
 module BlockKit
   module Types
-    autoload :Array, "block_kit/types/array"
-    autoload :Block, "block_kit/types/block"
+    autoload :Generic, "block_kit/types/generic"
     autoload :Blocks, "block_kit/types/blocks"
+
+    autoload :Array, "block_kit/types/array"
     autoload :Mrkdwn, "block_kit/types/text"
     autoload :NumberInput, "block_kit/types/number_input"
     autoload :Option, "block_kit/types/option"
