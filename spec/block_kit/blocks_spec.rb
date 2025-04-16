@@ -2,23 +2,145 @@
 
 require "spec_helper"
 
-RSpec.describe BlockKit::Blocks do
+RSpec.describe BlockKit::Blocks, type: :model do
   subject(:blocks) { described_class.new }
 
   describe "#initialize" do
-    it "initializes with an empty Typed array supporting all Layout blocks" do
-      expect(blocks.blocks).to be_a(BlockKit::TypedArray)
-      expect(blocks.blocks).to be_empty
-      expect(blocks.blocks.item_type).to be_a(BlockKit::Types::Blocks)
-      expect(blocks.blocks.item_type.block_classes).to match_array(BlockKit::Layout.all)
-    end
-
     it "yields self" do
       described_class.new do |blocks|
         expect(blocks).to be_a(described_class)
       end
     end
   end
+
+  it_behaves_like "a block that has a DSL method",
+    attribute: :blocks,
+    as: :actions,
+    type: BlockKit::Layout::Actions,
+    actual_fields: {elements: [{type: "button", text: "A button", value: "button_value"}, block_id: "block_id"]},
+    expected_fields: {
+      elements: [BlockKit::Elements::Button.new(text: "A button", value: "button_value")],
+      block_id: "block_id"
+    }
+
+  it_behaves_like "a block that has a DSL method",
+    attribute: :blocks,
+    as: :context,
+    type: BlockKit::Layout::Context,
+    actual_fields: {elements: [{type: "plain_text", text: "Some text"}, block_id: "block_id"]},
+    expected_fields: {
+      elements: [BlockKit::Composition::PlainText.new(text: "Some text")],
+      block_id: "block_id"
+    }
+
+  it_behaves_like "a block that has a DSL method",
+    attribute: :blocks,
+    as: :divider,
+    type: BlockKit::Layout::Divider,
+    actual_fields: {block_id: "block_id"},
+    expected_fields: {block_id: "block_id"},
+    yields: false
+
+  it_behaves_like "a block that has a DSL method",
+    attribute: :blocks,
+    as: :header,
+    type: BlockKit::Layout::Header,
+    actual_fields: {text: "Header text", emoji: true, block_id: "block_id"},
+    expected_fields: {
+      text: BlockKit::Composition::PlainText.new(text: "Header text", emoji: true),
+      block_id: "block_id"
+    },
+    yields: false
+
+  it_behaves_like "a block that has a DSL method",
+    attribute: :blocks,
+    as: :input,
+    type: BlockKit::Layout::Input,
+    actual_fields: {
+      label: "Input label",
+      element: BlockKit::Elements::PlainTextInput.new,
+      dispatch_action: false,
+      hint: "Input hint",
+      optional: true,
+      emoji: false,
+      block_id: "block_id"
+    },
+    expected_fields: {
+      label: BlockKit::Composition::PlainText.new(text: "Input label", emoji: false),
+      element: BlockKit::Elements::PlainTextInput.new,
+      dispatch_action: false,
+      hint: BlockKit::Composition::PlainText.new(text: "Input hint", emoji: false),
+      optional: true,
+      block_id: "block_id"
+    }
+
+  it_behaves_like "a block that has a DSL method",
+    attribute: :blocks,
+    as: :markdown,
+    type: BlockKit::Layout::Markdown,
+    actual_fields: {text: "Some **bold** text!", block_id: "block_id"},
+    expected_fields: {text: "Some **bold** text!", block_id: "block_id"},
+    yields: false
+
+  it_behaves_like "a block that has a DSL method",
+    attribute: :blocks,
+    as: :rich_text,
+    type: BlockKit::Layout::RichText,
+    actual_fields: {elements: [{type: "rich_text_section", elements: [{type: "text", text: "Some rich text"}]}], block_id: "block_id"},
+    expected_fields: {
+      elements: [BlockKit::Layout::RichText::Section.new(elements: [{type: "text", text: "Some rich text"}])],
+      block_id: "block_id"
+    }
+  it_behaves_like "a block that has a DSL method",
+    attribute: :blocks,
+    as: :section,
+    type: BlockKit::Layout::Section,
+    actual_fields: {
+      text: "Some section text",
+      fields: [BlockKit::Composition::PlainText.new(text: "Field 1"), BlockKit::Composition::PlainText.new(text: "Field 2")],
+      accessory: BlockKit::Elements::Image.new(image_url: "https://example.com/image.png", alt_text: "An image"),
+      expand: false,
+      block_id: "block_id"
+    },
+    expected_fields: {
+      text: BlockKit::Composition::Mrkdwn.new(text: "Some section text"),
+      fields: [BlockKit::Composition::PlainText.new(text: "Field 1"), BlockKit::Composition::PlainText.new(text: "Field 2")],
+      accessory: BlockKit::Elements::Image.new(image_url: "https://example.com/image.png", alt_text: "An image"),
+      expand: false,
+      block_id: "block_id"
+    }
+
+  it_behaves_like "a block that has a DSL method",
+    attribute: :blocks,
+    as: :video,
+    type: BlockKit::Layout::Video,
+    required_fields: [:alt_text, :title, :thumbnail_url, :video_url],
+    actual_fields: {
+      alt_text: "A detailed description of the video",
+      title: "Video Title",
+      thumbnail_url: "https://example.com/thumbnail.jpg",
+      video_url: "https://example.com/video.mp4",
+      author_name: "Author Name",
+      description: "A brief description of the video",
+      provider_icon_url: "https://example.com/icon.png",
+      provider_name: "Provider Name",
+      title_url: "https://example.com/title",
+      emoji: true,
+      block_id: "block_id"
+    },
+    expected_fields: {
+      alt_text: "A detailed description of the video",
+      title: BlockKit::Composition::PlainText.new(text: "Video Title", emoji: true),
+      thumbnail_url: "https://example.com/thumbnail.jpg",
+      video_url: "https://example.com/video.mp4",
+      author_name: "Author Name",
+      description: BlockKit::Composition::PlainText.new(text: "A brief description of the video", emoji: true),
+      provider_icon_url: "https://example.com/icon.png",
+      provider_name: "Provider Name",
+      title_url: "https://example.com/title",
+      block_id: "block_id"
+    },
+    yields: false
 
   describe "#append" do
     it "appends a block to the blocks array and returns itself" do
@@ -28,111 +150,6 @@ RSpec.describe BlockKit::Blocks do
       expect(result).to eq(blocks)
       expect(blocks.size).to eq(1)
       expect(blocks.last).to eq(block)
-    end
-  end
-
-  describe "#actions" do
-    let(:args) { {} }
-    subject { blocks.actions(**args) }
-
-    it "appends an actions block" do
-      expect { subject }.to change { blocks.size }.by(1)
-      expect(subject).to eq(blocks)
-      expect(blocks.last).to be_a(BlockKit::Layout::Actions)
-    end
-
-    it "yields the block" do
-      expect { |b| blocks.actions(&b) }.to yield_with_args(BlockKit::Layout::Actions)
-    end
-
-    context "with optional args" do
-      let(:args) do
-        super().merge(
-          elements: [BlockKit::Elements::Button.new(text: "Click me")],
-          block_id: "block_id"
-        )
-      end
-
-      it "passes args to the actions block" do
-        expect { subject }.to change { blocks.size }.by(1)
-        expect(blocks.last.elements).to eq(args[:elements])
-        expect(blocks.last.block_id).to eq("block_id")
-      end
-    end
-  end
-
-  describe "#context" do
-    let(:args) { {} }
-    subject { blocks.context(**args) }
-
-    it "appends a context block" do
-      expect { subject }.to change { blocks.size }.by(1)
-      expect(subject).to eq(blocks)
-      expect(blocks.last).to be_a(BlockKit::Layout::Context)
-    end
-
-    it "yields the block" do
-      expect { |b| blocks.context(&b) }.to yield_with_args(BlockKit::Layout::Context)
-    end
-
-    context "with optional args" do
-      let(:args) do
-        super().merge(
-          elements: [BlockKit::Elements::Image.new(image_url: "https://example.com/image.png", alt_text: "An image")],
-          block_id: "block_id"
-        )
-      end
-
-      it "passes args to the actions block" do
-        expect { subject }.to change { blocks.size }.by(1)
-        expect(blocks.last.elements).to eq(args[:elements])
-        expect(blocks.last.block_id).to eq("block_id")
-      end
-    end
-  end
-
-  describe "#divider" do
-    let(:args) { {} }
-    subject { blocks.divider(**args) }
-
-    it "appends a divider block" do
-      expect { subject }.to change { blocks.size }.by(1)
-      expect(subject).to eq(blocks)
-
-      expect(blocks.last).to be_a(BlockKit::Layout::Divider)
-    end
-
-    context "with optional args" do
-      let(:args) { super().merge(block_id: "block_id") }
-
-      it "passes args to the divider" do
-        expect { subject }.to change { blocks.size }.by(1)
-        expect(blocks.last.block_id).to eq("block_id")
-      end
-    end
-  end
-
-  describe "#header" do
-    let(:args) { {text: "Hello, world!"} }
-    subject { blocks.header(**args) }
-
-    it "appends a header block" do
-      expect { subject }.to change { blocks.size }.by(1)
-      expect(subject).to eq(blocks)
-
-      expect(blocks.last).to be_a(BlockKit::Layout::Header)
-      expect(blocks.last.text.text).to eq("Hello, world!")
-    end
-
-    context "with optional args" do
-      let(:args) { super().merge(emoji: false, block_id: "block_id") }
-
-      it "passes args to the header" do
-        expect { subject }.to change { blocks.size }.by(1)
-
-        expect(blocks.last.text.emoji).to be false
-        expect(blocks.last.block_id).to eq("block_id")
-      end
     end
   end
 
@@ -186,138 +203,6 @@ RSpec.describe BlockKit::Blocks do
 
       it "raises an ArgumentError" do
         expect { subject }.to raise_error(ArgumentError, "Must provide either image_url or slack_file, but not both.")
-      end
-    end
-  end
-
-  describe "#input" do
-    let(:args) { {} }
-    subject { blocks.input(**args) }
-
-    it "appends an input block" do
-      expect { subject }.to change { blocks.size }.by(1)
-      expect(subject).to eq(blocks)
-
-      expect(blocks.last).to be_a(BlockKit::Layout::Input)
-    end
-
-    it "yields the block" do
-      expect { |b| blocks.input(**args, &b) }.to yield_with_args(BlockKit::Layout::Input)
-    end
-
-    context "with optional args" do
-      let(:args) do
-        super().merge(
-          label: "An input",
-          hint: "Enter something good",
-          element: BlockKit::Elements::PlainTextInput.new,
-          optional: false,
-          dispatch_action: true,
-          emoji: false,
-          block_id: "block_id"
-        )
-      end
-
-      it "passes args to the input block" do
-        expect { subject }.to change { blocks.size }.by(1)
-
-        expect(blocks.last.label.emoji).to be false
-        expect(blocks.last.label.text).to eq("An input")
-        expect(blocks.last.hint.text).to eq("Enter something good")
-        expect(blocks.last.hint.emoji).to be false
-        expect(blocks.last.element).to eq(args[:element])
-        expect(blocks.last).not_to be_optional
-        expect(blocks.last).to be_dispatch_action
-        expect(blocks.last.block_id).to eq("block_id")
-      end
-    end
-  end
-
-  describe "#markdown" do
-    let(:args) { {text: "Hello, world!"} }
-    subject { blocks.markdown(**args) }
-
-    it "appends a markdown block" do
-      expect { subject }.to change { blocks.size }.by(1)
-      expect(subject).to eq(blocks)
-
-      expect(blocks.last).to be_a(BlockKit::Layout::Markdown)
-      expect(blocks.last.text).to eq("Hello, world!")
-    end
-
-    context "with optional args" do
-      let(:args) { super().merge(block_id: "block_id") }
-
-      it "passes args to the markdown block" do
-        expect { subject }.to change { blocks.size }.by(1)
-
-        expect(blocks.last.block_id).to eq("block_id")
-      end
-    end
-  end
-
-  describe "#rich_text" do
-    let(:args) { {} }
-    subject { blocks.rich_text(**args) }
-
-    it "appends an rich_text block" do
-      expect { subject }.to change { blocks.size }.by(1)
-      expect(subject).to eq(blocks)
-      expect(blocks.last).to be_a(BlockKit::Layout::RichText)
-    end
-
-    it "yields the block" do
-      expect { |b| blocks.rich_text(&b) }.to yield_with_args(BlockKit::Layout::RichText)
-    end
-
-    context "with optional args" do
-      let(:args) do
-        super().merge(
-          elements: [BlockKit::Layout::RichText::Section.new],
-          block_id: "block_id"
-        )
-      end
-
-      it "passes args to the rich_text block" do
-        expect { subject }.to change { blocks.size }.by(1)
-        expect(blocks.last.elements).to eq(args[:elements])
-        expect(blocks.last.block_id).to eq("block_id")
-      end
-    end
-  end
-
-  describe "#section" do
-    let(:args) { {} }
-    subject { blocks.section(**args) }
-
-    it "appends an section block" do
-      expect { subject }.to change { blocks.size }.by(1)
-      expect(subject).to eq(blocks)
-      expect(blocks.last).to be_a(BlockKit::Layout::Section)
-    end
-
-    it "yields the block" do
-      expect { |b| blocks.section(&b) }.to yield_with_args(BlockKit::Layout::Section)
-    end
-
-    context "with optional args" do
-      let(:args) do
-        super().merge(
-          text: "Hello, world!",
-          fields: [BlockKit::Composition::PlainText.new(text: "A field")],
-          accessory: BlockKit::Elements::Image.new(image_url: "https://example.com/image.png", alt_text: "An image"),
-          expand: true,
-          block_id: "block_id"
-        )
-      end
-
-      it "passes args to the section block" do
-        expect { subject }.to change { blocks.size }.by(1)
-        expect(blocks.last.text.text).to eq("Hello, world!")
-        expect(blocks.last.fields).to eq(args[:fields])
-        expect(blocks.last.accessory).to eq(args[:accessory])
-        expect(blocks.last).to be_expand
-        expect(blocks.last.block_id).to eq("block_id")
       end
     end
   end
@@ -385,6 +270,36 @@ RSpec.describe BlockKit::Blocks do
         },
         {type: "divider"}
       ])
+    end
+  end
+
+  context "attributes" do
+    it do
+      is_expected.to have_attribute(:blocks).with_type(:array).containing(
+        :block_kit_actions,
+        :block_kit_context,
+        :block_kit_divider,
+        :block_kit_header,
+        :block_kit_image,
+        :block_kit_input,
+        :block_kit_markdown,
+        :block_kit_rich_text,
+        :block_kit_section,
+        :block_kit_video
+      )
+    end
+  end
+
+  context "validates" do
+    it "validates associated blocks" do
+      blocks.header(text: "Some very long text" * BlockKit::Layout::Header::MAX_LENGTH)
+      blocks.divider
+      blocks.section(text: "More long text" * BlockKit::Layout::Section::MAX_TEXT_LENGTH)
+
+      expect(blocks).not_to be_valid
+      expect(blocks.errors[:blocks]).to include("is invalid")
+      expect(blocks.errors["blocks[0]"]).to include("is invalid: text is too long (maximum is #{BlockKit::Layout::Header::MAX_LENGTH} characters)")
+      expect(blocks.errors["blocks[2]"]).to include("is invalid: text is too long (maximum is #{BlockKit::Layout::Section::MAX_TEXT_LENGTH} characters)")
     end
   end
 

@@ -26,10 +26,6 @@ module BlockKit
       self.blocks ||= []
     end
 
-    def divider(block_id: nil)
-      append(Layout::Divider.new(block_id: block_id))
-    end
-
     def image(alt_text:, image_url: nil, slack_file: nil, title: nil, emoji: nil, block_id: nil)
       if (image_url.nil? && slack_file.nil?) || (image_url && slack_file)
         raise ArgumentError, "Must provide either image_url or slack_file, but not both."
