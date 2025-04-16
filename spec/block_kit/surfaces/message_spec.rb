@@ -2,16 +2,9 @@
 
 require "spec_helper"
 
-RSpec.describe BlockKit::Blocks, type: :model do
-  subject(:blocks) { described_class.new }
-
-  describe "#initialize" do
-    it "yields self" do
-      described_class.new do |blocks|
-        expect(blocks).to be_a(described_class)
-      end
-    end
-  end
+RSpec.describe BlockKit::Surfaces::Message, type: :model do
+  let(:attributes) { {text: "Hello, world!"} }
+  subject(:message) { described_class.new(**attributes) }
 
   it_behaves_like "a block that has a DSL method",
     attribute: :blocks,
@@ -156,35 +149,35 @@ RSpec.describe BlockKit::Blocks, type: :model do
     it "appends a block to the blocks array and returns itself" do
       block = BlockKit::Layout::Actions.new
 
-      result = blocks.append(block)
-      expect(result).to eq(blocks)
-      expect(blocks.size).to eq(1)
-      expect(blocks.last).to eq(block)
+      result = message.append(block)
+      expect(result).to eq(message)
+      expect(message.blocks.size).to eq(1)
+      expect(message.blocks.last).to eq(block)
     end
   end
 
   describe "#image" do
     let(:args) { {alt_text: "A beautiful image", image_url: "https://example.com/image.png"} }
-    subject { blocks.image(**args) }
+    subject { message.image(**args) }
 
     it "appends a image block" do
-      expect { subject }.to change { blocks.size }.by(1)
-      expect(subject).to eq(blocks)
+      expect { subject }.to change { message.blocks.size }.by(1)
+      expect(subject).to eq(message)
 
-      expect(blocks.last).to be_a(BlockKit::Layout::Image)
-      expect(blocks.last.alt_text).to eq("A beautiful image")
-      expect(blocks.last.image_url).to eq("https://example.com/image.png")
+      expect(message.blocks.last).to be_a(BlockKit::Layout::Image)
+      expect(message.blocks.last.alt_text).to eq("A beautiful image")
+      expect(message.blocks.last.image_url).to eq("https://example.com/image.png")
     end
 
     context "with optional args" do
       let(:args) { super().merge(title: "My Image", emoji: false, block_id: "block_id") }
 
       it "passes args to the image" do
-        expect { subject }.to change { blocks.size }.by(1)
+        expect { subject }.to change { message.blocks.size }.by(1)
 
-        expect(blocks.last.title.text).to eq("My Image")
-        expect(blocks.last.title.emoji).to be false
-        expect(blocks.last.block_id).to eq("block_id")
+        expect(message.blocks.last.title.text).to eq("My Image")
+        expect(message.blocks.last.title.emoji).to be false
+        expect(message.blocks.last.block_id).to eq("block_id")
       end
     end
 
@@ -192,11 +185,11 @@ RSpec.describe BlockKit::Blocks, type: :model do
       let(:args) { {alt_text: "A beautiful image", slack_file: BlockKit::Composition::SlackFile.new} }
 
       it "passes args to the image" do
-        expect { subject }.to change { blocks.size }.by(1)
+        expect { subject }.to change { message.blocks.size }.by(1)
 
-        expect(blocks.last.alt_text).to eq("A beautiful image")
-        expect(blocks.last.slack_file).to eq(args[:slack_file])
-        expect(blocks.last.image_url).to be_nil
+        expect(message.blocks.last.alt_text).to eq("A beautiful image")
+        expect(message.blocks.last.slack_file).to eq(args[:slack_file])
+        expect(message.blocks.last.image_url).to be_nil
       end
     end
 
@@ -218,21 +211,34 @@ RSpec.describe BlockKit::Blocks, type: :model do
   end
 
   describe "#as_json" do
-    it "serializes the list of blocks to JSON" do
-      blocks.header(text: "Hello, world!")
-      blocks.divider
+    let(:attributes) do
+      super().merge(
+        thread_ts: "123456789.12345",
+        mrkdwn: false
+      )
+    end
 
-      expect(blocks.as_json).to eq([
-        {
-          type: "header",
-          text: {type: "plain_text", text: "Hello, world!"}
-        },
-        {type: "divider"}
-      ])
+    it "serializes as JSON" do
+      message.header(text: "Hello, world!")
+      message.divider
+
+      expect(message.as_json).to eq({
+        text: "Hello, world!",
+        thread_ts: "123456789.12345",
+        mrkdwn: false,
+        blocks: [
+          {type: "header", text: {type: "plain_text", text: "Hello, world!"}},
+          {type: "divider"}
+        ]
+      })
     end
   end
 
   context "attributes" do
+    it { is_expected.to have_attribute(:text).with_type(:string) }
+    it { is_expected.to have_attribute(:thread_ts).with_type(:string) }
+    it { is_expected.to have_attribute(:mrkdwn).with_type(:boolean) }
+
     it do
       is_expected.to have_attribute(:blocks).with_type(:array).containing(
         :block_kit_actions,
@@ -251,36 +257,47 @@ RSpec.describe BlockKit::Blocks, type: :model do
   end
 
   context "validates" do
-    it "validates associated blocks" do
-      blocks.header(text: "Some very long text" * BlockKit::Layout::Header::MAX_LENGTH)
-      blocks.divider
-      blocks.section(text: "More long text" * BlockKit::Layout::Section::MAX_TEXT_LENGTH)
+    it { is_expected.to validate_presence_of(:text) }
 
-      expect(blocks).not_to be_valid
-      expect(blocks.errors[:blocks]).to include("is invalid")
-      expect(blocks.errors["blocks[0]"]).to include("is invalid: text is too long (maximum is #{BlockKit::Layout::Header::MAX_LENGTH} characters)")
-      expect(blocks.errors["blocks[2]"]).to include("is invalid: text is too long (maximum is #{BlockKit::Layout::Section::MAX_TEXT_LENGTH} characters)")
+    it "validates a maximum of 50 blocks" do
+      50.times { message.blocks << BlockKit::Layout::Section.new(text: "Some text") }
+      expect(message).to be_valid
+
+      message.blocks << BlockKit::Layout::Section.new(text: "Some text")
+      expect(message).not_to be_valid
+      expect(message.errors[:blocks]).to include("is too long (maximum is 50 blocks)")
+    end
+
+    it "validates associated blocks" do
+      message.header(text: "Some very long text" * BlockKit::Layout::Header::MAX_LENGTH)
+      message.divider
+      message.section(text: "More long text" * BlockKit::Layout::Section::MAX_TEXT_LENGTH)
+
+      expect(message).not_to be_valid
+      expect(message.errors[:blocks]).to include("is invalid")
+      expect(message.errors["blocks[0]"]).to include("is invalid: text is too long (maximum is #{BlockKit::Layout::Header::MAX_LENGTH} characters)")
+      expect(message.errors["blocks[2]"]).to include("is invalid: text is too long (maximum is #{BlockKit::Layout::Section::MAX_TEXT_LENGTH} characters)")
     end
   end
 
   it "fixes individually-contained blocks" do
-    blocks.header(text: "Some very long text" * BlockKit::Layout::Header::MAX_LENGTH)
-    blocks.divider
-    blocks.section(text: "More long text" * BlockKit::Layout::Section::MAX_TEXT_LENGTH)
+    message.header(text: "Some very long text" * BlockKit::Layout::Header::MAX_LENGTH)
+    message.divider
+    message.section(text: "More long text" * BlockKit::Layout::Section::MAX_TEXT_LENGTH)
 
-    expect(blocks.fix_validation_errors).to be true
+    expect(message.fix_validation_errors).to be true
 
-    expect(blocks.first.text.length).to be <= BlockKit::Layout::Header::MAX_LENGTH
-    expect(blocks.last.text.length).to be <= BlockKit::Layout::Section::MAX_TEXT_LENGTH
+    expect(message.blocks.first.text.length).to be <= BlockKit::Layout::Header::MAX_LENGTH
+    expect(message.blocks.last.text.length).to be <= BlockKit::Layout::Section::MAX_TEXT_LENGTH
   end
 
   it "can raise unfixed validation errors" do
-    blocks.header(text: "")
-    blocks.divider
-    blocks.section(text: "Long text" * BlockKit::Layout::Section::MAX_TEXT_LENGTH)
+    message.header(text: "")
+    message.divider
+    message.section(text: "Long text" * BlockKit::Layout::Section::MAX_TEXT_LENGTH)
 
-    expect { blocks.fix_validation_errors! }.to raise_error(ActiveModel::ValidationError)
+    expect { message.fix_validation_errors! }.to raise_error(ActiveModel::ValidationError)
 
-    expect(blocks.last.text.length).to be <= BlockKit::Layout::Section::MAX_TEXT_LENGTH
+    expect(message.blocks.last.text.length).to be <= BlockKit::Layout::Section::MAX_TEXT_LENGTH
   end
 end

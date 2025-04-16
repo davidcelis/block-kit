@@ -2,16 +2,9 @@
 
 require "spec_helper"
 
-RSpec.describe BlockKit::Blocks, type: :model do
-  subject(:blocks) { described_class.new }
-
-  describe "#initialize" do
-    it "yields self" do
-      described_class.new do |blocks|
-        expect(blocks).to be_a(described_class)
-      end
-    end
-  end
+RSpec.describe BlockKit::Surfaces::Home, type: :model do
+  let(:attributes) { {} }
+  subject(:home) { described_class.new(**attributes) }
 
   it_behaves_like "a block that has a DSL method",
     attribute: :blocks,
@@ -39,15 +32,6 @@ RSpec.describe BlockKit::Blocks, type: :model do
     type: BlockKit::Layout::Divider,
     actual_fields: {block_id: "block_id"},
     expected_fields: {block_id: "block_id"},
-    yields: false
-
-  it_behaves_like "a block that has a DSL method",
-    attribute: :blocks,
-    as: :file,
-    type: BlockKit::Layout::File,
-    required_fields: [:external_id],
-    actual_fields: {external_id: "external_id", block_id: "block_id"},
-    expected_fields: {external_id: "external_id", block_id: "block_id"},
     yields: false
 
   it_behaves_like "a block that has a DSL method",
@@ -82,15 +66,6 @@ RSpec.describe BlockKit::Blocks, type: :model do
       optional: true,
       block_id: "block_id"
     }
-
-  it_behaves_like "a block that has a DSL method",
-    attribute: :blocks,
-    as: :markdown,
-    type: BlockKit::Layout::Markdown,
-    required_fields: [:text],
-    actual_fields: {text: "Some **bold** text!", block_id: "block_id"},
-    expected_fields: {text: "Some **bold** text!", block_id: "block_id"},
-    yields: false
 
   it_behaves_like "a block that has a DSL method",
     attribute: :blocks,
@@ -156,35 +131,35 @@ RSpec.describe BlockKit::Blocks, type: :model do
     it "appends a block to the blocks array and returns itself" do
       block = BlockKit::Layout::Actions.new
 
-      result = blocks.append(block)
-      expect(result).to eq(blocks)
-      expect(blocks.size).to eq(1)
-      expect(blocks.last).to eq(block)
+      result = home.append(block)
+      expect(result).to eq(home)
+      expect(home.blocks.size).to eq(1)
+      expect(home.blocks.last).to eq(block)
     end
   end
 
   describe "#image" do
     let(:args) { {alt_text: "A beautiful image", image_url: "https://example.com/image.png"} }
-    subject { blocks.image(**args) }
+    subject { home.image(**args) }
 
     it "appends a image block" do
-      expect { subject }.to change { blocks.size }.by(1)
-      expect(subject).to eq(blocks)
+      expect { subject }.to change { home.blocks.size }.by(1)
+      expect(subject).to eq(home)
 
-      expect(blocks.last).to be_a(BlockKit::Layout::Image)
-      expect(blocks.last.alt_text).to eq("A beautiful image")
-      expect(blocks.last.image_url).to eq("https://example.com/image.png")
+      expect(home.blocks.last).to be_a(BlockKit::Layout::Image)
+      expect(home.blocks.last.alt_text).to eq("A beautiful image")
+      expect(home.blocks.last.image_url).to eq("https://example.com/image.png")
     end
 
     context "with optional args" do
       let(:args) { super().merge(title: "My Image", emoji: false, block_id: "block_id") }
 
       it "passes args to the image" do
-        expect { subject }.to change { blocks.size }.by(1)
+        expect { subject }.to change { home.blocks.size }.by(1)
 
-        expect(blocks.last.title.text).to eq("My Image")
-        expect(blocks.last.title.emoji).to be false
-        expect(blocks.last.block_id).to eq("block_id")
+        expect(home.blocks.last.title.text).to eq("My Image")
+        expect(home.blocks.last.title.emoji).to be false
+        expect(home.blocks.last.block_id).to eq("block_id")
       end
     end
 
@@ -192,11 +167,11 @@ RSpec.describe BlockKit::Blocks, type: :model do
       let(:args) { {alt_text: "A beautiful image", slack_file: BlockKit::Composition::SlackFile.new} }
 
       it "passes args to the image" do
-        expect { subject }.to change { blocks.size }.by(1)
+        expect { subject }.to change { home.blocks.size }.by(1)
 
-        expect(blocks.last.alt_text).to eq("A beautiful image")
-        expect(blocks.last.slack_file).to eq(args[:slack_file])
-        expect(blocks.last.image_url).to be_nil
+        expect(home.blocks.last.alt_text).to eq("A beautiful image")
+        expect(home.blocks.last.slack_file).to eq(args[:slack_file])
+        expect(home.blocks.last.image_url).to be_nil
       end
     end
 
@@ -218,31 +193,44 @@ RSpec.describe BlockKit::Blocks, type: :model do
   end
 
   describe "#as_json" do
-    it "serializes the list of blocks to JSON" do
-      blocks.header(text: "Hello, world!")
-      blocks.divider
+    let(:attributes) do
+      {
+        private_metadata: "Some metadata",
+        callback_id: "callback_id",
+        external_id: "external_id"
+      }
+    end
 
-      expect(blocks.as_json).to eq([
-        {
-          type: "header",
-          text: {type: "plain_text", text: "Hello, world!"}
-        },
-        {type: "divider"}
-      ])
+    it "serializes as JSON" do
+      home.header(text: "Hello, world!")
+      home.divider
+
+      expect(home.as_json).to eq({
+        type: described_class.type.to_s,
+        private_metadata: "Some metadata",
+        callback_id: "callback_id",
+        external_id: "external_id",
+        blocks: [
+          {type: "header", text: {type: "plain_text", text: "Hello, world!"}},
+          {type: "divider"}
+        ]
+      })
     end
   end
 
   context "attributes" do
+    it { is_expected.to have_attribute(:private_metadata).with_type(:string) }
+    it { is_expected.to have_attribute(:callback_id).with_type(:string) }
+    it { is_expected.to have_attribute(:external_id).with_type(:string) }
+
     it do
       is_expected.to have_attribute(:blocks).with_type(:array).containing(
         :block_kit_actions,
         :block_kit_context,
         :block_kit_divider,
-        :block_kit_file,
         :block_kit_header,
         :block_kit_image,
         :block_kit_input,
-        :block_kit_markdown,
         :block_kit_rich_text,
         :block_kit_section,
         :block_kit_video
@@ -251,36 +239,92 @@ RSpec.describe BlockKit::Blocks, type: :model do
   end
 
   context "validates" do
-    it "validates associated blocks" do
-      blocks.header(text: "Some very long text" * BlockKit::Layout::Header::MAX_LENGTH)
-      blocks.divider
-      blocks.section(text: "More long text" * BlockKit::Layout::Section::MAX_TEXT_LENGTH)
+    it { is_expected.to validate_length_of(:private_metadata).is_at_most(3000).allow_nil }
+    it { is_expected.to validate_length_of(:callback_id).is_at_most(255).allow_nil }
+    it { is_expected.to validate_length_of(:external_id).is_at_most(255).allow_nil }
 
-      expect(blocks).not_to be_valid
-      expect(blocks.errors[:blocks]).to include("is invalid")
-      expect(blocks.errors["blocks[0]"]).to include("is invalid: text is too long (maximum is #{BlockKit::Layout::Header::MAX_LENGTH} characters)")
-      expect(blocks.errors["blocks[2]"]).to include("is invalid: text is too long (maximum is #{BlockKit::Layout::Section::MAX_TEXT_LENGTH} characters)")
+    it "validates a maximum of 100 blocks" do
+      100.times { home.blocks << BlockKit::Layout::Section.new(text: "Some text") }
+      expect(home).to be_valid
+
+      home.blocks << BlockKit::Layout::Section.new(text: "Some text")
+      expect(home).not_to be_valid
+      expect(home.errors[:blocks]).to include("is too long (maximum is 100 blocks)")
+    end
+
+    it "validates associated blocks" do
+      home.header(text: "Some very long text" * BlockKit::Layout::Header::MAX_LENGTH)
+      home.divider
+      home.section(text: "More long text" * BlockKit::Layout::Section::MAX_TEXT_LENGTH)
+
+      expect(home).not_to be_valid
+      expect(home.errors[:blocks]).to include("is invalid")
+      expect(home.errors["blocks[0]"]).to include("is invalid: text is too long (maximum is #{BlockKit::Layout::Header::MAX_LENGTH} characters)")
+      expect(home.errors["blocks[2]"]).to include("is invalid: text is too long (maximum is #{BlockKit::Layout::Section::MAX_TEXT_LENGTH} characters)")
+    end
+
+    it "validates that only one nested block can focus on load" do
+      home.section(text: "Some text", accessory: BlockKit::Elements::ExternalSelect.new(focus_on_load: true))
+      expect(home).to be_valid
+
+      home.input(label: "Some label", element: BlockKit::Elements::PlainTextInput.new(focus_on_load: true))
+      home.actions do |actions|
+        actions.rich_text_input(focus_on_load: true)
+        actions.button(text: "A button", value: "button_value")
+        actions.checkboxes(options: [{text: "Option 1", value: "value_1"}], focus_on_load: true)
+      end
+
+      expect(home).not_to be_valid
+      expect(home.errors[:blocks]).to include("can't have more than one element with focus_on_load set to true")
+      expect(home.errors["blocks[0].accessory"]).to include("is invalid: can't set focus_on_load when other elements have set focus_on_load")
+      expect(home.errors["blocks[1].element"]).to include("is invalid: can't set focus_on_load when other elements have set focus_on_load")
+      expect(home.errors["blocks[2].elements[0]"]).to include("is invalid: can't set focus_on_load when other elements have set focus_on_load")
+      expect(home.errors["blocks[2].elements[2]"]).to include("is invalid: can't set focus_on_load when other elements have set focus_on_load")
     end
   end
 
   it "fixes individually-contained blocks" do
-    blocks.header(text: "Some very long text" * BlockKit::Layout::Header::MAX_LENGTH)
-    blocks.divider
-    blocks.section(text: "More long text" * BlockKit::Layout::Section::MAX_TEXT_LENGTH)
+    home.header(text: "Some very long text" * BlockKit::Layout::Header::MAX_LENGTH)
+    home.divider
+    home.section(text: "More long text" * BlockKit::Layout::Section::MAX_TEXT_LENGTH)
 
-    expect(blocks.fix_validation_errors).to be true
+    expect(home.fix_validation_errors).to be true
 
-    expect(blocks.first.text.length).to be <= BlockKit::Layout::Header::MAX_LENGTH
-    expect(blocks.last.text.length).to be <= BlockKit::Layout::Section::MAX_TEXT_LENGTH
+    expect(home.blocks.first.text.length).to be <= BlockKit::Layout::Header::MAX_LENGTH
+    expect(home.blocks.last.text.length).to be <= BlockKit::Layout::Section::MAX_TEXT_LENGTH
+  end
+
+  it "fixes nested focusable blocks by removing focus_on_load" do
+    external_select = BlockKit::Elements::ExternalSelect.new(focus_on_load: true)
+    plain_text_input = BlockKit::Elements::PlainTextInput.new(focus_on_load: true)
+    rich_text_input = BlockKit::Elements::RichTextInput.new(focus_on_load: true)
+    button = BlockKit::Elements::Button.new(text: "A button", value: "button_value")
+    checkboxes = BlockKit::Elements::Checkboxes.new(options: [{text: "Option 1", value: "value_1"}], focus_on_load: true)
+
+    home.section(text: "Some text", accessory: external_select)
+    home.input(label: "Some label", element: plain_text_input)
+    home.actions(elements: [rich_text_input, button, checkboxes])
+
+    expect {
+      home.fix_validation_errors
+    }.to change {
+      external_select.focus_on_load
+    }.from(true).to(false).and change {
+      plain_text_input.focus_on_load
+    }.from(true).to(false).and change {
+      rich_text_input.focus_on_load
+    }.from(true).to(false).and change {
+      checkboxes.focus_on_load
+    }.from(true).to(false)
   end
 
   it "can raise unfixed validation errors" do
-    blocks.header(text: "")
-    blocks.divider
-    blocks.section(text: "Long text" * BlockKit::Layout::Section::MAX_TEXT_LENGTH)
+    home.header(text: "")
+    home.divider
+    home.section(text: "Long text" * BlockKit::Layout::Section::MAX_TEXT_LENGTH)
 
-    expect { blocks.fix_validation_errors! }.to raise_error(ActiveModel::ValidationError)
+    expect { home.fix_validation_errors! }.to raise_error(ActiveModel::ValidationError)
 
-    expect(blocks.last.text.length).to be <= BlockKit::Layout::Section::MAX_TEXT_LENGTH
+    expect(home.blocks.last.text.length).to be <= BlockKit::Layout::Section::MAX_TEXT_LENGTH
   end
 end
