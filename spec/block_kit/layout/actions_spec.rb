@@ -561,4 +561,15 @@ RSpec.describe BlockKit::Layout::Actions, type: :model do
       expect(block.errors[:elements]).to include("is too long (maximum is 25 elements)")
     end
   end
+
+  context "fixers" do
+    it "fixes associated elements" do
+      block.button(text: "a" * (BlockKit::Elements::BaseButton::MAX_TEXT_LENGTH + 1), value: "button")
+      expect(block).not_to be_valid
+
+      block.fix_validation_errors
+
+      expect(block.elements.last.text.length).to eq(BlockKit::Elements::BaseButton::MAX_TEXT_LENGTH)
+    end
+  end
 end

@@ -3,6 +3,10 @@
 module BlockKit
   module Layout
     class Section < Base
+      MAX_TEXT_LENGTH = 3000
+      MAX_FIELDS = 10
+      MAX_FIELD_TEXT_LENGTH = 2000
+
       self.type = :section
 
       SUPPORTED_ELEMENTS = [
@@ -31,9 +35,16 @@ module BlockKit
       attribute :accessory, Types::Blocks.new(*SUPPORTED_ELEMENTS)
       attribute :expand, :boolean
 
-      validates :text, length: {maximum: 3000}, presence: {allow_nil: true}
-      validates :fields, length: {maximum: 10, message: "is too long (maximum is %{count} fields)"}, presence: {allow_nil: true}
+      validates :text, length: {maximum: MAX_TEXT_LENGTH}, presence: {allow_nil: true}
+      fixes :text, truncate: {maximum: MAX_TEXT_LENGTH}
+
+      validates :fields, length: {maximum: MAX_FIELDS, message: "is too long (maximum is %{count} fields)"}, presence: {allow_nil: true}
+      fix :truncate_long_fields
+      fix :remove_blank_fields
+
       validates :accessory, "block_kit/validators/associated": true
+      fixes :accessory, associated: true
+
       validate :has_text_or_fields
       validate :fields_are_valid
 
@@ -117,11 +128,23 @@ module BlockKit
 
       def fields_are_valid
         fields&.each_with_index do |field, i|
-          if field.length > 2000
-            errors.add("fields[#{i}]", "is invalid: text is too long (maximum is 2000 characters)")
+          if field.length > MAX_FIELD_TEXT_LENGTH
+            errors.add("fields[#{i}]", "is invalid: text is too long (maximum is #{MAX_FIELD_TEXT_LENGTH} characters)")
           elsif field.blank?
             errors.add("fields[#{i}]", "is invalid: text can't be blank")
           end
+        end
+      end
+
+      def truncate_long_fields
+        Array(fields).select { |field| field.length > MAX_FIELD_TEXT_LENGTH }.each do |field|
+          field.text = field.text.truncate(MAX_FIELD_TEXT_LENGTH)
+        end
+      end
+
+      def remove_blank_fields
+        Array(fields).select(&:blank?).each do |field|
+          fields.delete(field)
         end
       end
     end

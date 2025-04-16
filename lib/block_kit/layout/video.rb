@@ -5,6 +5,13 @@ require "uri"
 module BlockKit
   module Layout
     class Video < Base
+      MAX_ALT_TEXT_LENGTH = 2000
+      MAX_AUTHOR_NAME_LENGTH = 50
+      MAX_DESCRIPTION_LENGTH = 200
+      MAX_URL_LENGTH = 3000
+      MAX_PROVIDER_NAME_LENGTH = 50
+      MAX_TITLE_LENGTH = 200
+
       self.type = :video
 
       attribute :alt_text, :string
@@ -19,15 +26,29 @@ module BlockKit
 
       include Concerns::PlainTextEmojiAssignment.new(:description, :title)
 
-      validates :alt_text, presence: true, length: {maximum: 2000}
-      validates :author_name, presence: true, length: {maximum: 50}, allow_nil: true
-      validates :description, presence: true, length: {maximum: 200}, allow_nil: true
-      validates :provider_icon_url, presence: true, length: {maximum: 3000}, format: {with: URI::DEFAULT_PARSER.make_regexp(%w[https http]), message: "is not a valid URI"}, allow_nil: true
-      validates :provider_name, presence: true, length: {maximum: 50}, allow_nil: true
-      validates :title, presence: true, length: {maximum: 200}
-      validates :title_url, presence: true, length: {maximum: 3000}, format: {with: URI::DEFAULT_PARSER.make_regexp(%w[https]), message: "is not a valid HTTPS URI"}, allow_nil: true
-      validates :thumbnail_url, presence: true, length: {maximum: 3000}, format: {with: URI::DEFAULT_PARSER.make_regexp(%w[https http]), message: "is not a valid URI"}
-      validates :video_url, presence: true, length: {maximum: 3000}, format: {with: URI::DEFAULT_PARSER.make_regexp(%w[https]), message: "is not a valid HTTPS URI"}
+      validates :alt_text, presence: true, length: {maximum: MAX_ALT_TEXT_LENGTH}
+      fixes :alt_text, truncate: {maximum: MAX_ALT_TEXT_LENGTH}
+
+      validates :author_name, presence: true, length: {maximum: MAX_AUTHOR_NAME_LENGTH}, allow_nil: true
+      fixes :author_name, truncate: {maximum: MAX_AUTHOR_NAME_LENGTH}, null_value: {error_types: [:blank]}
+
+      validates :description, presence: true, length: {maximum: MAX_DESCRIPTION_LENGTH}, allow_nil: true
+      fixes :description, truncate: {maximum: MAX_DESCRIPTION_LENGTH}, null_value: {error_types: [:blank]}
+
+      validates :provider_icon_url, presence: true, length: {maximum: MAX_URL_LENGTH}, format: {with: URI::DEFAULT_PARSER.make_regexp(%w[https http]), message: "is not a valid URI"}, allow_nil: true
+      fixes :provider_icon_url, null_value: {error_types: [:blank]}
+
+      validates :provider_name, presence: true, length: {maximum: MAX_PROVIDER_NAME_LENGTH}, allow_nil: true
+      fixes :provider_name, truncate: {maximum: MAX_PROVIDER_NAME_LENGTH}, null_value: {error_types: [:blank]}
+
+      validates :title, presence: true, length: {maximum: MAX_TITLE_LENGTH}
+      fixes :title, truncate: {maximum: MAX_TITLE_LENGTH}
+
+      validates :title_url, presence: true, length: {maximum: MAX_URL_LENGTH}, format: {with: URI::DEFAULT_PARSER.make_regexp(%w[https]), message: "is not a valid HTTPS URI"}, allow_nil: true
+      fixes :title_url, null_value: {error_types: [:blank]}
+
+      validates :thumbnail_url, presence: true, length: {maximum: MAX_URL_LENGTH}, format: {with: URI::DEFAULT_PARSER.make_regexp(%w[https http]), message: "is not a valid URI"}
+      validates :video_url, presence: true, length: {maximum: MAX_URL_LENGTH}, format: {with: URI::DEFAULT_PARSER.make_regexp(%w[https]), message: "is not a valid HTTPS URI"}
 
       def as_json(*)
         super.merge(

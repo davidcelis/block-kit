@@ -629,4 +629,34 @@ RSpec.describe BlockKit::Layout::Input, type: :model do
       expect(subject.errors[:dispatch_action]).to include("can't be enabled for FileInputs")
     end
   end
+
+  context "fixers" do
+    it_behaves_like "a block that fixes validation errors", attribute: :label, truncate: {maximum: described_class::MAX_LABEL_LENGTH}
+    it_behaves_like "a block that fixes validation errors",
+      attribute: :hint,
+      truncate: {maximum: described_class::MAX_HINT_LENGTH},
+      null_value: {
+        valid_values: ["A hint", nil],
+        invalid_values: [{before: "", after: nil}]
+      }
+
+    it "unsets dispatch_action for FileInputs" do
+      block.element = BlockKit::Elements::FileInput.new
+      block.dispatch_action = true
+      expect(block).not_to be_valid
+
+      expect { block.fix_validation_errors }.to change { block.dispatch_action }.from(true).to(false)
+    end
+
+    it "fixes associated element" do
+      block.plain_text_input(placeholder: "a" * (BlockKit::Concerns::HasPlaceholder::MAX_TEXT_LENGTH + 1))
+      expect(block).not_to be_valid
+
+      expect {
+        block.fix_validation_errors
+      }.to change {
+        block.element.placeholder.length
+      }.by(-1)
+    end
+  end
 end

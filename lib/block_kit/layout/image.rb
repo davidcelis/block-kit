@@ -5,6 +5,10 @@ require "uri"
 module BlockKit
   module Layout
     class Image < Base
+      MAX_ALT_TEXT_LENGTH = 2000
+      MAX_IMAGE_URL_LENGTH = 3000
+      MAX_TITLE_LENGTH = 2000
+
       self.type = :image
 
       attribute :alt_text, :string
@@ -14,9 +18,15 @@ module BlockKit
 
       include Concerns::PlainTextEmojiAssignment.new(:title)
 
-      validates :alt_text, presence: true, length: {maximum: 2000}
-      validates :image_url, presence: true, length: {maximum: 3000}, format: {with: URI::DEFAULT_PARSER.make_regexp(%w[http https]), message: "is not a valid URI", allow_blank: true}, allow_nil: true
-      validates :title, presence: true, length: {maximum: 2000}, allow_nil: true
+      validates :alt_text, presence: true, length: {maximum: MAX_ALT_TEXT_LENGTH}
+      fixes :alt_text, truncate: {maximum: MAX_ALT_TEXT_LENGTH}
+
+      validates :image_url, presence: true, length: {maximum: MAX_IMAGE_URL_LENGTH}, format: {with: URI::DEFAULT_PARSER.make_regexp(%w[http https]), message: "is not a valid URI", allow_blank: true}, allow_nil: true
+      fixes :image_url, null_value: {error_types: [:blank]}
+
+      validates :title, presence: true, length: {maximum: MAX_TITLE_LENGTH}, allow_nil: true
+      fixes :title, truncate: {maximum: MAX_TITLE_LENGTH}, null_value: {error_types: [:blank]}
+
       validate :slack_file_or_url_present
 
       def slack_file(attrs = {})

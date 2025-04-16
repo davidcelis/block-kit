@@ -758,4 +758,43 @@ RSpec.describe BlockKit::Layout::Section, type: :model do
       expect(block.errors[:accessory]).to include("is invalid: alt_text can't be blank")
     end
   end
+
+  context "fixers" do
+    it_behaves_like "a block that fixes validation errors", attribute: :text, truncate: {maximum: described_class::MAX_TEXT_LENGTH}
+
+    it "truncates long fields" do
+      block.fields = [
+        BlockKit::Composition::Mrkdwn.new(text: "a" * described_class::MAX_FIELD_TEXT_LENGTH),
+        BlockKit::Composition::PlainText.new(text: "a" * (described_class::MAX_FIELD_TEXT_LENGTH + 1)),
+        BlockKit::Composition::PlainText.new(text: "a" * described_class::MAX_FIELD_TEXT_LENGTH),
+        BlockKit::Composition::Mrkdwn.new(text: "a" * (described_class::MAX_FIELD_TEXT_LENGTH + 2))
+      ]
+
+      block.fix_validation_errors
+
+      expect(block.fields[1].text.length).to eq(described_class::MAX_FIELD_TEXT_LENGTH)
+      expect(block.fields[3].text.length).to eq(described_class::MAX_FIELD_TEXT_LENGTH)
+    end
+
+    it "removes blank fields" do
+      block.fields = [
+        BlockKit::Composition::Mrkdwn.new(text: "Field 1"),
+        BlockKit::Composition::PlainText.new(text: ""),
+        BlockKit::Composition::PlainText.new(text: "Field 2"),
+        BlockKit::Composition::Mrkdwn.new(text: nil)
+      ]
+
+      expect { block.fix_validation_errors }.to change { block.fields.count }.by(-2)
+
+      expect(block.fields.map(&:text)).to eq(["Field 1", "Field 2"])
+    end
+
+    it_behaves_like "a block that fixes validation errors", attribute: :accessory, associated: {
+      record: -> {
+        BlockKit::Elements::Button.new(text: "a" * (BlockKit::Elements::BaseButton::MAX_TEXT_LENGTH + 1), value: "button")
+      },
+      invalid_attribute: :text,
+      fixed_attribute_value: BlockKit::Composition::PlainText.new(text: "a" * (BlockKit::Elements::BaseButton::MAX_TEXT_LENGTH - 3) + "...")
+    }
+  end
 end

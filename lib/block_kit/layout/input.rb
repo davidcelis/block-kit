@@ -3,6 +3,9 @@
 module BlockKit
   module Layout
     class Input < Base
+      MAX_LABEL_LENGTH = 2000
+      MAX_HINT_LENGTH = 2000
+
       self.type = :input
 
       SUPPORTED_ELEMENTS = [
@@ -37,10 +40,17 @@ module BlockKit
 
       include Concerns::PlainTextEmojiAssignment.new(:label, :hint)
 
-      validates :label, presence: true, length: {maximum: 2000}
+      validates :label, presence: true, length: {maximum: MAX_LABEL_LENGTH}
+      fixes :label, truncate: {maximum: MAX_LABEL_LENGTH}
+
       validates :element, presence: true, "block_kit/validators/associated": true
+      fixes :element, associated: true
+
       validates :dispatch_action, inclusion: {in: [nil, false], message: "can't be enabled for FileInputs"}, if: ->(input) { input.element.is_a?(Elements::FileInput) }
-      validates :hint, length: {maximum: 2000}, allow_nil: true
+      fix :unset_dispatch_action_if_file_input
+
+      validates :hint, presence: true, length: {maximum: MAX_HINT_LENGTH}, allow_nil: true
+      fixes :hint, truncate: {maximum: MAX_HINT_LENGTH}, null_value: {error_types: [:blank]}
 
       dsl_method :element, as: :channels_select, type: Elements::ChannelsSelect
       dsl_method :element, as: :checkboxes, type: Elements::Checkboxes
@@ -96,6 +106,14 @@ module BlockKit
           hint: hint&.as_json,
           optional: optional
         ).compact
+      end
+
+      private
+
+      def unset_dispatch_action_if_file_input
+        if dispatch_action? && element.is_a?(Elements::FileInput)
+          self.dispatch_action = false
+        end
       end
     end
   end

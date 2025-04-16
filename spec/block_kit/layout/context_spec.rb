@@ -141,4 +141,25 @@ RSpec.describe BlockKit::Layout::Context, type: :model do
       expect(block.errors["elements[1]"]).to include("is invalid: image_url can't be blank")
     end
   end
+
+  context "fixers" do
+    it "fixes associated elements" do
+      plain_text = BlockKit::Composition::PlainText.new(text: "a" * (BlockKit::Composition::Text::MAX_LENGTH + 1))
+      image = BlockKit::Elements::Image.new(image_url: "https://example.com/image.png", alt_text: "b" * (BlockKit::Elements::Image::MAX_ALT_TEXT_LENGTH + 2))
+      mrkdwn = BlockKit::Composition::Mrkdwn.new(text: "c" * (BlockKit::Composition::Text::MAX_LENGTH + 3))
+
+      subject.elements = [plain_text, image, mrkdwn]
+      expect(subject).not_to be_valid
+
+      expect {
+        subject.fix_validation_errors
+      }.to change {
+        plain_text.length
+      }.by(-1).and change {
+        image.alt_text.length
+      }.by(-2).and change {
+        mrkdwn.length
+      }.by(-3)
+    end
+  end
 end

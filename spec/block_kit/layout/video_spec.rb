@@ -112,4 +112,71 @@ RSpec.describe BlockKit::Layout::Video, type: :model do
     it { is_expected.not_to allow_value("this://kind.of.url/").for(:video_url).with_message("is not a valid HTTPS URI") }
     it { is_expected.not_to allow_value("invalid_url").for(:video_url).with_message("is not a valid HTTPS URI") }
   end
+
+  context "fixers" do
+    it_behaves_like "a block that fixes validation errors", attribute: :alt_text, truncate: {maximum: described_class::MAX_ALT_TEXT_LENGTH}
+    it_behaves_like "a block that fixes validation errors", attribute: :title, truncate: {maximum: described_class::MAX_TITLE_LENGTH}
+
+    it_behaves_like "a block that fixes validation errors",
+      attribute: :author_name,
+      truncate: {maximum: described_class::MAX_AUTHOR_NAME_LENGTH},
+      null_value: {
+        valid_values: ["A name", nil],
+        invalid_values: [{before: "", after: nil}]
+      }
+
+    it_behaves_like "a block that fixes validation errors",
+      attribute: :description,
+      truncate: {maximum: described_class::MAX_DESCRIPTION_LENGTH},
+      null_value: {
+        valid_values: ["A description", nil],
+        invalid_values: [{before: "", after: nil}]
+      }
+
+    it_behaves_like "a block that fixes validation errors", attribute: :provider_icon_url, null_value: {
+      valid_values: ["http://example.com/", "https://example.com/", nil],
+      invalid_values: [
+        {before: "this://kind.of.url/", after: "this://kind.of.url/", still_invalid: true},
+        {before: "invalid_url", after: "invalid_url", still_invalid: true},
+        {before: "", after: nil}
+      ]
+    }
+
+    it_behaves_like "a block that fixes validation errors",
+      attribute: :provider_name,
+      truncate: {maximum: described_class::MAX_PROVIDER_NAME_LENGTH},
+      null_value: {
+        valid_values: ["YouTube", nil],
+        invalid_values: [{before: "", after: nil}]
+      }
+
+    it_behaves_like "a block that fixes validation errors", attribute: :title_url, null_value: {
+      valid_values: ["https://example.com/", nil],
+      invalid_values: [
+        {before: "http://example.com/", after: "http://example.com/", still_invalid: true},
+        {before: "this://kind.of.url/", after: "this://kind.of.url/", still_invalid: true},
+        {before: "invalid_url", after: "invalid_url", still_invalid: true},
+        {before: "", after: nil}
+      ]
+    }
+
+    it_behaves_like "a block that fixes validation errors", attribute: :thumbnail_url, null_value: {
+      valid_values: ["https://example.com/", "http://example.com/"],
+      invalid_values: [
+        {before: "this://kind.of.url/", after: "this://kind.of.url/", still_invalid: true},
+        {before: "invalid_url", after: "invalid_url", still_invalid: true},
+        {before: "", after: "", still_invalid: true}
+      ]
+    }
+
+    it_behaves_like "a block that fixes validation errors", attribute: :video_url, null_value: {
+      valid_values: ["https://example.com/"],
+      invalid_values: [
+        {before: "http://example.com/", after: "http://example.com/", still_invalid: true},
+        {before: "this://kind.of.url/", after: "this://kind.of.url/", still_invalid: true},
+        {before: "invalid_url", after: "invalid_url", still_invalid: true},
+        {before: "", after: "", still_invalid: true}
+      ]
+    }
+  end
 end

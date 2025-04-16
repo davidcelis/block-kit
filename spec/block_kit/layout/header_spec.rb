@@ -41,4 +41,8 @@ RSpec.describe BlockKit::Layout::Header, type: :model do
     it { is_expected.to validate_presence_of(:text) }
     it { is_expected.to validate_length_of(:text).is_at_most(150) }
   end
+
+  context "fixers" do
+    it_behaves_like "a block that fixes validation errors", attribute: :text, truncate: {maximum: described_class::MAX_LENGTH}
+  end
 end
