@@ -5,14 +5,21 @@ require "uri"
 module BlockKit
   module Elements
     class Image < Block
+      MAX_ALT_TEXT_LENGTH = 2000
+      MAX_IMAGE_URL_LENGTH = 3000
+
       self.type = :image
 
       attribute :alt_text, :string
       attribute :image_url, :string
       attribute :slack_file, Types::Block.of_type(Composition::SlackFile)
 
-      validates :alt_text, presence: true, length: {maximum: 2000}
-      validates :image_url, presence: true, length: {maximum: 3000}, format: {with: URI::DEFAULT_PARSER.make_regexp(%w[http https]), message: "is not a valid URI", allow_blank: true}, allow_nil: true
+      validates :alt_text, presence: true, length: {maximum: MAX_ALT_TEXT_LENGTH}
+      fixes :alt_text, truncate: {maximum: MAX_ALT_TEXT_LENGTH}
+
+      validates :image_url, presence: true, length: {maximum: MAX_IMAGE_URL_LENGTH}, format: {with: URI::DEFAULT_PARSER.make_regexp(%w[http https]), message: "is not a valid URI", allow_blank: true}, allow_nil: true
+      fixes :image_url, null_value: {error_types: [:blank]}
+
       validate :slack_file_or_url_present
 
       def slack_file(attrs = {})

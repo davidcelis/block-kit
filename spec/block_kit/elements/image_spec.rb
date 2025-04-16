@@ -93,4 +93,17 @@ RSpec.describe BlockKit::Elements::Image, type: :model do
       expect(image.errors[:base]).to include("must have either a slack_file or image_url but not both")
     end
   end
+
+  context "fixers" do
+    it_behaves_like "a block that fixes validation errors", attribute: :alt_text, truncate: {maximum: described_class::MAX_ALT_TEXT_LENGTH}
+
+    it_behaves_like "a block that fixes validation errors", attribute: :image_url, null_value: {
+      valid_values: ["http://example.com/", "https://example.com/", nil],
+      invalid_values: [
+        {before: "this://kind.of.url/", after: "this://kind.of.url/", still_invalid: true},
+        {before: "invalid_url", after: "invalid_url", still_invalid: true},
+        {before: "", after: nil}
+      ]
+    }
+  end
 end

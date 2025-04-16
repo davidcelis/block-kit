@@ -49,4 +49,21 @@ RSpec.describe BlockKit::Elements::FileInput, type: :model do
     it { is_expected.not_to allow_value(0).for(:max_files).with_message("must be in 1..10") }
     it { is_expected.not_to allow_value(11).for(:max_files).with_message("must be in 1..10") }
   end
+
+  context "fixers" do
+    it "clamps max_files to be within 1..10" do
+      input.max_files = 15
+      expect(input).not_to be_valid
+
+      input.fix_validation_errors
+
+      expect(input.max_files).to eq(10)
+
+      input.max_files = 0
+      expect(input).not_to be_valid
+
+      input.fix_validation_errors
+      expect(input.max_files).to eq(1)
+    end
+  end
 end
