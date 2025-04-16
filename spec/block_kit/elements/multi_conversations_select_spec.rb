@@ -46,5 +46,21 @@ RSpec.describe BlockKit::Elements::MultiConversationsSelect, type: :model do
 
   context "validations" do
     it { is_expected.to be_valid }
+
+    it "validates initial_conversations are all present" do
+      multi_conversations_select.initial_conversations = ["C12345678", "", "C23456789", nil]
+
+      expect(multi_conversations_select).not_to be_valid
+      expect(multi_conversations_select.errors[:initial_conversations]).to include("must not contain blank values")
+    end
+  end
+
+  context "fixers" do
+    it "removes blank initial_conversations" do
+      multi_conversations_select.initial_conversations = ["C12345678", "", "C23456789", nil]
+      multi_conversations_select.fix_validation_errors
+
+      expect(multi_conversations_select.initial_conversations.to_a).to eq(["C12345678", "C23456789"])
+    end
   end
 end

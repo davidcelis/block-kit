@@ -36,5 +36,21 @@ RSpec.describe BlockKit::Elements::MultiUsersSelect, type: :model do
 
   context "validations" do
     it { is_expected.to be_valid }
+
+    it "validates initial_users are all present" do
+      multi_users_select.initial_users = ["C12345678", "", "C23456789", nil]
+
+      expect(multi_users_select).not_to be_valid
+      expect(multi_users_select.errors[:initial_users]).to include("must not contain blank values")
+    end
+  end
+
+  context "fixers" do
+    it "removes blank initial_users" do
+      multi_users_select.initial_users = ["C12345678", "", "C23456789", nil]
+      multi_users_select.fix_validation_errors
+
+      expect(multi_users_select.initial_users.to_a).to eq(["C12345678", "C23456789"])
+    end
   end
 end

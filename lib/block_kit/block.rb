@@ -21,6 +21,10 @@ module BlockKit
       end
     end
 
+    def self.fix(method_name)
+      attribute_fixers[:base] << method_name
+    end
+
     def self.inherited(base)
       base.attribute_fixers = attribute_fixers.dup
     end
@@ -34,7 +38,11 @@ module BlockKit
     def fix_validation_errors
       return if valid?
 
-      attribute_fixers.each do |attribute, fixers|
+      Array(attribute_fixers[:base]).each do |method_name|
+        method(method_name).call
+      end
+
+      attribute_fixers.except(:base).each do |attribute, fixers|
         fixers.each { |fixer| fixer.fix(self) }
       end
 

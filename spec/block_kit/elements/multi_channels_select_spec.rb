@@ -36,5 +36,21 @@ RSpec.describe BlockKit::Elements::MultiChannelsSelect, type: :model do
 
   context "validations" do
     it { is_expected.to be_valid }
+
+    it "validates initial_channels are all present" do
+      multi_channels_select.initial_channels = ["C12345678", "", "C23456789", nil]
+
+      expect(multi_channels_select).not_to be_valid
+      expect(multi_channels_select.errors[:initial_channels]).to include("must not contain blank values")
+    end
+  end
+
+  context "fixers" do
+    it "removes blank initial_channels" do
+      multi_channels_select.initial_channels = ["C12345678", "", "C23456789", nil]
+      multi_channels_select.fix_validation_errors
+
+      expect(multi_channels_select.initial_channels.to_a).to eq(["C12345678", "C23456789"])
+    end
   end
 end
