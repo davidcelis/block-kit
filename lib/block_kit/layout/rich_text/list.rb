@@ -22,6 +22,8 @@ module BlockKit
       validates :offset, numericality: {only_integer: true, greater_than_or_equal_to: 0}, allow_nil: true
       validates :border, numericality: {only_integer: true, greater_than_or_equal_to: 0}, allow_nil: true
 
+      fixes :elements, associated: true
+
       dsl_method :elements, as: :section, type: RichText::Section
       alias_method :rich_text_section, :section
 

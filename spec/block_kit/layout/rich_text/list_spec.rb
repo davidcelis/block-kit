@@ -67,4 +67,25 @@ RSpec.describe BlockKit::Layout::RichText::List, type: :model do
       expect(block.errors["elements[2]"]).to include("is invalid: elements can't be blank")
     end
   end
+
+  context "fixers" do
+    it "fixes associated elements" do
+      element_1 = BlockKit::Layout::RichText::Elements::Date.new(timestamp: 1234567890, format: "{date_long_pretty}", url: "", fallback: "")
+      element_2 = BlockKit::Layout::RichText::Elements::Emoji.new(name: "smile", unicode: "1F600")
+      element_3 = BlockKit::Layout::RichText::Elements::Emoji.new(name: "hotdog", unicode: "")
+      section = BlockKit::Layout::RichText::Section.new(elements: [element_1, element_2, element_3])
+
+      subject.elements = [section]
+
+      expect {
+        subject.fix_validation_errors
+      }.to change {
+        element_1.url
+      }.from("").to(nil).and change {
+        element_1.fallback
+      }.from("").to(nil).and change {
+        element_3.unicode
+      }.from("").to(nil)
+    end
+  end
 end

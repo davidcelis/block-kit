@@ -29,4 +29,15 @@ RSpec.describe BlockKit::Layout::RichText::Preformatted, type: :model do
     it { is_expected.not_to allow_value(-1).for(:border) }
     it { is_expected.to allow_value(nil).for(:border) }
   end
+
+  context "fixers" do
+    it_behaves_like "a block that fixes validation errors", attribute: :border, null_value: {
+      valid_values: [nil, 0, 1, 2, 3],
+      invalid_values: [
+        {before: -1, after: nil},
+        {before: -2, after: nil},
+        {before: -3, after: nil}
+      ]
+    }
+  end
 end

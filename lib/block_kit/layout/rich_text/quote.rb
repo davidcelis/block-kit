@@ -9,6 +9,7 @@ module BlockKit
 
       attribute :border, :integer
       validates :border, numericality: {only_integer: true, greater_than_or_equal_to: 0}, allow_nil: true
+      fixes :border, null_value: {error_types: [:greater_than_or_equal_to]}
 
       def as_json(*)
         super.merge(border: border).compact
