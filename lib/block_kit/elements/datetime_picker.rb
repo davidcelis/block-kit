@@ -9,9 +9,9 @@ module BlockKit
       include Concerns::FocusableOnLoad
 
       attribute :initial_date_time, :datetime
-      alias_attribute :initial_datetime, :initial_date_time
-
       validates :initial_date_time, presence: true, allow_nil: true
+
+      alias_attribute :initial_datetime, :initial_date_time
 
       def as_json(*)
         super.merge(initial_date_time: initial_date_time&.to_i).compact

@@ -18,10 +18,18 @@ module BlockKit
       attribute :max_length, :integer
       attribute :multiline, :boolean
 
-      validates :initial_value, presence: true, length: {minimum: ->(input) { input.min_length || 0 }, maximum: ->(input) { input.max_length || 3000 }}, allow_nil: true
       validates :min_length, presence: true, numericality: {only_integer: true}, allow_nil: true
       validates :max_length, presence: true, numericality: {only_integer: true}, allow_nil: true
       validate :min_and_max_lengths_are_valid
+
+      validates :initial_value, presence: true, length: {
+        minimum: ->(input) { input.min_length || 0 },
+        maximum: ->(input) { input.max_length || 3000 }
+      }, allow_nil: true
+
+      fixes :initial_value,
+        truncate: {maximum: ->(input) { input.max_length || 3000 }},
+        null_value: {error_types: [:blank, :too_short]}
 
       def as_json(*)
         super.merge(

@@ -9,6 +9,7 @@ module BlockKit
 
       attribute :initial_option, Types::Block.of_type(Composition::Option)
       validates :initial_option, "block_kit/validators/associated": true, allow_nil: true
+      fixes :initial_option, associated: true
 
       dsl_method :initial_option, required_fields: [:text, :value], yields: false
 

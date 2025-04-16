@@ -42,4 +42,14 @@ RSpec.describe BlockKit::Elements::URLTextInput, type: :model do
     it { is_expected.to allow_value("anything://is.fine/").for(:initial_value) }
     it { is_expected.not_to allow_value("invalid_url").for(:initial_value).with_message("is not a valid URI") }
   end
+
+  context "fixers" do
+    it_behaves_like "a block that fixes validation errors", attribute: :initial_value, null_value: {
+      valid_values: ["http://example.com/", "https://example.com/", "anything://is.fine/", nil],
+      invalid_values: [
+        {before: "invalid_url", after: nil},
+        {before: "", after: nil}
+      ]
+    }
+  end
 end

@@ -20,6 +20,7 @@ module BlockKit
 
       attribute :elements, Types::Array.of(Types::Blocks.new(*SUPPORTED_ELEMENTS))
       validates :elements, presence: true, "block_kit/validators/associated": true
+      fixes :elements, associated: true
 
       dsl_method :elements, as: :list, type: RichText::List
       dsl_method :elements, as: :preformatted, type: RichText::Preformatted

@@ -5,6 +5,7 @@ module BlockKit
     class MultiSelect < Select
       attribute :max_selected_items, :integer
       validates :max_selected_items, presence: true, numericality: {only_integer: true, greater_than: 0}, allow_nil: true
+      fixes :max_selected_items, null_value: {error_types: [:greater_than]}
 
       def initialize(attributes = {})
         raise NotImplementedError, "#{self.class} is an abstract class and can't be instantiated." if instance_of?(MultiSelect)

@@ -56,4 +56,15 @@ RSpec.describe BlockKit::Elements::TimePicker, type: :model do
       expect(time_picker).to be_valid
     end
   end
+
+  context "fixers" do
+    it_behaves_like "a block that fixes validation errors", attribute: :timezone, null_value: {
+      valid_values: ["America/Los_Angeles", "Europe/London", nil],
+      invalid_values: [
+        {before: "Invalid/Timezone", after: nil},
+        {before: "invalid", after: nil},
+        {before: "", after: nil}
+      ]
+    }
+  end
 end

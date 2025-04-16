@@ -60,8 +60,6 @@ RSpec.describe BlockKit::Elements::RichTextInput, type: :model do
   context "validations" do
     it { is_expected.to be_valid }
 
-    it { is_expected.to validate_presence_of(:initial_value).allow_nil }
-
     it "validates initial_value" do
       expect(input).to be_valid
 
@@ -70,6 +68,20 @@ RSpec.describe BlockKit::Elements::RichTextInput, type: :model do
       )
       expect(input).not_to be_valid
       expect(input.errors[:initial_value]).to include("is invalid: elements is invalid, elements[0].elements can't be blank")
+    end
+  end
+
+  context "fixers" do
+    it "fixes the initial_value" do
+      emoji = BlockKit::Layout::RichText::Elements::Emoji.new(name: "hotdog", unicode: "")
+      section = BlockKit::Layout::RichText::Section.new(elements: [emoji])
+      input.initial_value = BlockKit::Layout::RichText.new(elements: [section])
+
+      expect(input).not_to be_valid
+
+      expect { input.fix_validation_errors }.to change { emoji.unicode }.from("").to(nil)
+
+      expect(input).to be_valid
     end
   end
 end

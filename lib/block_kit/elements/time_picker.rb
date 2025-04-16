@@ -14,6 +14,7 @@ module BlockKit
       attribute :timezone, :string
 
       validate :timezone_is_valid
+      fixes :timezone, null_value: {error_types: [:blank, :invalid]}
 
       def timezone
         ActiveSupport::TimeZone[super] if super
@@ -30,9 +31,12 @@ module BlockKit
 
       def timezone_is_valid
         return if attributes["timezone"].nil?
-        return errors.add(:timezone, "can't be blank") if attributes["timezone"].blank?
 
-        errors.add(:timezone, "is not a valid timezone") unless ActiveSupport::TimeZone[attributes["timezone"]]
+        if attributes["timezone"].blank?
+          errors.add(:timezone, :blank)
+        else
+          errors.add(:timezone, :invalid, message: "is not a valid timezone") unless ActiveSupport::TimeZone[attributes["timezone"]]
+        end
       end
     end
   end

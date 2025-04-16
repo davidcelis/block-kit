@@ -74,4 +74,21 @@ RSpec.describe BlockKit::Elements::Overflow, type: :model do
       expect(subject.errors["options[0]"]).to include("is invalid: value can't be blank")
     end
   end
+
+  context "fixers" do
+    it "fixes the associated options" do
+      subject.options = [
+        {text: "Option 1", value: "option_1"},
+        {text: "Option 2", value: "option_2", description: ""}
+      ]
+
+      expect(subject).not_to be_valid
+      expect(subject.errors["options[1]"]).to include("is invalid: description can't be blank")
+
+      subject.fix_validation_errors
+
+      expect(subject.options[1].description).to be_nil
+      expect(subject).to be_valid
+    end
+  end
 end

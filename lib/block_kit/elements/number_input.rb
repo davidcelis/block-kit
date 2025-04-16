@@ -17,7 +17,10 @@ module BlockKit
 
       validates :min_value, numericality: {less_than_or_equal_to: :max_value}, allow_nil: true, if: :max_value
       validates :max_value, numericality: {greater_than_or_equal_to: :min_value}, allow_nil: true, if: :min_value
-      validates :initial_value, numericality: {greater_than_or_equal_to: :min_value, less_than_or_equal_to: :max_value}, allow_nil: true
+      validates :initial_value, numericality: {greater_than_or_equal_to: :min_value}, allow_nil: true, if: :min_value
+      validates :initial_value, numericality: {less_than_or_equal_to: :max_value}, allow_nil: true, if: :max_value
+
+      fixes :initial_value, null_value: {error_types: [:greater_than_or_equal_to, :less_than_or_equal_to]}
 
       def is_decimal_allowed?
         !!is_decimal_allowed

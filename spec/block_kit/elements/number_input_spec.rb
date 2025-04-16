@@ -123,4 +123,24 @@ RSpec.describe BlockKit::Elements::NumberInput, type: :model do
       end
     end
   end
+
+  context "fixers" do
+    let(:attributes) do
+      {
+        min_value: 1,
+        max_value: 3,
+        initial_value: 2
+      }
+    end
+
+    it_behaves_like "a block that fixes validation errors", attribute: :initial_value, null_value: {
+      valid_values: [nil, 1, 2, 3],
+      invalid_values: [
+        {before: 0, after: nil},
+        {before: -1, after: nil},
+        {before: 4, after: nil},
+        {before: 5, after: nil}
+      ]
+    }
+  end
 end

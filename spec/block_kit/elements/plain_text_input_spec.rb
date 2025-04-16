@@ -117,4 +117,31 @@ RSpec.describe BlockKit::Elements::PlainTextInput, type: :model do
       end
     end
   end
+
+  context "fixers" do
+    it_behaves_like "a block that fixes validation errors",
+      attribute: :initial_value,
+      truncate: {maximum: 3000},
+      null_value: {
+        valid_values: ["anything", nil],
+        invalid_values: [{before: "", after: nil}]
+      }
+
+    context "when max_length is set" do
+      before { input.max_length = 10 }
+
+      it_behaves_like "a block that fixes validation errors", attribute: :initial_value, truncate: {maximum: 10}
+    end
+
+    context "when min_length is set" do
+      before { input.min_length = 5 }
+
+      it_behaves_like "a block that fixes validation errors",
+        attribute: :initial_value,
+        null_value: {
+          valid_values: ["Hello", nil],
+          invalid_values: [{before: "Hell", after: nil}]
+        }
+    end
+  end
 end

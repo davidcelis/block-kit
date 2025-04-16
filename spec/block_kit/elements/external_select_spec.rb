@@ -58,4 +58,14 @@ RSpec.describe BlockKit::Elements::ExternalSelect, type: :model do
       expect(external_select.errors[:initial_option]).to include("is invalid: value can't be blank")
     end
   end
+
+  context "fixers" do
+    it_behaves_like "a block that fixes validation errors", attribute: :initial_option, associated: {
+      record: -> {
+        BlockKit::Composition::Option.new(text: "Option 1", value: "option_1", description: "")
+      },
+      invalid_attribute: :description,
+      fixed_attribute_value: nil
+    }
+  end
 end

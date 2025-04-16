@@ -9,6 +9,7 @@ module BlockKit
 
       attribute :options, Types::Array.of(Composition::OverflowOption)
       validates :options, presence: true, length: {maximum: 5, message: "is too long (maximum is %{count} options)"}, "block_kit/validators/associated": true
+      fixes :options, associated: true
 
       dsl_method :options, as: :option, required_fields: [:text, :value], yields: false
 

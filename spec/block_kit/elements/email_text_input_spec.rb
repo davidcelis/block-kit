@@ -41,4 +41,14 @@ RSpec.describe BlockKit::Elements::EmailTextInput, type: :model do
     it { is_expected.not_to allow_value("invalidemail.com").for(:initial_value) }
     it { is_expected.not_to allow_value("invalidemail@.com").for(:initial_value) }
   end
+
+  context "fixers" do
+    it_behaves_like "a block that fixes validation errors", attribute: :initial_value, null_value: {
+      valid_values: ["hello@example.com", nil],
+      invalid_values: [
+        {before: "invalidemail@.com", after: nil},
+        {before: "", after: nil}
+      ]
+    }
+  end
 end

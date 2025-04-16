@@ -81,4 +81,18 @@ RSpec.describe BlockKit::Layout::RichText, type: :model do
   context "validations" do
     it { is_expected.to be_valid }
   end
+
+  context "fixers" do
+    it "fixes elements" do
+      emoji = BlockKit::Layout::RichText::Elements::Emoji.new(name: "hotdog", unicode: "")
+      section = BlockKit::Layout::RichText::Section.new(elements: [emoji])
+      subject.elements = [section]
+
+      expect(subject).not_to be_valid
+
+      expect { subject.fix_validation_errors }.to change { emoji.unicode }.from("").to(nil)
+
+      expect(subject).to be_valid
+    end
+  end
 end

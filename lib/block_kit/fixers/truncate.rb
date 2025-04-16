@@ -15,6 +15,9 @@ module BlockKit
         return unless errors.any? { |e| e.type == :too_long }
 
         value = model.attributes[attribute.to_s]
+        maximum = @maximum.call(model) if @maximum.is_a?(Proc)
+        maximum ||= @maximum
+
         new_value = if value.is_a?(Enumerable)
           value.first(maximum)
         else
@@ -23,10 +26,6 @@ module BlockKit
 
         model.assign_attributes(attribute => new_value)
       end
-
-      private
-
-      attr_reader :maximum
     end
   end
 end
