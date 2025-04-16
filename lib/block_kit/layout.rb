@@ -7,6 +7,7 @@ module BlockKit
     autoload :Actions, "block_kit/layout/actions"
     autoload :Context, "block_kit/layout/context"
     autoload :Divider, "block_kit/layout/divider"
+    autoload :File, "block_kit/layout/file"
     autoload :Header, "block_kit/layout/header"
     autoload :Image, "block_kit/layout/image"
     autoload :Input, "block_kit/layout/input"
@@ -20,6 +21,7 @@ module BlockKit
         Actions,
         Context,
         Divider,
+        File,
         Header,
         Image,
         Input,

@@ -11,8 +11,9 @@ module BlockKit
     dsl_method :blocks, as: :actions, type: Layout::Actions
     dsl_method :blocks, as: :context, type: Layout::Context
     dsl_method :blocks, as: :divider, type: Layout::Divider, yields: false
-    dsl_method :blocks, as: :input, type: Layout::Input
+    dsl_method :blocks, as: :file, type: Layout::File, required_fields: [:external_id], yields: false
     dsl_method :blocks, as: :header, type: Layout::Header, required_fields: [:text], yields: false
+    dsl_method :blocks, as: :input, type: Layout::Input
     dsl_method :blocks, as: :markdown, type: Layout::Markdown, required_fields: [:text], yields: false
     dsl_method :blocks, as: :rich_text, type: Layout::RichText
     dsl_method :blocks, as: :section, type: Layout::Section

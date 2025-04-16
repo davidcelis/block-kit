@@ -43,6 +43,14 @@ RSpec.describe BlockKit::Blocks, type: :model do
 
   it_behaves_like "a block that has a DSL method",
     attribute: :blocks,
+    as: :file,
+    type: BlockKit::Layout::File,
+    actual_fields: {external_id: "external_id", block_id: "block_id"},
+    expected_fields: {external_id: "external_id", block_id: "block_id"},
+    yields: false
+
+  it_behaves_like "a block that has a DSL method",
+    attribute: :blocks,
     as: :header,
     type: BlockKit::Layout::Header,
     actual_fields: {text: "Header text", emoji: true, block_id: "block_id"},
@@ -279,6 +287,7 @@ RSpec.describe BlockKit::Blocks, type: :model do
         :block_kit_actions,
         :block_kit_context,
         :block_kit_divider,
+        :block_kit_file,
         :block_kit_header,
         :block_kit_image,
         :block_kit_input,
