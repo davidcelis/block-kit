@@ -42,5 +42,13 @@ RSpec.describe BlockKit::Elements::ChannelsSelect, type: :model do
 
   context "validations" do
     it { is_expected.to be_valid }
+    it { is_expected.to validate_presence_of(:initial_channel).allow_nil }
+  end
+
+  context "fixers" do
+    it_behaves_like "a block that fixes validation errors", attribute: :initial_channel, null_value: {
+      valid_values: ["anything", nil],
+      invalid_values: [{before: "", after: nil}]
+    }
   end
 end

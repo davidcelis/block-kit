@@ -50,4 +50,11 @@ RSpec.describe BlockKit::Elements::ConversationsSelect, type: :model do
 
     it { is_expected.to validate_presence_of(:initial_conversation).allow_nil }
   end
+
+  context "fixers" do
+    it_behaves_like "a block that fixes validation errors", attribute: :initial_conversation, null_value: {
+      valid_values: ["anything", nil],
+      invalid_values: [{before: "", after: nil}]
+    }
+  end
 end
