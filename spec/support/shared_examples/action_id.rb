@@ -12,4 +12,9 @@ RSpec.shared_examples_for "a block with an action_id" do
   end
 
   it { is_expected.to validate_length_of(:action_id).is_at_most(255).allow_nil }
+
+  it_behaves_like "a block that fixes validation errors", attribute: :action_id, null_value: {
+    valid_values: ["anything", nil],
+    invalid_values: [{before: "", after: nil}]
+  }
 end
