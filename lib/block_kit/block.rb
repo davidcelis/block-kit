@@ -33,6 +33,8 @@ module BlockKit
       raise NotImplementedError, "#{self.class} is an abstract class and can't be instantiated." if instance_of?(Block)
 
       super
+
+      yield(self) if block_given?
     end
 
     def fix_validation_errors
