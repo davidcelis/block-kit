@@ -58,4 +58,24 @@ RSpec.shared_examples_for "a block that has options" do |limit:|
     expect(subject).not_to be_valid
     expect(subject.errors[:options]).to include("can't be blank")
   end
+
+  it "automatically fixes invalid options with dangerous truncation" do
+    subject.options = (limit + 1).times.map do |i|
+      BlockKit::Composition::Option.new(text: "Option #{i + 1}", value: i + 1)
+    end
+
+    expect {
+      subject.fix_validation_errors
+    }.not_to change {
+      subject.options.length
+    }
+
+    expect {
+      subject.fix_validation_errors(dangerous: true)
+    }.to change {
+      subject.options.length
+    }.by(-1)
+    expect(subject.options.length).to eq(limit)
+    expect(subject.options.last.text.text).to eq("Option #{limit}")
+  end
 end

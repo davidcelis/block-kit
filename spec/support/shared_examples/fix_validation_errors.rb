@@ -3,15 +3,27 @@ require "spec_helper"
 RSpec.shared_examples_for "a block that fixes validation errors" do |attribute:, **options|
   context "on attribute #{attribute}" do
     if (truncater = options[:truncate])
-      it "automatically truncates the #{attribute} attribute" do
+      it "automatically truncates" do
         invalid_value = truncater.fetch(:invalid_value) { "a" * (truncater[:maximum] + 1) }
 
         subject.assign_attributes(attribute => invalid_value)
-        expect(subject).not_to be_valid
+        subject.fix_validation_errors(dangerous: true)
 
-        subject.fix_validation_errors
-        expect(subject).to be_valid
         expect(subject.attributes[attribute.to_s].length).to be <= truncater[:maximum]
+      end
+
+      if truncater[:dangerous]
+        it "does not truncate unless fixing dangerously" do
+          invalid_value = truncater.fetch(:invalid_value) { "a" * (truncater[:maximum] + 1) }
+
+          subject.assign_attributes(attribute => invalid_value)
+
+          expect {
+            subject.fix_validation_errors
+          }.not_to change {
+            subject.attributes[attribute.to_s].length
+          }
+        end
       end
     end
 
@@ -20,7 +32,7 @@ RSpec.shared_examples_for "a block that fixes validation errors" do |attribute:,
         it "does not change valid value #{valid_value.inspect}" do
           subject.assign_attributes(attribute => valid_value)
 
-          expect { subject.fix_validation_errors }.not_to change { subject.attributes[attribute.to_s] }
+          expect { subject.fix_validation_errors(dangerous: true) }.not_to change { subject.attributes[attribute.to_s] }
 
           expect(subject.errors[attribute.to_s]).to be_empty
         end
@@ -33,7 +45,7 @@ RSpec.shared_examples_for "a block that fixes validation errors" do |attribute:,
           subject.assign_attributes(attribute => old_value)
           expect(subject).not_to be_valid
 
-          subject.fix_validation_errors
+          subject.fix_validation_errors(dangerous: true)
 
           expect(subject.attributes[attribute.to_s]).to eq(new_value)
           new_errors = subject.errors[attribute.to_s]
@@ -57,7 +69,7 @@ RSpec.shared_examples_for "a block that fixes validation errors" do |attribute:,
         expect(associated_model).not_to be_valid
         expect(subject).not_to be_valid
 
-        subject.fix_validation_errors
+        subject.fix_validation_errors(dangerous: true)
         expect(associated_model).to be_valid
         expect(associated_model.attributes[invalid_attribute]).to eq(fixed_attribute_value)
         expect(subject).to be_valid

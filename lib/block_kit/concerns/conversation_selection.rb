@@ -9,7 +9,6 @@ module BlockKit
         attribute :default_to_current_conversation, :boolean
         attribute :filter, Types::Generic.of_type(Composition::ConversationFilter)
 
-        validates :default_to_current_conversation, inclusion: {in: [true, false]}, allow_nil: true
         validates :filter, "block_kit/validators/associated": true, allow_nil: true
         fixes :filter, associated: true
 

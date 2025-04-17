@@ -7,9 +7,12 @@ module BlockKit
         super
 
         @maximum = options.delete(:maximum)
+        @omission = options.delete(:omission)
       end
 
-      def fix(model)
+      def fix(model, fixing_dangerously: false)
+        return if dangerous? && !fixing_dangerously
+
         model.validate
         errors = errors_for(model)
 
@@ -22,7 +25,7 @@ module BlockKit
         new_value = if value.is_a?(Enumerable)
           value.first(maximum)
         else
-          value.truncate(maximum)
+          value.truncate(maximum, omission: @omission)
         end
 
         model.assign_attributes(attribute => new_value)

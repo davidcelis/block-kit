@@ -68,4 +68,11 @@ RSpec.describe BlockKit::Composition::Trigger, type: :model do
 
     it { is_expected.to have_attribute(:customizable_input_parameters).with_type(:array).containing(:block_kit_input_parameter) }
   end
+
+  context "fixers" do
+    it_behaves_like "a block that fixes validation errors", attribute: :customizable_input_parameters, null_value: {
+      valid_values: [[{name: "other_parameter", value: "Some value"}]],
+      invalid_values: [{before: [], after: nil}]
+    }
+  end
 end

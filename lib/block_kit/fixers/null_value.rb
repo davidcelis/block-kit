@@ -11,7 +11,9 @@ module BlockKit
         @error_types = options.delete(:error_types) { [:blank] }
       end
 
-      def fix(model)
+      def fix(model, fixing_dangerously: false)
+        return if dangerous? && !fixing_dangerously
+
         model.validate
         errors = errors_for(model)
 

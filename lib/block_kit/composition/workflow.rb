@@ -7,6 +7,7 @@ module BlockKit
 
       attribute :trigger, Types::Generic.of_type(Composition::Trigger)
       validates :trigger, presence: true, "block_kit/validators/associated": true
+      fixes :trigger, associated: true
 
       dsl_method :trigger
 

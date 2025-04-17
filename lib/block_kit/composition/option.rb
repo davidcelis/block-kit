@@ -20,6 +20,7 @@ module BlockKit
       fixes :text, truncate: {maximum: MAX_TEXT_LENGTH}
 
       validates :value, presence: true, length: {maximum: MAX_VALUE_LENGTH}
+      fixes :value, truncate: {maximum: MAX_VALUE_LENGTH, dangerous: true}
 
       validates :description, presence: true, length: {maximum: MAX_DESCRIPTION_LENGTH}, allow_nil: true
       fixes :description, truncate: {maximum: MAX_DESCRIPTION_LENGTH}, null_value: [:blank]

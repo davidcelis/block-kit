@@ -80,4 +80,25 @@ RSpec.shared_examples_for "a block that has option groups" do |limit:, options_l
       option_3.description.length
     }.by(-3)
   end
+
+  it "automatically fixes invalid option_groups with dangerous truncation" do
+    subject.option_groups = []
+    (limit + 1).times do |i|
+      subject.option_groups << BlockKit::Composition::OptionGroup.new(label: "Group #{i + 1}")
+    end
+
+    expect {
+      subject.fix_validation_errors
+    }.not_to change {
+      subject.option_groups.length
+    }
+
+    expect {
+      subject.fix_validation_errors(dangerous: true)
+    }.to change {
+      subject.option_groups.length
+    }.by(-1)
+    expect(subject.option_groups.length).to eq(limit)
+    expect(subject.option_groups.last.label.text).to eq("Group #{limit}")
+  end
 end

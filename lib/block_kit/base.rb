@@ -50,7 +50,7 @@ module BlockKit
         end
 
         attribute_fixers.except(:base).each do |attribute, fixers|
-          fixers.each { |fixer| fixer.fix(self) unless fixer.dangerous? && !dangerous }
+          fixers.each { |fixer| fixer.fix(self, fixing_dangerously: dangerous) }
         end
 
         validate

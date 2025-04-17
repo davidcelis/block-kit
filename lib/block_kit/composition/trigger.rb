@@ -14,6 +14,7 @@ module BlockKit
 
       validates :url, presence: true, length: {maximum: MAX_URL_LENGTH}, format: {with: URI::DEFAULT_PARSER.make_regexp(%w[http https]), message: "is not a valid URI", allow_blank: true}
       validates :customizable_input_parameters, presence: true, "block_kit/validators/associated": true, allow_nil: true
+      fixes :customizable_input_parameters, null_value: [:blank]
 
       dsl_method :customizable_input_parameters, as: :customizable_input_parameter, required_fields: [:name, :value], yields: false
 

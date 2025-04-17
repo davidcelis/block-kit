@@ -10,7 +10,7 @@ module BlockKit
         @dangerous = options.delete(:dangerous)
       end
 
-      def fix(model)
+      def fix(model, fixing_dangerously: false)
         raise NotImplementedError, "#{self.class} must implement `fix'"
       end
 

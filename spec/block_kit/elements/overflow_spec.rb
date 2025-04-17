@@ -90,5 +90,25 @@ RSpec.describe BlockKit::Elements::Overflow, type: :model do
       expect(subject.options[1].description).to be_nil
       expect(subject).to be_valid
     end
+
+    it "automatically fixes invalid options with dangerous truncation" do
+      subject.options = (described_class::MAX_OPTIONS + 1).times.map do |i|
+        BlockKit::Composition::Option.new(text: "Option #{i + 1}", value: i + 1)
+      end
+
+      expect {
+        subject.fix_validation_errors
+      }.not_to change {
+        subject.options.length
+      }
+
+      expect {
+        subject.fix_validation_errors(dangerous: true)
+      }.to change {
+        subject.options.length
+      }.by(-1)
+      expect(subject.options.length).to eq(described_class::MAX_OPTIONS)
+      expect(subject.options.last.text.text).to eq("Option #{described_class::MAX_OPTIONS}")
+    end
   end
 end

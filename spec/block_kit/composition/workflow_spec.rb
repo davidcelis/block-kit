@@ -63,4 +63,17 @@ RSpec.describe BlockKit::Composition::Workflow, type: :model do
   context "attributes" do
     it { is_expected.to have_attribute(:trigger).with_type(:block_kit_trigger) }
   end
+
+  context "fixers" do
+    it_behaves_like "a block that fixes validation errors", attribute: :trigger, associated: {
+      record: -> {
+        BlockKit::Composition::Trigger.new(
+          url: "https://example.com",
+          customizable_input_parameters: []
+        )
+      },
+      invalid_attribute: :customizable_input_parameters,
+      fixed_attribute_value: nil
+    }
+  end
 end

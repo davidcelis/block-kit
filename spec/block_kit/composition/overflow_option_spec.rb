@@ -45,12 +45,15 @@ RSpec.describe BlockKit::Composition::OverflowOption, type: :model do
   end
 
   context "fixers" do
-    it_behaves_like "a block that fixes validation errors", attribute: :url, null_value: {
-      valid_values: ["http://example.com/", "https://example.com/", "anything://is.fine/", nil],
-      invalid_values: [
-        {before: "invalid_url", after: "invalid_url", still_invalid: true},
-        {before: "", after: nil}
-      ]
-    }
+    it_behaves_like "a block that fixes validation errors",
+      attribute: :url,
+      truncate: {maximum: described_class::MAX_URL_LENGTH, dangerous: true},
+      null_value: {
+        valid_values: ["http://example.com/", "https://example.com/", "anything://is.fine/", nil],
+        invalid_values: [
+          {before: "invalid_url", after: "invalid_url", still_invalid: true},
+          {before: "", after: nil}
+        ]
+      }
   end
 end
