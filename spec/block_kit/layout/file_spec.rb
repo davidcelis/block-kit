@@ -26,4 +26,10 @@ RSpec.describe BlockKit::Layout::File, type: :model do
     it { is_expected.to validate_presence_of(:external_id) }
     it { is_expected.to validate_length_of(:external_id).is_at_most(255) }
   end
+
+  context "fixers" do
+    it_behaves_like "a block that fixes validation errors",
+      attribute: :external_id,
+      truncate: {maximum: described_class::MAX_EXTERNAL_ID_LENGTH, dangerous: true}
+  end
 end

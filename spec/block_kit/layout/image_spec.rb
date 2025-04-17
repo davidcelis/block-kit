@@ -104,14 +104,17 @@ RSpec.describe BlockKit::Layout::Image, type: :model do
   context "fixers" do
     it_behaves_like "a block that fixes validation errors", attribute: :alt_text, truncate: {maximum: described_class::MAX_ALT_TEXT_LENGTH}
 
-    it_behaves_like "a block that fixes validation errors", attribute: :image_url, null_value: {
-      valid_values: ["http://example.com/", "https://example.com/", nil],
-      invalid_values: [
-        {before: "this://kind.of.url/", after: "this://kind.of.url/", still_invalid: true},
-        {before: "invalid_url", after: "invalid_url", still_invalid: true},
-        {before: "", after: nil}
-      ]
-    }
+    it_behaves_like "a block that fixes validation errors",
+      attribute: :image_url,
+      truncate: {maximum: described_class::MAX_IMAGE_URL_LENGTH, dangerous: true},
+      null_value: {
+        valid_values: ["http://example.com/", "https://example.com/", nil],
+        invalid_values: [
+          {before: "this://kind.of.url/", after: "this://kind.of.url/", still_invalid: true},
+          {before: "invalid_url", after: "invalid_url", still_invalid: true},
+          {before: "", after: nil}
+        ]
+      }
 
     it_behaves_like "a block that fixes validation errors",
       attribute: :title,

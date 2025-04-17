@@ -410,4 +410,18 @@ RSpec.describe BlockKit::Surfaces::Home, type: :model do
 
     expect(home.blocks.last.text.length).to be <= BlockKit::Layout::Section::MAX_TEXT_LENGTH
   end
+
+  it "truncates the list of blocks" do
+    (described_class::MAX_BLOCKS + 1).times { |i| home.section(text: "Section #{i + 1}") }
+
+    expect { home.fix_validation_errors }.not_to change { home.blocks.length }
+
+    expect {
+      home.fix_validation_errors(dangerous: true)
+    }.to change {
+      home.blocks.length
+    }.to(described_class::MAX_BLOCKS)
+
+    expect(home.blocks.last.text.text).to eq("Section #{described_class::MAX_BLOCKS}")
+  end
 end

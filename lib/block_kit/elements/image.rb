@@ -18,7 +18,7 @@ module BlockKit
       fixes :alt_text, truncate: {maximum: MAX_ALT_TEXT_LENGTH}
 
       validates :image_url, presence: true, length: {maximum: MAX_IMAGE_URL_LENGTH}, format: {with: URI::DEFAULT_PARSER.make_regexp(%w[http https]), message: "is not a valid URI", allow_blank: true}, allow_nil: true
-      fixes :image_url, truncate: {maximum: MAX_IMAGE_URL_LENGTH, dangerous: true}, null_value: {error_types: [:blank]}
+      fixes :image_url, truncate: {maximum: MAX_IMAGE_URL_LENGTH, dangerous: true, omission: ""}, null_value: {error_types: [:blank]}
 
       validate :slack_file_or_url_present
 

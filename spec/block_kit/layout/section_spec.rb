@@ -762,6 +762,20 @@ RSpec.describe BlockKit::Layout::Section, type: :model do
   context "fixers" do
     it_behaves_like "a block that fixes validation errors", attribute: :text, truncate: {maximum: described_class::MAX_TEXT_LENGTH}
 
+    it "truncates the fields array when there are too many fields" do
+      subject.fields = (described_class::MAX_FIELDS + 1).times.map do |i|
+        BlockKit::Composition::PlainText.new(text: "Field #{i + 1}")
+      end
+
+      expect {
+        subject.fix_validation_errors
+      }.to change {
+        subject.fields.length
+      }.by(-1)
+      expect(subject.fields.length).to eq(described_class::MAX_FIELDS)
+      expect(subject.fields.last.text).to eq("Field #{described_class::MAX_FIELDS}")
+    end
+
     it "truncates long fields" do
       block.fields = [
         BlockKit::Composition::Mrkdwn.new(text: "a" * described_class::MAX_FIELD_TEXT_LENGTH),

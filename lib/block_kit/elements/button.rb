@@ -17,7 +17,7 @@ module BlockKit
       fixes :url, truncate: {maximum: MAX_URL_LENGTH, dangerous: true, omission: ""}, null_value: {error_types: [:blank]}
 
       validates :value, presence: true, length: {maximum: MAX_VALUE_LENGTH}, allow_nil: true
-      fixes :value, truncate: {maximum: MAX_VALUE_LENGTH, dangerous: true}, null_value: {error_types: [:blank]}
+      fixes :value, truncate: {maximum: MAX_VALUE_LENGTH, dangerous: true, omission: ""}, null_value: {error_types: [:blank]}
 
       def as_json(*)
         super.merge(url: url, value: value).compact

@@ -426,4 +426,18 @@ RSpec.describe BlockKit::Surfaces::Modal, type: :model do
 
     expect(modal.blocks.last.text.length).to be <= BlockKit::Layout::Section::MAX_TEXT_LENGTH
   end
+
+  it "truncates the list of blocks" do
+    (described_class::MAX_BLOCKS + 1).times { |i| modal.section(text: "Section #{i + 1}") }
+
+    expect { modal.fix_validation_errors }.not_to change { modal.blocks.length }
+
+    expect {
+      modal.fix_validation_errors(dangerous: true)
+    }.to change {
+      modal.blocks.length
+    }.to(described_class::MAX_BLOCKS)
+
+    expect(modal.blocks.last.text.text).to eq("Section #{described_class::MAX_BLOCKS}")
+  end
 end

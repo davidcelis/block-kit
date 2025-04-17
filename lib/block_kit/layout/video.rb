@@ -36,7 +36,7 @@ module BlockKit
       fixes :description, truncate: {maximum: MAX_DESCRIPTION_LENGTH}, null_value: {error_types: [:blank]}
 
       validates :provider_icon_url, presence: true, length: {maximum: MAX_URL_LENGTH}, format: {with: URI::DEFAULT_PARSER.make_regexp(%w[https http]), message: "is not a valid URI"}, allow_nil: true
-      fixes :provider_icon_url, null_value: {error_types: [:blank]}
+      fixes :provider_icon_url, truncate: {maximum: MAX_URL_LENGTH, dangerous: true, omission: ""}, null_value: {error_types: [:blank]}
 
       validates :provider_name, presence: true, length: {maximum: MAX_PROVIDER_NAME_LENGTH}, allow_nil: true
       fixes :provider_name, truncate: {maximum: MAX_PROVIDER_NAME_LENGTH}, null_value: {error_types: [:blank]}
@@ -45,10 +45,13 @@ module BlockKit
       fixes :title, truncate: {maximum: MAX_TITLE_LENGTH}
 
       validates :title_url, presence: true, length: {maximum: MAX_URL_LENGTH}, format: {with: URI::DEFAULT_PARSER.make_regexp(%w[https]), message: "is not a valid HTTPS URI"}, allow_nil: true
-      fixes :title_url, null_value: {error_types: [:blank]}
+      fixes :title_url, truncate: {maximum: MAX_URL_LENGTH, dangerous: true, omission: ""}, null_value: {error_types: [:blank]}
 
       validates :thumbnail_url, presence: true, length: {maximum: MAX_URL_LENGTH}, format: {with: URI::DEFAULT_PARSER.make_regexp(%w[https http]), message: "is not a valid URI"}
+      fixes :thumbnail_url, truncate: {maximum: MAX_URL_LENGTH, dangerous: true, omission: ""}
+
       validates :video_url, presence: true, length: {maximum: MAX_URL_LENGTH}, format: {with: URI::DEFAULT_PARSER.make_regexp(%w[https]), message: "is not a valid HTTPS URI"}
+      fixes :video_url, truncate: {maximum: MAX_URL_LENGTH, dangerous: true, omission: ""}
 
       def as_json(*)
         super.merge(

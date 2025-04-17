@@ -79,6 +79,8 @@ client.views_open(
 )
 ```
 
+Most DSL methods you call while building blocks will accept optional keyword arguments for the block's attributes and will yield the block itself, allowing you to choose how you want to build your blocks.
+
 Another benefit of being built on ActiveModel is that all documented limitations of BlockKit are enforced as model validations, with surfaces and collections validating all blocks within them. For example:
 
 ```ruby

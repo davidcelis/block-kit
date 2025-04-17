@@ -336,6 +336,20 @@ RSpec.describe BlockKit::Surfaces::Message, type: :model do
     expect(message.blocks[7].element).to be_nil
   end
 
+  it "truncates the list of blocks" do
+    (described_class::MAX_BLOCKS + 1).times { |i| message.section(text: "Section #{i + 1}") }
+
+    expect { message.fix_validation_errors }.not_to change { message.blocks.length }
+
+    expect {
+      message.fix_validation_errors(dangerous: true)
+    }.to change {
+      message.blocks.length
+    }.to(described_class::MAX_BLOCKS)
+
+    expect(message.blocks.last.text.text).to eq("Section #{described_class::MAX_BLOCKS}")
+  end
+
   it "can raise unfixed validation errors" do
     message.header(text: "")
     message.divider

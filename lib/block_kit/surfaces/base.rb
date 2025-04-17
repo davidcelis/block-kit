@@ -7,6 +7,7 @@ module BlockKit
     class Base < BlockKit::Base
       self.type = :surface
 
+      MAX_BLOCKS = 100
       SUPPORTED_BLOCKS = [
         Layout::Actions,
         Layout::Context,
@@ -24,10 +25,10 @@ module BlockKit
       attribute :callback_id, :string
       attribute :external_id, :string
 
-      validates :blocks, presence: true, length: {maximum: 100, message: "is too long (maximum is %{count} blocks)"}, "block_kit/validators/associated": true
+      validates :blocks, presence: true, length: {maximum: MAX_BLOCKS, message: "is too long (maximum is %{count} blocks)"}, "block_kit/validators/associated": true
       validate :no_unsupported_elements
       fix :remove_unsupported_elements, dangerous: true
-      fixes :blocks, associated: true
+      fixes :blocks, truncate: {maximum: MAX_BLOCKS, dangerous: true}, associated: true
 
       validates :private_metadata, length: {maximum: 3000}, allow_nil: true
       validates :callback_id, length: {maximum: 255}, allow_nil: true

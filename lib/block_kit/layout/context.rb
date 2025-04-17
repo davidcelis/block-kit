@@ -5,6 +5,7 @@ module BlockKit
     class Context < Base
       self.type = :context
 
+      MAX_ELEMENTS = 10
       SUPPORTED_ELEMENTS = [
         Elements::Image,
         Composition::Mrkdwn,
@@ -12,8 +13,8 @@ module BlockKit
       ].freeze
 
       attribute :elements, Types::Array.of(Types::Blocks.new(*SUPPORTED_ELEMENTS))
-      validates :elements, presence: true, length: {maximum: 10, message: "is too long (maximum is %{count} elements)"}, "block_kit/validators/associated": true
-      fixes :elements, associated: true
+      validates :elements, presence: true, length: {maximum: MAX_ELEMENTS, message: "is too long (maximum is %{count} elements)"}, "block_kit/validators/associated": true
+      fixes :elements, truncate: {maximum: MAX_ELEMENTS, dangerous: true}, associated: true
 
       dsl_method :elements, as: :mrkdwn, type: Composition::Mrkdwn, required_fields: [:text], yields: false
       dsl_method :elements, as: :plain_text, type: Composition::PlainText, required_fields: [:text], yields: false

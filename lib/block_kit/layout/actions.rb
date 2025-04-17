@@ -5,6 +5,7 @@ module BlockKit
     class Actions < Base
       self.type = :actions
 
+      MAX_ELEMENTS = 25
       SUPPORTED_ELEMENTS = [
         Elements::Button,
         Elements::ChannelsSelect,
@@ -35,8 +36,8 @@ module BlockKit
       end
 
       attribute :elements, Types::Array.of(Types::Blocks.new(*SUPPORTED_ELEMENTS))
-      validates :elements, presence: true, length: {maximum: 25, message: "is too long (maximum is %{count} elements)"}, "block_kit/validators/associated": true
-      fixes :elements, associated: true
+      validates :elements, presence: true, length: {maximum: MAX_ELEMENTS, message: "is too long (maximum is %{count} elements)"}, "block_kit/validators/associated": true
+      fixes :elements, truncate: {maximum: MAX_ELEMENTS, dangerous: true}, associated: true
 
       dsl_method :elements, as: :button, type: Elements::Button, required_fields: [:text]
       dsl_method :elements, as: :channels_select, type: Elements::ChannelsSelect

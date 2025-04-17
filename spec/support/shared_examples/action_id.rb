@@ -13,8 +13,11 @@ RSpec.shared_examples_for "a block with an action_id" do
 
   it { is_expected.to validate_length_of(:action_id).is_at_most(255).allow_nil }
 
-  it_behaves_like "a block that fixes validation errors", attribute: :action_id, null_value: {
-    valid_values: ["anything", nil],
-    invalid_values: [{before: "", after: nil}]
-  }
+  it_behaves_like "a block that fixes validation errors",
+    attribute: :action_id,
+    truncate: {maximum: BlockKit::Elements::Base::MAX_ACTION_ID_LENGTH, dangerous: true},
+    null_value: {
+      valid_values: ["anything", nil],
+      invalid_values: [{before: "", after: nil}]
+    }
 end

@@ -39,6 +39,7 @@ module BlockKit
       fixes :text, truncate: {maximum: MAX_TEXT_LENGTH}
 
       validates :fields, length: {maximum: MAX_FIELDS, message: "is too long (maximum is %{count} fields)"}, presence: {allow_nil: true}
+      fixes :fields, truncate: {maximum: MAX_FIELDS}
       fix :truncate_long_fields
       fix :remove_blank_fields
 

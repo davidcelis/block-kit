@@ -161,5 +161,25 @@ RSpec.describe BlockKit::Layout::Context, type: :model do
         mrkdwn.length
       }.by(-3)
     end
+
+    it "automatically fixes too many elements with dangerous truncation" do
+      subject.elements = (described_class::MAX_ELEMENTS + 1).times.map do |i|
+        BlockKit::Composition::PlainText.new(text: "Text #{i + 1}")
+      end
+
+      expect {
+        subject.fix_validation_errors
+      }.not_to change {
+        subject.elements.length
+      }
+
+      expect {
+        subject.fix_validation_errors(dangerous: true)
+      }.to change {
+        subject.elements.length
+      }.by(-1)
+      expect(subject.elements.length).to eq(described_class::MAX_ELEMENTS)
+      expect(subject.elements.last.text).to eq("Text #{described_class::MAX_ELEMENTS}")
+    end
   end
 end

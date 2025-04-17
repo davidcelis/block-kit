@@ -3,9 +3,11 @@
 module BlockKit
   module Elements
     class Base < BlockKit::Base
+      MAX_ACTION_ID_LENGTH = 255
+
       attribute :action_id, :string
-      validates :action_id, presence: true, length: {maximum: 255}, allow_nil: true
-      fixes :action_id, null_value: {error_types: [:blank]}
+      validates :action_id, presence: true, length: {maximum: MAX_ACTION_ID_LENGTH}, allow_nil: true
+      fixes :action_id, truncate: {maximum: MAX_ACTION_ID_LENGTH, dangerous: true, omission: ""}, null_value: {error_types: [:blank]}
 
       def initialize(attributes = {})
         raise NotImplementedError, "#{self.class} is an abstract class and can't be instantiated." if instance_of?(Base)

@@ -7,6 +7,7 @@ module BlockKit
     class Message < BlockKit::Base
       self.type = :message
 
+      MAX_BLOCKS = 50
       SUPPORTED_ELEMENTS = [
         Elements::Button,
         Elements::ChannelsSelect,
@@ -36,10 +37,10 @@ module BlockKit
       attribute :mrkdwn, :boolean
 
       validates :text, presence: true
-      validates :blocks, length: {maximum: 50, message: "is too long (maximum is %{count} blocks)"}, "block_kit/validators/associated": true
+      validates :blocks, length: {maximum: MAX_BLOCKS, message: "is too long (maximum is %{count} blocks)"}, "block_kit/validators/associated": true
       validate :no_unsupported_elements
       fix :remove_unsupported_elements, dangerous: true
-      fixes :blocks, associated: true
+      fixes :blocks, truncate: {maximum: MAX_BLOCKS, dangerous: true}, associated: true
 
       dsl_method :blocks, as: :actions, type: Layout::Actions
       dsl_method :blocks, as: :context, type: Layout::Context
