@@ -263,6 +263,48 @@ RSpec.describe BlockKit::Surfaces::Home, type: :model do
       expect(home.errors["blocks[2]"]).to include("is invalid: text is too long (maximum is #{BlockKit::Layout::Section::MAX_TEXT_LENGTH} characters)")
     end
 
+    it "validates that no unsupported elements are present" do
+      home.actions do |actions|
+        actions.static_select
+        actions.datetime_picker
+      end
+
+      home.input(label: "Email", element: BlockKit::Elements::EmailTextInput.new)
+      home.input(label: "Multi-select", element: BlockKit::Elements::MultiStaticSelect.new)
+
+      home.actions do |actions|
+        actions.button(text: "A button")
+        actions.workflow_button(text: "A workflow")
+      end
+
+      home.input(label: "Attachments", element: BlockKit::Elements::FileInput.new)
+      home.input(label: "Options", element: BlockKit::Elements::RadioButtons.new)
+
+      home.section(text: "Some text", accessory: BlockKit::Elements::WorkflowButton.new)
+
+      home.input(label: "Number", element: BlockKit::Elements::NumberInput.new)
+      home.input(label: "WYSIWYG", element: BlockKit::Elements::RichTextInput.new)
+      home.input(label: "Plain text", element: BlockKit::Elements::PlainTextInput.new)
+      home.input(label: "URL", element: BlockKit::Elements::URLTextInput.new)
+
+      home.validate
+
+      expect(home.errors[:blocks]).to include("contains unsupported elements")
+      expect(home.errors["blocks[0].elements[0]"]).to be_empty
+      expect(home.errors["blocks[0].elements[1]"]).to include("is invalid: datetimepicker is not a supported element for this surface")
+      expect(home.errors["blocks[1].element"]).to include("is invalid: email_text_input is not a supported element for this surface")
+      expect(home.errors["blocks[2].element"]).to be_empty
+      expect(home.errors["blocks[3].elements[0]"]).to be_empty
+      expect(home.errors["blocks[3].elements[1]"]).to include("is invalid: workflow_button is not a supported element for this surface")
+      expect(home.errors["blocks[4].element"]).to include("is invalid: file_input is not a supported element for this surface")
+      expect(home.errors["blocks[5].element"]).to be_empty
+      expect(home.errors["blocks[6].accessory"]).to include("is invalid: workflow_button is not a supported element for this surface")
+      expect(home.errors["blocks[7].element"]).to include("is invalid: number_input is not a supported element for this surface")
+      expect(home.errors["blocks[8].element"]).to be_empty
+      expect(home.errors["blocks[9].element"]).to be_empty
+      expect(home.errors["blocks[10].element"]).to include("is invalid: url_text_input is not a supported element for this surface")
+    end
+
     it "validates that only one nested block can focus on load" do
       home.section(text: "Some text", accessory: BlockKit::Elements::ExternalSelect.new(focus_on_load: true))
       expect(home).to be_valid
@@ -292,6 +334,47 @@ RSpec.describe BlockKit::Surfaces::Home, type: :model do
 
     expect(home.blocks.first.text.length).to be <= BlockKit::Layout::Header::MAX_LENGTH
     expect(home.blocks.last.text.length).to be <= BlockKit::Layout::Section::MAX_TEXT_LENGTH
+  end
+
+  it "fixes unsupported elements by removing them" do
+    home.actions do |actions|
+      actions.static_select
+      actions.datetime_picker
+    end
+
+    home.input(label: "Email", element: BlockKit::Elements::EmailTextInput.new)
+    home.input(label: "Multi-select", element: BlockKit::Elements::MultiStaticSelect.new)
+
+    home.actions do |actions|
+      actions.button(text: "A button")
+      actions.workflow_button(text: "A workflow")
+    end
+
+    home.input(label: "Attachments", element: BlockKit::Elements::FileInput.new)
+    home.input(label: "Options", element: BlockKit::Elements::RadioButtons.new)
+
+    home.section(text: "Some text", accessory: BlockKit::Elements::WorkflowButton.new)
+
+    home.input(label: "Number", element: BlockKit::Elements::NumberInput.new)
+    home.input(label: "WYSIWYG", element: BlockKit::Elements::RichTextInput.new)
+    home.input(label: "Plain text", element: BlockKit::Elements::PlainTextInput.new)
+    home.input(label: "URL", element: BlockKit::Elements::URLTextInput.new)
+
+    home.fix_validation_errors(dangerous: true)
+
+    expect(home.blocks[0].elements.length).to eq(1)
+    expect(home.blocks[0].elements.first).to be_a(BlockKit::Elements::StaticSelect)
+    expect(home.blocks[1].element).to be_nil
+    expect(home.blocks[2].element).to be_present
+    expect(home.blocks[3].elements.length).to eq(1)
+    expect(home.blocks[3].elements.first).to be_a(BlockKit::Elements::Button)
+    expect(home.blocks[4].element).to be_nil
+    expect(home.blocks[5].element).to be_present
+    expect(home.blocks[6].accessory).to be_nil
+    expect(home.blocks[7].element).to be_nil
+    expect(home.blocks[8].element).to be_present
+    expect(home.blocks[9].element).to be_present
+    expect(home.blocks[10].element).to be_nil
   end
 
   it "fixes nested focusable blocks by removing focus_on_load" do

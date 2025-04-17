@@ -5,10 +5,36 @@ require "active_model"
 module BlockKit
   module Surfaces
     class Modal < Base
+      self.type = :modal
+
       MAX_TITLE_LENGTH = 24
       MAX_BUTTON_LENGTH = 24
-
-      self.type = :modal
+      SUPPORTED_ELEMENTS = [
+        Elements::Button,
+        Elements::ChannelsSelect,
+        Elements::Checkboxes,
+        Elements::ConversationsSelect,
+        Elements::DatePicker,
+        Elements::DatetimePicker,
+        Elements::EmailTextInput,
+        Elements::ExternalSelect,
+        Elements::FileInput,
+        Elements::Image,
+        Elements::MultiChannelsSelect,
+        Elements::MultiConversationsSelect,
+        Elements::MultiExternalSelect,
+        Elements::MultiStaticSelect,
+        Elements::MultiUsersSelect,
+        Elements::NumberInput,
+        Elements::Overflow,
+        Elements::PlainTextInput,
+        Elements::RadioButtons,
+        Elements::RichTextInput,
+        Elements::StaticSelect,
+        Elements::TimePicker,
+        Elements::URLTextInput,
+        Elements::UsersSelect
+      ].freeze
 
       plain_text_attribute :title
       plain_text_attribute :close
@@ -25,6 +51,13 @@ module BlockKit
 
       validates :submit, presence: true, length: {maximum: MAX_BUTTON_LENGTH}, allow_nil: true
       fixes :submit, truncate: {maximum: MAX_BUTTON_LENGTH}, null_value: {error_types: [:blank]}
+
+      def initialize(attributes = {})
+        attributes = attributes.with_indifferent_access
+        attributes[:blocks] ||= []
+
+        super
+      end
 
       def as_json(*)
         super.merge(

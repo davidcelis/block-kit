@@ -25,6 +25,8 @@ module BlockKit
       attribute :external_id, :string
 
       validates :blocks, presence: true, length: {maximum: 100, message: "is too long (maximum is %{count} blocks)"}, "block_kit/validators/associated": true
+      validate :no_unsupported_elements
+      fix :remove_unsupported_elements, dangerous: true
       fixes :blocks, associated: true
 
       validates :private_metadata, length: {maximum: 3000}, allow_nil: true
@@ -43,8 +45,7 @@ module BlockKit
       dsl_method :blocks, as: :video, type: Layout::Video, required_fields: [:alt_text, :title, :thumbnail_url, :video_url], yields: false
 
       def initialize(attributes = {})
-        attributes = attributes.with_indifferent_access
-        attributes[:blocks] ||= []
+        raise NotImplementedError, "#{self.class} is an abstract class and can't be instantiated." if instance_of?(Base)
 
         super
       end
@@ -75,11 +76,22 @@ module BlockKit
 
       private
 
+      def no_unsupported_elements
+        unsupported_elements = unsupported_elements_by_path
+        return if unsupported_elements.empty?
+
+        errors.add(:blocks, "contains unsupported elements")
+
+        unsupported_elements.each do |path, element|
+          errors.add(path, "is invalid: #{element.class.type} is not a supported element for this surface")
+        end
+      end
+
       # Crawls through deeply nested blocks, looking for blocks that impelement the
       # BlockKit::Concerns::FocusableOnLoad concern, and ensures that only one of them
       # has `focus_on_load` set to true.
       def only_one_element_focuses_on_load
-        focusable_blocks = blocks_that_focus_on_load
+        focusable_blocks = focused_blocks_by_path
 
         if focusable_blocks.size > 1
           errors.add(:blocks, "can't have more than one element with focus_on_load set to true")
@@ -90,29 +102,68 @@ module BlockKit
         end
       end
 
-      def blocks_that_focus_on_load
-        blocks_by_path = {}
+      def unsupported_elements_by_path
+        unsupported_elements = {}
+
+        blocks.each_with_index do |block, index|
+          # Context block elements are globally supported, so we don't need to check them.
+          case block
+          when Layout::Actions
+            block.elements.each_with_index do |element, element_index|
+              unless self.class::SUPPORTED_ELEMENTS.include?(element.class)
+                unsupported_elements["blocks[#{index}].elements[#{element_index}]"] = element
+              end
+            end
+          when Layout::Input
+            if block.element.present? && !self.class::SUPPORTED_ELEMENTS.include?(block.element.class)
+              unsupported_elements["blocks[#{index}].element"] = block.element
+            end
+          when Layout::Section
+            if block.accessory.present? && !self.class::SUPPORTED_ELEMENTS.include?(block.accessory.class)
+              unsupported_elements["blocks[#{index}].accessory"] = block.accessory
+            end
+          end
+        end
+
+        unsupported_elements
+      end
+
+      def focused_blocks_by_path
+        focused_blocks = {}
 
         blocks.each_with_index do |block, i|
           case block
           when Layout::Actions
             block.elements.each_with_index do |element, ei|
               if element.respond_to?(:focus_on_load) && element.focus_on_load
-                blocks_by_path["blocks[#{i}].elements[#{ei}]"] = element
+                focused_blocks["blocks[#{i}].elements[#{ei}]"] = element
               end
             end
           when Layout::Input
-            blocks_by_path["blocks[#{i}].element"] = block.element if block.element.respond_to?(:focus_on_load) && block.element.focus_on_load
+            focused_blocks["blocks[#{i}].element"] = block.element if block.element.respond_to?(:focus_on_load) && block.element.focus_on_load
           when Layout::Section
-            blocks_by_path["blocks[#{i}].accessory"] = block.accessory if block.accessory.respond_to?(:focus_on_load) && block.accessory.focus_on_load
+            focused_blocks["blocks[#{i}].accessory"] = block.accessory if block.accessory.respond_to?(:focus_on_load) && block.accessory.focus_on_load
           end
         end
 
-        blocks_by_path
+        focused_blocks
+      end
+
+      def remove_unsupported_elements
+        blocks.each do |block|
+          case block
+          when Layout::Actions
+            block.elements.delete_if { |element| !self.class::SUPPORTED_ELEMENTS.include?(element.class) }
+          when Layout::Input
+            block.element = nil unless self.class::SUPPORTED_ELEMENTS.include?(block.element.class)
+          when Layout::Section
+            block.accessory = nil unless self.class::SUPPORTED_ELEMENTS.include?(block.accessory.class)
+          end
+        end
       end
 
       def unset_focus_on_load_on_all_elements
-        blocks_that_focus_on_load.values.each do |element|
+        focused_blocks_by_path.values.each do |element|
           element.focus_on_load = false if element.respond_to?(:focus_on_load)
         end
       end

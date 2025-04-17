@@ -7,6 +7,29 @@ module BlockKit
     class Message < BlockKit::Base
       self.type = :message
 
+      SUPPORTED_ELEMENTS = [
+        Elements::Button,
+        Elements::ChannelsSelect,
+        Elements::Checkboxes,
+        Elements::ConversationsSelect,
+        Elements::DatePicker,
+        Elements::DatetimePicker,
+        Elements::ExternalSelect,
+        Elements::Image,
+        Elements::MultiChannelsSelect,
+        Elements::MultiConversationsSelect,
+        Elements::MultiExternalSelect,
+        Elements::MultiStaticSelect,
+        Elements::MultiUsersSelect,
+        Elements::Overflow,
+        Elements::PlainTextInput,
+        Elements::RadioButtons,
+        Elements::StaticSelect,
+        Elements::TimePicker,
+        Elements::UsersSelect,
+        Elements::WorkflowButton
+      ].freeze
+
       attribute :text, :string
       attribute :blocks, Types::Array.of(Types::Blocks.new(*Layout.all))
       attribute :thread_ts, :string
@@ -14,6 +37,8 @@ module BlockKit
 
       validates :text, presence: true
       validates :blocks, length: {maximum: 50, message: "is too long (maximum is %{count} blocks)"}, "block_kit/validators/associated": true
+      validate :no_unsupported_elements
+      fix :remove_unsupported_elements, dangerous: true
       fixes :blocks, associated: true
 
       dsl_method :blocks, as: :actions, type: Layout::Actions
@@ -56,6 +81,58 @@ module BlockKit
           thread_ts: thread_ts,
           mrkdwn: mrkdwn
         ).compact
+      end
+
+      private
+
+      def no_unsupported_elements
+        unsupported_elements = unsupported_elements_by_path
+        return if unsupported_elements.empty?
+
+        errors.add(:blocks, "contains unsupported elements")
+
+        unsupported_elements.each do |path, element|
+          errors.add(path, "is invalid: #{element.class.type} is not a supported element for this surface")
+        end
+      end
+
+      def unsupported_elements_by_path
+        unsupported_elements = {}
+
+        blocks.each_with_index do |block, index|
+          # Context block elements are globally supported, so we don't need to check them.
+          case block
+          when Layout::Actions
+            block.elements.each_with_index do |element, element_index|
+              unless SUPPORTED_ELEMENTS.include?(element.class)
+                unsupported_elements["blocks[#{index}].elements[#{element_index}]"] = element
+              end
+            end
+          when Layout::Input
+            if block.element.present? && !SUPPORTED_ELEMENTS.include?(block.element.class)
+              unsupported_elements["blocks[#{index}].element"] = block.element
+            end
+          when Layout::Section
+            if block.accessory.present? && !SUPPORTED_ELEMENTS.include?(block.accessory.class)
+              unsupported_elements["blocks[#{index}].accessory"] = block.accessory
+            end
+          end
+        end
+
+        unsupported_elements
+      end
+
+      def remove_unsupported_elements
+        blocks.each do |block|
+          case block
+          when Layout::Actions
+            block.elements.delete_if { |element| !SUPPORTED_ELEMENTS.include?(element.class) }
+          when Layout::Input
+            block.element = nil unless SUPPORTED_ELEMENTS.include?(block.element.class)
+          when Layout::Section
+            block.accessory = nil unless SUPPORTED_ELEMENTS.include?(block.accessory.class)
+          end
+        end
       end
     end
   end

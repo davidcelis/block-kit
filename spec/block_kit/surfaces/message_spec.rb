@@ -278,6 +278,29 @@ RSpec.describe BlockKit::Surfaces::Message, type: :model do
       expect(message.errors["blocks[0]"]).to include("is invalid: text is too long (maximum is #{BlockKit::Layout::Header::MAX_LENGTH} characters)")
       expect(message.errors["blocks[2]"]).to include("is invalid: text is too long (maximum is #{BlockKit::Layout::Section::MAX_TEXT_LENGTH} characters)")
     end
+
+    it "validates that no unsupported elements are present" do
+      message.input(label: "Email", element: BlockKit::Elements::EmailTextInput.new)
+      message.input(label: "Select", element: BlockKit::Elements::StaticSelect.new)
+      message.input(label: "Attachments", element: BlockKit::Elements::FileInput.new)
+      message.input(label: "Options", element: BlockKit::Elements::RadioButtons.new)
+      message.input(label: "Number", element: BlockKit::Elements::NumberInput.new)
+      message.input(label: "WYSIWYG", element: BlockKit::Elements::RichTextInput.new)
+      message.input(label: "Plain text", element: BlockKit::Elements::PlainTextInput.new)
+      message.input(label: "URL", element: BlockKit::Elements::URLTextInput.new)
+
+      message.validate
+
+      expect(message.errors[:blocks]).to include("contains unsupported elements")
+      expect(message.errors["blocks[0].element"]).to include("is invalid: email_text_input is not a supported element for this surface")
+      expect(message.errors["blocks[1].element"]).to be_empty
+      expect(message.errors["blocks[2].element"]).to include("is invalid: file_input is not a supported element for this surface")
+      expect(message.errors["blocks[3].element"]).to be_empty
+      expect(message.errors["blocks[4].element"]).to include("is invalid: number_input is not a supported element for this surface")
+      expect(message.errors["blocks[5].element"]).to include("is invalid: rich_text_input is not a supported element for this surface")
+      expect(message.errors["blocks[6].element"]).to be_empty
+      expect(message.errors["blocks[7].element"]).to include("is invalid: url_text_input is not a supported element for this surface")
+    end
   end
 
   it "fixes individually-contained blocks" do
@@ -289,6 +312,28 @@ RSpec.describe BlockKit::Surfaces::Message, type: :model do
 
     expect(message.blocks.first.text.length).to be <= BlockKit::Layout::Header::MAX_LENGTH
     expect(message.blocks.last.text.length).to be <= BlockKit::Layout::Section::MAX_TEXT_LENGTH
+  end
+
+  it "removes unsupported elements" do
+    message.input(label: "Email", element: BlockKit::Elements::EmailTextInput.new)
+    message.input(label: "Select", element: BlockKit::Elements::StaticSelect.new)
+    message.input(label: "Attachments", element: BlockKit::Elements::FileInput.new)
+    message.input(label: "Options", element: BlockKit::Elements::RadioButtons.new)
+    message.input(label: "Number", element: BlockKit::Elements::NumberInput.new)
+    message.input(label: "WYSIWYG", element: BlockKit::Elements::RichTextInput.new)
+    message.input(label: "Plain text", element: BlockKit::Elements::PlainTextInput.new)
+    message.input(label: "URL", element: BlockKit::Elements::URLTextInput.new)
+
+    message.fix_validation_errors(dangerous: true)
+
+    expect(message.blocks[0].element).to be_nil
+    expect(message.blocks[1].element).to be_present
+    expect(message.blocks[2].element).to be_nil
+    expect(message.blocks[3].element).to be_present
+    expect(message.blocks[4].element).to be_nil
+    expect(message.blocks[5].element).to be_nil
+    expect(message.blocks[6].element).to be_present
+    expect(message.blocks[7].element).to be_nil
   end
 
   it "can raise unfixed validation errors" do
