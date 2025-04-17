@@ -5,9 +5,9 @@ require "active_support/core_ext/object/inclusion" # Necessary for `max_files.in
 module BlockKit
   module Elements
     class FileInput < Base
-      VALID_MAX_FILES_RANGE = 1..10
-
       self.type = :file_input
+
+      VALID_MAX_FILES_RANGE = 1..10
 
       attribute :filetypes, Types::Set.of(:string)
       attribute :max_files, :integer

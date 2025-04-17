@@ -5,14 +5,14 @@ require "uri"
 module BlockKit
   module Layout
     class Video < Base
+      self.type = :video
+
       MAX_ALT_TEXT_LENGTH = 2000
       MAX_AUTHOR_NAME_LENGTH = 50
       MAX_DESCRIPTION_LENGTH = 200
       MAX_URL_LENGTH = 3000
       MAX_PROVIDER_NAME_LENGTH = 50
       MAX_TITLE_LENGTH = 200
-
-      self.type = :video
 
       attribute :alt_text, :string
       attribute :author_name, :string

@@ -3,9 +3,9 @@
 module BlockKit
   module Layout
     class Header < Base
-      MAX_LENGTH = 150
-
       self.type = :header
+
+      MAX_LENGTH = 150
 
       plain_text_attribute :text
 

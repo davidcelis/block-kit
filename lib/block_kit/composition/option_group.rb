@@ -3,10 +3,10 @@
 module BlockKit
   module Composition
     class OptionGroup < Base
+      self.type = :option_group
+
       MAX_LABEL_LENGTH = 75
       MAX_OPTIONS = 100
-
-      self.type = :option_group
 
       include Concerns::HasOptions.new(limit: MAX_OPTIONS)
 

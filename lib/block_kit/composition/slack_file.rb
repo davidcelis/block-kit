@@ -5,9 +5,9 @@ require "uri"
 module BlockKit
   module Composition
     class SlackFile < Base
-      MAX_URL_LENGTH = 3000
-
       self.type = :slack_file
+
+      MAX_URL_LENGTH = 3000
 
       attribute :id, :string
       attribute :url, :string

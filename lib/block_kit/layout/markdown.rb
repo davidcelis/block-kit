@@ -3,9 +3,9 @@
 module BlockKit
   module Layout
     class Markdown < Base
-      MAX_LENGTH = 12_000
-
       self.type = :markdown
+
+      MAX_LENGTH = 12_000
 
       attribute :text, :string
       validates :text, presence: true, length: {maximum: MAX_LENGTH}

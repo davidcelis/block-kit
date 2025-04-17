@@ -3,11 +3,10 @@
 module BlockKit
   module Layout
     class Input < Base
-      MAX_LABEL_LENGTH = 2000
-      MAX_HINT_LENGTH = 2000
-
       self.type = :input
 
+      MAX_LABEL_LENGTH = 2000
+      MAX_HINT_LENGTH = 2000
       SUPPORTED_ELEMENTS = [
         Elements::ChannelsSelect,
         Elements::Checkboxes,

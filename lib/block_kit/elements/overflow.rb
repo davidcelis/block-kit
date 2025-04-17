@@ -3,9 +3,9 @@
 module BlockKit
   module Elements
     class Overflow < Base
-      MAX_OPTIONS = 5
-
       self.type = :overflow
+
+      MAX_OPTIONS = 5
 
       include Concerns::Confirmable
 

@@ -6,7 +6,6 @@ module BlockKit
       MAX_LENGTH = 3000
 
       attribute :text, :string
-
       validates :text, presence: true, length: {maximum: MAX_LENGTH}
       fixes :text, truncate: {maximum: MAX_LENGTH}
 

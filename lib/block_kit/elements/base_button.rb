@@ -3,14 +3,14 @@
 module BlockKit
   module Elements
     class BaseButton < Base
+      self.type = :button
+
       MAX_TEXT_LENGTH = 75
       MAX_ACCESSIBILITY_LABEL_LENGTH = 75
       VALID_STYLES = [
         PRIMARY = "primary",
         DANGER = "danger"
       ].freeze
-
-      self.type = :button
 
       plain_text_attribute :text
       attribute :style, :string

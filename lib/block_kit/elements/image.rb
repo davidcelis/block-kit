@@ -5,10 +5,10 @@ require "uri"
 module BlockKit
   module Elements
     class Image < BlockKit::Base
+      self.type = :image
+
       MAX_ALT_TEXT_LENGTH = 2000
       MAX_IMAGE_URL_LENGTH = 3000
-
-      self.type = :image
 
       attribute :alt_text, :string
       attribute :image_url, :string

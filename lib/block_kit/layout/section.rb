@@ -3,12 +3,11 @@
 module BlockKit
   module Layout
     class Section < Base
+      self.type = :section
+
       MAX_TEXT_LENGTH = 3000
       MAX_FIELDS = 10
       MAX_FIELD_TEXT_LENGTH = 2000
-
-      self.type = :section
-
       SUPPORTED_ELEMENTS = [
         Elements::Button,
         Elements::ChannelsSelect,

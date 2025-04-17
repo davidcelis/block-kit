@@ -3,6 +3,8 @@
 module BlockKit
   module Composition
     class ConfirmationDialog < Base
+      self.type = :confirmation_dialog
+
       MAX_TITLE_TEXT_LENGTH = 100
       MAX_TEXT_LENGTH = 300
       MAX_BUTTON_TEXT_LENGTH = 30
@@ -10,8 +12,6 @@ module BlockKit
         PRIMARY = "primary",
         DANGER = "danger"
       ].freeze
-
-      self.type = :confirmation_dialog
 
       plain_text_attribute :title
       plain_text_attribute :text

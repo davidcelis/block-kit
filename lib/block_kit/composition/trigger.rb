@@ -5,9 +5,9 @@ require "uri"
 module BlockKit
   module Composition
     class Trigger < Base
-      MAX_URL_LENGTH = 3000
-
       self.type = :trigger
+
+      MAX_URL_LENGTH = 3000
 
       attribute :url, :string
       attribute :customizable_input_parameters, Types::Array.of(Composition::InputParameter)
