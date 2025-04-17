@@ -3,9 +3,10 @@
 module BlockKit
   module Fixers
     class Truncate < Base
-      def initialize(attribute:, maximum:)
-        @attribute = attribute
-        @maximum = maximum
+      def initialize(attribute:, **options)
+        super
+
+        @maximum = options.delete(:maximum)
       end
 
       def fix(model)

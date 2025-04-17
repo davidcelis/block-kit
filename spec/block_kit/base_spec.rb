@@ -16,8 +16,8 @@ RSpec.describe BlockKit::Base do
     fixes :text, truncate: {maximum: 25}
 
     attribute :items, BlockKit::Types::Array.of(:string)
-    validates :items, presence: true, allow_nil: true
-    fixes :items, null_value: {error_types: [:blank]}
+    validates :items, presence: true, length: {maximum: 5, message: "is too long (maximum is 5 items)"}, allow_nil: true
+    fixes :items, truncate: {maximum: 5, dangerous: true}, null_value: {error_types: [:blank]}
 
     def as_json(*)
       super().merge(text: text, items: items).compact
@@ -36,6 +36,24 @@ RSpec.describe BlockKit::Base do
       expect(block).to be_valid
       expect(block.text).to eq("This is a very long te...")
       expect(block.items).to be_nil
+    end
+
+    it "does not fix dangerous validation errors unless specified" do
+      block = block_class.new(text: "This is a very long text that exceeds the maximum length", items: ["1", "2", "3", "4", "5", "6", "7"])
+      expect(block).not_to be_valid
+      expect(block.errors[:text]).to include("is too long (maximum is 25 characters)")
+      expect(block.errors[:items]).to include("is too long (maximum is 5 items)")
+
+      block.fix_validation_errors
+
+      expect(block).not_to be_valid
+      expect(block.text).to eq("This is a very long te...")
+      expect(block.items).to eq(["1", "2", "3", "4", "5", "6", "7"])
+
+      block.fix_validation_errors(dangerous: true)
+      expect(block).to be_valid
+      expect(block.text).to eq("This is a very long te...")
+      expect(block.items).to eq(["1", "2", "3", "4", "5"])
     end
 
     context "with autofix_on_validation enabled" do

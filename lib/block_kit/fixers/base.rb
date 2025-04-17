@@ -5,12 +5,17 @@ module BlockKit
     class Base
       include ActiveSupport::Callbacks
 
-      def initialize(attribute:)
+      def initialize(attribute:, **options)
         @attribute = attribute.to_sym
+        @dangerous = options.delete(:dangerous)
       end
 
       def fix(model)
         raise NotImplementedError, "#{self.class} must implement `fix'"
+      end
+
+      def dangerous?
+        !!@dangerous
       end
 
       private

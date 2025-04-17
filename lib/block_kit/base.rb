@@ -25,8 +25,8 @@ module BlockKit
       end
     end
 
-    def self.fix(method_name)
-      attribute_fixers[:base] << method_name
+    def self.fix(method_name, dangerous: false)
+      attribute_fixers[:base] << {name: method_name, dangerous: dangerous}
     end
 
     def self.inherited(base)
@@ -41,16 +41,16 @@ module BlockKit
       yield(self) if block_given?
     end
 
-    def fix_validation_errors
+    def fix_validation_errors(dangerous: false)
       fixing do
         return true if valid?
 
-        Array(attribute_fixers[:base]).each do |method_name|
-          method(method_name).call
+        Array(attribute_fixers[:base]).each do |method|
+          method(method[:name]).call unless method[:dangerous] && !dangerous
         end
 
         attribute_fixers.except(:base).each do |attribute, fixers|
-          fixers.each { |fixer| fixer.fix(self) }
+          fixers.each { |fixer| fixer.fix(self) unless fixer.dangerous? && !dangerous }
         end
 
         validate

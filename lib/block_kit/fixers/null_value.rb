@@ -5,9 +5,10 @@ require "active_support/core_ext/object/inclusion"
 module BlockKit
   module Fixers
     class NullValue < Base
-      def initialize(attribute:, error_types: [:blank])
-        super(attribute: attribute)
-        @error_types = error_types
+      def initialize(attribute:, **options)
+        super
+
+        @error_types = options.delete(:error_types) { [:blank] }
       end
 
       def fix(model)
