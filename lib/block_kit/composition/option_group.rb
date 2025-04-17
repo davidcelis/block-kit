@@ -17,10 +17,10 @@ module BlockKit
       dsl_method :options, as: :option, required_fields: [:text, :value], yields: false
 
       def as_json(*)
-        {
+        super().except(:type).merge(
           label: label&.as_json,
           options: options&.map(&:as_json)
-        }
+        ).compact
       end
     end
   end

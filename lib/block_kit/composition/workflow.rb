@@ -11,7 +11,7 @@ module BlockKit
       dsl_method :trigger
 
       def as_json(*)
-        {trigger: trigger&.as_json}.compact
+        super().except(:type).merge(trigger: trigger&.as_json).compact
       end
     end
   end

@@ -8,9 +8,12 @@ module BlockKit
     include ActiveModel::Model
     include ActiveModel::Attributes
     include ActiveModel::Validations
+    include ActiveModel::Validations::Callbacks
 
     class_attribute :type, default: nil
     class_attribute :attribute_fixers, default: Hash.new { |h, k| h[k] = [] }
+
+    before_validation :fix_validation_errors, if: -> { BlockKit.config.autofix_on_validation && !fixing? }
 
     def self.fixes(attribute, fixers)
       fixers.each do |name, options|
@@ -39,26 +42,32 @@ module BlockKit
     end
 
     def fix_validation_errors
-      return if valid?
+      fixing do
+        return true if valid?
 
-      Array(attribute_fixers[:base]).each do |method_name|
-        method(method_name).call
+        Array(attribute_fixers[:base]).each do |method_name|
+          method(method_name).call
+        end
+
+        attribute_fixers.except(:base).each do |attribute, fixers|
+          fixers.each { |fixer| fixer.fix(self) }
+        end
+
+        validate
       end
-
-      attribute_fixers.except(:base).each do |attribute, fixers|
-        fixers.each { |fixer| fixer.fix(self) }
-      end
-
-      validate
     end
 
     def fix_validation_errors!
-      fix_validation_errors
+      fixing do
+        fix_validation_errors
 
-      validate!
+        validate!
+      end
     end
 
     def as_json(*)
+      fix_validation_errors if BlockKit.config.autofix_on_render
+
       {type: self.class.type.to_s}
     end
 
@@ -86,6 +95,25 @@ module BlockKit
           pp.pp v
         end
       end
+    end
+
+    private
+
+    # The `fixing` instance variable is set to true when the object is being
+    # autofixed. This is used to prevent infinite loops when the fixers modify
+    # the object and trigger validation again.
+    def fixing
+      previous_value = @fixing
+
+      @fixing = true
+
+      yield
+    ensure
+      @fixing = previous_value
+    end
+
+    def fixing?
+      !!@fixing
     end
 
     def self.plain_text_attribute(name)

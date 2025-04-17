@@ -12,7 +12,7 @@ module BlockKit
       validates :value, presence: true
 
       def as_json(*)
-        {name: name, value: value}.compact
+        super().except(:type).merge(name: name, value: value).compact
       end
     end
   end

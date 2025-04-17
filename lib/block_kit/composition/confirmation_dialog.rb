@@ -35,13 +35,13 @@ module BlockKit
       fixes :style, null_value: {error_types: [:blank, :inclusion]}
 
       def as_json(*)
-        {
+        super().except(:type).merge(
           title: title&.as_json,
           text: text&.as_json,
           confirm: confirm&.as_json,
           deny: deny&.as_json,
           style: style
-        }.compact
+        ).compact
       end
     end
   end

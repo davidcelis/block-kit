@@ -100,7 +100,7 @@ modal.errors.full_messages
 ["Blocks is invalid", "Blocks[0] is invalid: accessory.url is not a valid URI", "Title is too long (maximum is 24 characters)"]
 ```
 
-This allows you to catch most issues that would result in an `invalid_blocks` error from Slack before you even send the request. Better yet, `block-kit` provides a way to automatically fix any validation error that wouldn't result in changing the behavior of your view. Currently this includes fixing most text length errors via truncation (this notably excludes URLs, which cannot be truncated safely) and nulling out ptional fields that are accidentally set to blank values:
+This allows you to catch most issues that would result in an `invalid_blocks` error from Slack before you even send the request. Better yet, `block-kit` provides a way to fix any validation error that wouldn't result in changing the behavior of your view. Currently this includes fixing most text length errors via truncation (this notably excludes URLs, which cannot be truncated safely) and nulling out optional fields that are accidentally set to blank values:
 
 ```ruby
 modal = BlockKit.modal do |m|
@@ -129,6 +129,19 @@ modal.title
 modal.blocks.first.accessory
 # => #<BlockKit::Elements::Button text: #<BlockKit::Composition::PlainText text: "Learn more", emoji: nil>, style: nil, ...>
 ```
+
+The gem can also be configured to fix validation errors automatically on validation or when rendering as JSON if you don't want to have to remember to call `fix_validation_errors` yourself:
+
+```ruby
+BlockKit.configure do |config|
+  # You can set both of these, but `autofix_on_render` is likely enough if you
+  # prefer not to have to call `valid?` at all.
+  config.autofix_on_validation = true
+  config.autofix_on_render = true
+end
+```
+
+Note that even `autofix_on_render` does _not_ mean that only the resulting JSON is fixed; it still fixes the underlying model's attributes, meaning the model will be mutated.
 
 ## Development
 

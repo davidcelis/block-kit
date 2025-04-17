@@ -76,9 +76,7 @@ module BlockKit
       end
 
       def as_json(*)
-        super.merge(
-          elements: elements&.map(&:as_json)
-        ).compact
+        super.merge(elements: elements&.map(&:as_json)).compact
       end
     end
   end

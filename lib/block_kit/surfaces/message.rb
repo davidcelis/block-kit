@@ -50,12 +50,12 @@ module BlockKit
       end
 
       def as_json(*)
-        {
+        super().except(:type).merge(
           text: text,
           blocks: blocks&.map(&:as_json),
           thread_ts: thread_ts,
           mrkdwn: mrkdwn
-        }
+        ).compact
       end
     end
   end

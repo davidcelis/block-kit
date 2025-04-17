@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
+require "active_support/configurable"
+
 module BlockKit
+  include ActiveSupport::Configurable
+
   autoload :Base, "block_kit/base"
   autoload :Blocks, "block_kit/blocks"
   autoload :Composition, "block_kit/composition"

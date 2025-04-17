@@ -31,11 +31,11 @@ module BlockKit
       end
 
       def as_json(*)
-        {
+        super().except(:type).merge(
           include: include&.to_a,
           exclude_external_shared_channels: exclude_external_shared_channels,
           exclude_bot_users: exclude_bot_users
-        }.compact
+        ).compact
       end
     end
   end

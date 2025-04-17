@@ -26,9 +26,7 @@ module BlockKit
       end
 
       def as_json(*)
-        {
-          trigger_actions_on: trigger_actions_on&.to_a
-        }
+        super().except(:type).merge(trigger_actions_on: trigger_actions_on&.to_a).compact
       end
     end
   end

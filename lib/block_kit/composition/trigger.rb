@@ -22,10 +22,10 @@ module BlockKit
       alias_method :input_param, :customizable_input_parameter
 
       def as_json(*)
-        {
+        super().except(:type).merge(
           url: url,
           customizable_input_parameters: customizable_input_parameters&.map(&:as_json)
-        }.compact
+        ).compact
       end
     end
   end

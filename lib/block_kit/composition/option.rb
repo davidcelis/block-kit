@@ -29,11 +29,11 @@ module BlockKit
       end
 
       def as_json(*)
-        {
+        super().except(:type).merge(
           text: text&.as_json,
           value: value,
           description: description&.as_json
-        }.compact
+        ).compact
       end
     end
   end
