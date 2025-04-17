@@ -18,7 +18,7 @@ gem install block-kit
 
 ## Usage
 
-Blocks can be built individually or as a surface or collection of blocks, which each block able to initialize with a simple Hash or attributes or via a block-based DSL. For example, each of the following declarations would result in the same `section` block:
+Blocks can be built individually or as a surface or collection of blocks, which each block able to initialize with a simple Hash of attributes or via a block-based DSL. For example, each of the following declarations would result in the same `section` block:
 
 ```ruby
 require "block-kit"
@@ -180,4 +180,8 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Code of Conduct
 
-Everyone interacting in the Block::Kit project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/davidcelis/block-kit/blob/main/CODE_OF_CONDUCT.md).
+Everyone interacting in the project's codebase, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/davidcelis/block-kit/blob/main/CODE_OF_CONDUCT.md).
+
+## Acknowledgements
+
+Special thanks to [FireHydrant](https://firehydrant.com) for allowing me to build the initial version on the job (and therefore sponsoring the project)!
