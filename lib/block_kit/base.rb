@@ -41,7 +41,7 @@ module BlockKit
       yield(self) if block_given?
     end
 
-    def fix_validation_errors(dangerous: false)
+    def fix_validation_errors(dangerous: BlockKit.config.autofix_dangerously)
       fixing do
         return true if valid?
 
@@ -57,9 +57,9 @@ module BlockKit
       end
     end
 
-    def fix_validation_errors!
+    def fix_validation_errors!(dangerous: BlockKit.config.autofix_dangerously)
       fixing do
-        fix_validation_errors
+        fix_validation_errors(dangerous: dangerous)
 
         validate!
       end

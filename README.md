@@ -102,7 +102,7 @@ modal.errors.full_messages
 ["Blocks is invalid", "Blocks[0] is invalid: accessory.url is not a valid URI", "Title is too long (maximum is 24 characters)"]
 ```
 
-This allows you to catch most issues that would result in an `invalid_blocks` error from Slack before you even send the request. Better yet, `block-kit` provides a way to fix any validation error that wouldn't result in changing the behavior of your view. Currently this includes fixing most text length errors via truncation (this notably excludes URLs, which cannot be truncated safely) and nulling out optional fields that are accidentally set to blank values:
+This allows you to catch most issues that would result in an `invalid_blocks` error from Slack before you even send the request. Better yet, `block-kit` provides a way to fix any validation error that wouldn't result in changing the behavior of your view. For instance:
 
 ```ruby
 modal = BlockKit.modal do |m|
@@ -137,13 +137,32 @@ The gem can also be configured to fix validation errors automatically on validat
 ```ruby
 BlockKit.configure do |config|
   # You can set both of these, but `autofix_on_render` is likely enough if you
-  # prefer not to have to call `valid?` at all.
+  # prefer not to have to call `valid?` at all. Note that `autofix_on_render`
+  # does _not_ mean that only the resulting JSON is fixed; it still fixes the
+  # underlying model's attributes, meaning the model will be mutated.
   config.autofix_on_validation = true
   config.autofix_on_render = true
+
+  # Set this to perform autofixes that may change the behavior of your view. This
+  # is useful if you would rather post messages or publish views at the cost of
+  # behavioral quirks or changes rather than suffer from `invalid_blocks` errors.
+  #
+  # If you'd prefer to run dangerous autofixers on demand, you can do this by
+  # calling `fix_validation_errors(dangerous: true)` on your blocks or surfaces.
+  config.autofix_dangerously = true
 end
 ```
 
-Note that even `autofix_on_render` does _not_ mean that only the resulting JSON is fixed; it still fixes the underlying model's attributes, meaning the model will be mutated.
+Autofixers currently include:
+
+* Truncating long text fields to their maximum length
+* Setting optional attributes to `nil` if they are blank
+
+Dangerous autofixers (which can be run by calling `fix_validation_errors(dangerous: true)`) that may change the behavior of your view include:
+
+* Truncating long _lists_ of blocks or elements to their maximum length (such as surface blocks, options, option groups, actions elements, etc.)
+* Truncating URLs to their maximum length
+* Removing section accessories or actions/input elements from surfaces that don't support them
 
 ## Development
 

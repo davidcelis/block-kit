@@ -91,5 +91,24 @@ RSpec.describe BlockKit::Base do
         expect(block.items).to be_nil
       end
     end
+
+    context "with autofix_dangerously enabled" do
+      around do |example|
+        BlockKit.config.autofix_dangerously = true
+        example.run
+        BlockKit.config.autofix_dangerously = false
+      end
+
+      it "runs dangerous autofixers automatically" do
+        block = block_class.new(text: "This is a very long text that exceeds the maximum length", items: ["1", "2", "3", "4", "5", "6", "7"])
+        expect(block).not_to be_valid
+
+        block.fix_validation_errors
+
+        expect(block).to be_valid
+        expect(block.text).to eq("This is a very long te...")
+        expect(block.items).to eq(["1", "2", "3", "4", "5"])
+      end
+    end
   end
 end
