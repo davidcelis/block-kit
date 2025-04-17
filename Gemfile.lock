@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    block-kit (1.0.0)
+    block-kit (1.0.1)
       activemodel (>= 7.0.0)
       activesupport (>= 7.0.0)
 
