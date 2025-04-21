@@ -50,7 +50,9 @@ module BlockKit
       fixes :close, truncate: {maximum: MAX_BUTTON_LENGTH}, null_value: {error_types: [:blank]}
 
       validates :submit, presence: true, length: {maximum: MAX_BUTTON_LENGTH}, allow_nil: true
+      validate :submit_present_if_contains_input
       fixes :submit, truncate: {maximum: MAX_BUTTON_LENGTH}, null_value: {error_types: [:blank]}
+      fix :add_default_submit_button
 
       def initialize(attributes = {})
         attributes = attributes.with_indifferent_access
@@ -68,6 +70,20 @@ module BlockKit
           notify_on_close: notify_on_close,
           submit_disabled: submit_disabled
         ).compact
+      end
+
+      private
+
+      def submit_present_if_contains_input
+        errors.add(:submit, "can't be blank when blocks contain input elements") if contains_input? && submit.blank?
+      end
+
+      def add_default_submit_button
+        self.submit = "Submit" if contains_input? && submit.blank?
+      end
+
+      def contains_input?
+        blocks.any? { |block| block.is_a?(Layout::Input) }
       end
     end
   end

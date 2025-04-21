@@ -255,7 +255,7 @@ RSpec.describe BlockKit::Surfaces::Modal, type: :model do
     end
   end
 
-  context "validates" do
+  context "validations" do
     it { is_expected.to validate_length_of(:private_metadata).is_at_most(3000).allow_nil }
     it { is_expected.to validate_length_of(:callback_id).is_at_most(255).allow_nil }
     it { is_expected.to validate_length_of(:external_id).is_at_most(255).allow_nil }
@@ -340,6 +340,22 @@ RSpec.describe BlockKit::Surfaces::Modal, type: :model do
       expect(modal.errors["blocks[2].elements[0]"]).to include("is invalid: can't set focus_on_load when other elements have set focus_on_load")
       expect(modal.errors["blocks[2].elements[2]"]).to include("is invalid: can't set focus_on_load when other elements have set focus_on_load")
     end
+
+    it "validates that a submit button is present if there are inputs" do
+      modal.header(text: "Header text")
+      modal.section(text: "Info text")
+
+      expect(modal).to be_valid
+
+      modal.input(label: "Input label", element: BlockKit::Elements::PlainTextInput.new)
+
+      expect(modal).not_to be_valid
+      expect(modal.errors[:submit]).to include("can't be blank when blocks contain input elements")
+
+      modal.submit = "Submit"
+      expect(modal).to be_valid
+      expect(modal.errors[:submit]).to be_empty
+    end
   end
 
   it "fixes individually-contained blocks" do
@@ -415,6 +431,20 @@ RSpec.describe BlockKit::Surfaces::Modal, type: :model do
     }.from(true).to(false).and change {
       checkboxes.focus_on_load
     }.from(true).to(false)
+  end
+
+  it "fixes missing submit buttons when blocks contain inputs" do
+    modal.header(text: "Header text")
+    modal.section(text: "Info text")
+    modal.input(label: "Input label", element: BlockKit::Elements::PlainTextInput.new)
+
+    expect {
+      modal.fix_validation_errors
+    }.to change {
+      modal.submit
+    }.from(nil).to(BlockKit::Composition::PlainText.new(text: "Submit"))
+
+    expect(modal).to be_valid
   end
 
   it "can raise unfixed validation errors" do
