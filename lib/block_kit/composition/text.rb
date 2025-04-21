@@ -11,6 +11,10 @@ module BlockKit
 
       delegate :blank?, :present?, to: :text
 
+      def self.inherited(subclass)
+        subclass.attribute_fixers = attribute_fixers.deep_dup
+      end
+
       def length
         text&.length || 0
       end

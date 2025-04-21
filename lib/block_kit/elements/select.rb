@@ -8,6 +8,10 @@ module BlockKit
       include Concerns::HasPlaceholder
       include Concerns::PlainTextEmojiAssignment.new(:placeholder)
 
+      def self.inherited(subclass)
+        subclass.attribute_fixers = attribute_fixers.deep_dup
+      end
+
       def initialize(attributes = {})
         raise NotImplementedError, "#{self.class} is an abstract class and can't be instantiated." if instance_of?(Select)
 

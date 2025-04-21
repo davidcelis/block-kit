@@ -45,6 +45,10 @@ module BlockKit
       dsl_method :blocks, as: :section, type: Layout::Section
       dsl_method :blocks, as: :video, type: Layout::Video, required_fields: [:alt_text, :title, :thumbnail_url, :video_url], yields: false
 
+      def self.inherited(subclass)
+        subclass.attribute_fixers = attribute_fixers.deep_dup
+      end
+
       def initialize(attributes = {})
         raise NotImplementedError, "#{self.class} is an abstract class and can't be instantiated." if instance_of?(Base)
 

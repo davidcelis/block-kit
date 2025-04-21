@@ -27,6 +27,10 @@ module BlockKit
       validates :accessibility_label, presence: true, length: {maximum: MAX_ACCESSIBILITY_LABEL_LENGTH}, allow_nil: true
       fixes :accessibility_label, truncate: {maximum: MAX_ACCESSIBILITY_LABEL_LENGTH}, null_value: {error_types: [:blank]}
 
+      def self.inherited(subclass)
+        subclass.attribute_fixers = attribute_fixers.deep_dup
+      end
+
       def initialize(attributes = {})
         raise NotImplementedError, "#{self.class} is an abstract class and can't be instantiated." if instance_of?(BaseButton)
 

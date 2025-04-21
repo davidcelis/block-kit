@@ -29,8 +29,8 @@ module BlockKit
       attribute_fixers[:base] << {name: method_name, dangerous: dangerous}
     end
 
-    def self.inherited(base)
-      base.attribute_fixers = attribute_fixers.dup
+    def self.inherited(subclass)
+      subclass.attribute_fixers = attribute_fixers.deep_dup
     end
 
     def initialize(attributes = {})

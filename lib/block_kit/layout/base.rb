@@ -9,6 +9,10 @@ module BlockKit
       validates :block_id, presence: true, length: {maximum: MAX_BLOCK_ID_LENGTH}, allow_nil: true
       fixes :block_id, truncate: {maximum: MAX_BLOCK_ID_LENGTH, dangerous: true, omission: ""}, null_value: {error_types: [:blank]}
 
+      def self.inherited(subclass)
+        subclass.attribute_fixers = attribute_fixers.deep_dup
+      end
+
       def initialize(attributes = {})
         raise NotImplementedError, "#{self.class} is an abstract class and can't be instantiated." if instance_of?(Base)
 
