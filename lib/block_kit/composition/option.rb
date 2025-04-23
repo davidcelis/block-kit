@@ -23,7 +23,7 @@ module BlockKit
       fixes :value, truncate: {maximum: MAX_VALUE_LENGTH, dangerous: true}
 
       validates :description, presence: true, length: {maximum: MAX_DESCRIPTION_LENGTH}, allow_nil: true
-      fixes :description, truncate: {maximum: MAX_DESCRIPTION_LENGTH}, null_value: [:blank]
+      fixes :description, truncate: {maximum: MAX_DESCRIPTION_LENGTH}, null_value: {error_types: [:blank]}
 
       def self.inherited(subclass)
         subclass.attribute_fixers = attribute_fixers.deep_dup
