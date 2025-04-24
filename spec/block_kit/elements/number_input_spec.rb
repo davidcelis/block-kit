@@ -46,9 +46,9 @@ RSpec.describe BlockKit::Elements::NumberInput, type: :model do
         expect(input.as_json).to eq({
           type: described_class.type.to_s,
           is_decimal_allowed: false,
-          initial_value: 7,
-          min_value: 0,
-          max_value: 9
+          initial_value: "7",
+          min_value: "0",
+          max_value: "9"
         })
       end
     end

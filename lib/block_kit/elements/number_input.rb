@@ -42,9 +42,9 @@ module BlockKit
       def as_json(*)
         super.merge(
           is_decimal_allowed: is_decimal_allowed,
-          initial_value: initial_value.respond_to?(:to_digits) ? initial_value.to_digits : initial_value&.to_i,
-          min_value: min_value.respond_to?(:to_digits) ? min_value.to_digits : min_value&.to_i,
-          max_value: max_value.respond_to?(:to_digits) ? max_value.to_digits : max_value&.to_i
+          initial_value: initial_value.respond_to?(:to_digits) ? initial_value.to_digits : initial_value&.to_s,
+          min_value: min_value.respond_to?(:to_digits) ? min_value.to_digits : min_value&.to_s,
+          max_value: max_value.respond_to?(:to_digits) ? max_value.to_digits : max_value&.to_s
         ).compact
       end
     end
