@@ -6,6 +6,8 @@ RSpec.describe BlockKit::Composition::Workflow, type: :model do
   subject(:block) { described_class.new(**attributes) }
   let(:attributes) { {trigger: {url: "https://example.com"}} }
 
+  it_behaves_like "a class that yields self on initialize"
+
   it_behaves_like "a block that has a DSL method",
     attribute: :trigger,
     type: BlockKit::Composition::Trigger,

@@ -11,6 +11,8 @@ RSpec.describe BlockKit::Composition::OverflowOption, type: :model do
     }
   end
 
+  it_behaves_like "a class that yields self on initialize"
+
   it { is_expected.to be_a(BlockKit::Composition::Option) }
 
   describe "#as_json" do

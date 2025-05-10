@@ -14,6 +14,8 @@ RSpec.describe BlockKit::Layout::Context, type: :model do
     }
   end
 
+  it_behaves_like "a class that yields self on initialize"
+
   describe "#image" do
     let(:args) { {alt_text: "A beautiful image", image_url: "https://example.com/image.png"} }
     subject { block.image(**args) }

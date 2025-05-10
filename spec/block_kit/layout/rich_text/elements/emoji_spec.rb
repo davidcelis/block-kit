@@ -6,6 +6,8 @@ RSpec.describe BlockKit::Layout::RichText::Elements::Emoji, type: :model do
   subject(:element) { described_class.new(attributes) }
   let(:attributes) { {name: "hotdog"} }
 
+  it_behaves_like "a class that yields self on initialize"
+
   describe "#as_json" do
     it "serializes to JSON" do
       expect(element.as_json).to eq({

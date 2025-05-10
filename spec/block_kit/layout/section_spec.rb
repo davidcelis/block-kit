@@ -6,6 +6,8 @@ RSpec.describe BlockKit::Layout::Section, type: :model do
   let(:attributes) { {text: "Hello, world!"} }
   subject(:block) { described_class.new(**attributes) }
 
+  it_behaves_like "a class that yields self on initialize"
+
   describe "#initialize" do
     it "accepts text as a string and defaults to mrkdwn" do
       expect(block.text).to be_a(BlockKit::Composition::Mrkdwn)

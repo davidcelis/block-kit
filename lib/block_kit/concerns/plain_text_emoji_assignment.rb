@@ -5,12 +5,12 @@ module BlockKit
     module PlainTextEmojiAssignment
       def self.new(*attributes)
         Module.new do
-          define_method(:initialize) do |attrs = {}|
+          define_method(:initialize) do |attrs = {}, &block|
             raise ArgumentError, "expected `attributes' to be a Hash, got #{attrs.class}" unless attrs.is_a?(Hash)
 
             emoji = attrs.delete(:emoji)
 
-            super(attrs)
+            super(attrs, &block)
 
             unless emoji.nil?
               attributes.each do |attribute|

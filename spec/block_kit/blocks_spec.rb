@@ -5,13 +5,7 @@ require "spec_helper"
 RSpec.describe BlockKit::Blocks, type: :model do
   subject(:blocks) { described_class.new }
 
-  describe "#initialize" do
-    it "yields self" do
-      described_class.new do |blocks|
-        expect(blocks).to be_a(described_class)
-      end
-    end
-  end
+  it_behaves_like "a class that yields self on initialize"
 
   it_behaves_like "a block that has a DSL method",
     attribute: :blocks,

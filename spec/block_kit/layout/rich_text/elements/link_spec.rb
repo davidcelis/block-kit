@@ -11,6 +11,8 @@ RSpec.describe BlockKit::Layout::RichText::Elements::Link, type: :model do
     }
   end
 
+  it_behaves_like "a class that yields self on initialize"
+
   describe "#as_json" do
     it "serializes to JSON" do
       expect(element.as_json).to eq({

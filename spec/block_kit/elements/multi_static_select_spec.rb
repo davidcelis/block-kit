@@ -13,6 +13,8 @@ RSpec.describe BlockKit::Elements::MultiStaticSelect, type: :model do
     }
   end
 
+  it_behaves_like "a class that yields self on initialize"
+
   describe "#as_json" do
     it "serializes to JSON" do
       expect(multi_static_select.as_json).to eq({

@@ -6,6 +6,8 @@ RSpec.describe BlockKit::Elements::Button, type: :model do
   subject(:button) { described_class.new(attributes) }
   let(:attributes) { {text: "My Button"} }
 
+  it_behaves_like "a class that yields self on initialize"
+
   describe "#as_json" do
     it "serializes to JSON" do
       expect(button.as_json).to eq({

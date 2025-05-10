@@ -6,6 +6,8 @@ RSpec.describe BlockKit::Composition::PlainText, type: :model do
   subject(:plain_text_block) { described_class.new(**attributes) }
   let(:attributes) { {text: "Hello, world!"} }
 
+  it_behaves_like "a class that yields self on initialize"
+
   describe "#truncate" do
     it "copies itself and truncates the copy's text" do
       plain_text_block.emoji = true
