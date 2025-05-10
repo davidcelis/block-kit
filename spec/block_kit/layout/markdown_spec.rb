@@ -6,6 +6,8 @@ RSpec.describe BlockKit::Layout::Markdown, type: :model do
   let(:attributes) { {text: "Hello, world!"} }
   subject(:markdown) { described_class.new(**attributes) }
 
+  it_behaves_like "a class that yields self on initialize"
+
   describe "#as_json" do
     it "serializes to JSON" do
       expect(markdown.as_json).to eq({

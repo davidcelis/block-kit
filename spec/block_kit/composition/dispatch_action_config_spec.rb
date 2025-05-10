@@ -5,6 +5,8 @@ require "spec_helper"
 RSpec.describe BlockKit::Composition::DispatchActionConfig, type: :model do
   subject(:config) { described_class.new(trigger_actions_on: ["on_enter_pressed", "on_character_entered"]) }
 
+  it_behaves_like "a class that yields self on initialize"
+
   it "declares predicate and mutator methods for each trigger_actions_on value" do
     config = described_class.new
 

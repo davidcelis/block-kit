@@ -5,6 +5,8 @@ require "spec_helper"
 RSpec.describe BlockKit::Layout::Divider, type: :model do
   subject(:divider) { described_class.new }
 
+  it_behaves_like "a class that yields self on initialize"
+
   it "has a type" do
     expect(described_class.type.to_s).to eq("divider")
   end

@@ -11,6 +11,8 @@ RSpec.describe BlockKit::Composition::ConversationFilter, type: :model do
     }
   end
 
+  it_behaves_like "a class that yields self on initialize"
+
   it "declares predicate and mutator methods for each include value" do
     described_class::VALID_INCLUDES.each do |value|
       expect(conversation_filter.public_send(:"include_#{value}?")).to be(false)

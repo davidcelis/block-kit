@@ -23,6 +23,8 @@ RSpec.describe BlockKit::Layout::RichText::List, type: :model do
     }
   end
 
+  it_behaves_like "a class that yields self on initialize"
+
   it_behaves_like "a block that has a DSL method",
     attribute: :elements,
     as: :section,

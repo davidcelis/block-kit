@@ -6,6 +6,8 @@ RSpec.describe BlockKit::Elements::MultiConversationsSelect, type: :model do
   subject(:multi_conversations_select) { described_class.new(attributes) }
   let(:attributes) { {} }
 
+  it_behaves_like "a class that yields self on initialize"
+
   describe "#as_json" do
     it "serializes to JSON" do
       expect(multi_conversations_select.as_json).to eq({type: described_class.type.to_s})

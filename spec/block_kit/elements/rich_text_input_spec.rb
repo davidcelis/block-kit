@@ -6,6 +6,8 @@ RSpec.describe BlockKit::Elements::RichTextInput, type: :model do
   subject(:input) { described_class.new(attributes) }
   let(:attributes) { {} }
 
+  it_behaves_like "a class that yields self on initialize"
+
   it_behaves_like "a block that has a DSL method",
     attribute: :initial_value,
     type: BlockKit::Layout::RichText,

@@ -6,6 +6,8 @@ RSpec.describe BlockKit::Surfaces::Home, type: :model do
   let(:attributes) { {} }
   subject(:home) { described_class.new(**attributes) }
 
+  it_behaves_like "a class that yields self on initialize"
+
   it_behaves_like "a block that has a DSL method",
     attribute: :blocks,
     as: :actions,

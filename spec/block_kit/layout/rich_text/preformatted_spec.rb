@@ -6,6 +6,7 @@ RSpec.describe BlockKit::Layout::RichText::Preformatted, type: :model do
   subject(:block) { described_class.new(attributes) }
   let(:attributes) { {elements: [BlockKit::Layout::RichText::Elements::Text.new(text: "Hello, world!")]} }
 
+  it_behaves_like "a class that yields self on initialize"
   it_behaves_like "a block that has rich text elements"
 
   describe "#as_json" do

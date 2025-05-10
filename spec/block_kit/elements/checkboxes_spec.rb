@@ -13,6 +13,8 @@ RSpec.describe BlockKit::Elements::Checkboxes, type: :model do
     }
   end
 
+  it_behaves_like "a class that yields self on initialize"
+
   describe "#as_json" do
     it "serializes to JSON" do
       expect(checkboxes.as_json).to eq({

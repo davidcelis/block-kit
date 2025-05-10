@@ -11,6 +11,8 @@ RSpec.describe BlockKit::Layout::Image, type: :model do
     }
   end
 
+  it_behaves_like "a class that yields self on initialize"
+
   describe "#slack_file" do
     it "sets the slack_file attribute by ID" do
       image.slack_file(id: "F12345678")

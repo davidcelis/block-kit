@@ -6,6 +6,8 @@ RSpec.describe BlockKit::Layout::File, type: :model do
   subject(:slack_file) { described_class.new(**attributes) }
   let(:attributes) { {external_id: "file_id"} }
 
+  it_behaves_like "a class that yields self on initialize"
+
   describe "#as_json" do
     it "serializes to JSON" do
       expect(slack_file.as_json).to eq({

@@ -6,6 +6,8 @@ RSpec.describe BlockKit::Elements::ExternalSelect, type: :model do
   subject(:external_select) { described_class.new(attributes) }
   let(:attributes) { {} }
 
+  it_behaves_like "a class that yields self on initialize"
+
   it_behaves_like "a block that has a DSL method",
     attribute: :initial_option,
     type: BlockKit::Composition::Option,
