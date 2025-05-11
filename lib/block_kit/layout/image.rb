@@ -16,6 +16,8 @@ module BlockKit
       attribute :slack_file, Types::Generic.of_type(Composition::SlackFile)
       plain_text_attribute :title
 
+      alias_attribute :url, :image_url
+
       include Concerns::PlainTextEmojiAssignment.new(:title)
 
       validates :alt_text, presence: true, length: {maximum: MAX_ALT_TEXT_LENGTH}

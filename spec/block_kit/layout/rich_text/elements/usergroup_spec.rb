@@ -44,6 +44,9 @@ RSpec.describe BlockKit::Layout::RichText::Elements::Usergroup, type: :model do
   context "attributes" do
     it { is_expected.to have_attribute(:usergroup_id).with_type(:string) }
     it { is_expected.to have_attribute(:style).with_type(:block_kit_rich_text_element_mention_style) }
+
+    it { is_expected.to alias_attribute(:usergroup_id).as(:id) }
+    it { is_expected.to alias_attribute(:usergroup_id).as(:user_group_id) }
   end
 
   context "validations" do

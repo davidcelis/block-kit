@@ -16,6 +16,10 @@ module BlockKit
       validates :customizable_input_parameters, presence: true, "block_kit/validators/associated": true, allow_nil: true
       fixes :customizable_input_parameters, null_value: {error_types: [:blank]}
 
+      alias_attribute :input_parameters, :customizable_input_parameters
+      alias_attribute :customizable_input_params, :customizable_input_parameters
+      alias_attribute :input_params, :customizable_input_parameters
+
       dsl_method :customizable_input_parameters, as: :customizable_input_parameter, required_fields: [:name, :value], yields: false
 
       alias_method :input_parameter, :customizable_input_parameter

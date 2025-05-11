@@ -22,15 +22,15 @@ module BlockKit
       validates :elements, presence: true, "block_kit/validators/associated": true
       fixes :elements, associated: true
 
-      dsl_method :elements, as: :list, type: RichText::List
-      dsl_method :elements, as: :preformatted, type: RichText::Preformatted
-      dsl_method :elements, as: :quote, type: RichText::Quote
-      dsl_method :elements, as: :section, type: RichText::Section
+      dsl_method :elements, as: :rich_text_list, type: RichText::List
+      dsl_method :elements, as: :rich_text_preformatted, type: RichText::Preformatted
+      dsl_method :elements, as: :rich_text_quote, type: RichText::Quote
+      dsl_method :elements, as: :rich_text_section, type: RichText::Section
 
-      alias_method :rich_text_list, :list
-      alias_method :rich_text_preformatted, :preformatted
-      alias_method :rich_text_quote, :quote
-      alias_method :rich_text_section, :section
+      alias_method :list, :rich_text_list
+      alias_method :preformatted, :rich_text_preformatted
+      alias_method :quote, :rich_text_quote
+      alias_method :section, :rich_text_section
 
       def initialize(attributes = {})
         attributes = attributes.with_indifferent_access

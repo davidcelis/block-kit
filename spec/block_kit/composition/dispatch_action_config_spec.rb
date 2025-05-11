@@ -28,6 +28,7 @@ RSpec.describe BlockKit::Composition::DispatchActionConfig, type: :model do
 
   context "attributes" do
     it { is_expected.to have_attribute(:trigger_actions_on).with_type(:set).containing(:string) }
+    it { is_expected.to alias_attribute(:trigger_actions_on).as(:triggers) }
   end
 
   context "validations" do

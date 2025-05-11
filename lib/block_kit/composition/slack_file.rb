@@ -21,7 +21,7 @@ module BlockKit
       validate :id_or_url_present
 
       def as_json(*)
-        super().except(:type).merge(id: id, url: url).compact
+        {id: id, url: url}.compact
       end
 
       private

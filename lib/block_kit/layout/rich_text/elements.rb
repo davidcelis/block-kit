@@ -12,6 +12,7 @@ module BlockKit
       autoload :Text, "block_kit/layout/rich_text/elements/text"
       autoload :User, "block_kit/layout/rich_text/elements/user"
       autoload :Usergroup, "block_kit/layout/rich_text/elements/usergroup"
+      autoload :UserGroup, "block_kit/layout/rich_text/elements/usergroup"
 
       # Utility blocks
       autoload :MentionStyle, "block_kit/layout/rich_text/elements/mention_style"

@@ -39,5 +39,7 @@ module BlockKit
         end
       end
     end
+
+    Timepicker = TimePicker
   end
 end

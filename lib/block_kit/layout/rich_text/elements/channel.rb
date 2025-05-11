@@ -8,6 +8,8 @@ module BlockKit
       attribute :channel_id, :string
       attribute :style, Types::Generic.of_type(RichText::Elements::MentionStyle)
 
+      alias_attribute :id, :channel_id
+
       validates :channel_id, presence: true
 
       def as_json(*)

@@ -14,6 +14,8 @@ module BlockKit
       attribute :image_url, :string
       attribute :slack_file, Types::Generic.of_type(Composition::SlackFile)
 
+      alias_attribute :url, :image_url
+
       validates :alt_text, presence: true, length: {maximum: MAX_ALT_TEXT_LENGTH}
       fixes :alt_text, truncate: {maximum: MAX_ALT_TEXT_LENGTH}
 

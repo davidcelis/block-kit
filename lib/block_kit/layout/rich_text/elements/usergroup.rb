@@ -8,6 +8,9 @@ module BlockKit
       attribute :usergroup_id, :string
       attribute :style, Types::Generic.of_type(RichText::Elements::MentionStyle)
 
+      alias_attribute :user_group_id, :usergroup_id
+      alias_attribute :id, :usergroup_id
+
       validates :usergroup_id, presence: true
 
       def as_json(*)
@@ -17,5 +20,7 @@ module BlockKit
         ).compact
       end
     end
+
+    RichText::Elements::UserGroup = RichText::Elements::Usergroup
   end
 end

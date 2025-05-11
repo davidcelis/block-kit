@@ -63,6 +63,8 @@ RSpec.describe BlockKit::Layout::Video, type: :model do
     it { is_expected.to have_attribute(:thumbnail_url).with_type(:string) }
     it { is_expected.to have_attribute(:video_url).with_type(:string) }
 
+    it { is_expected.to alias_attribute(:video_url).as(:url) }
+
     it_behaves_like "a block with a block_id"
     it_behaves_like "a block that has plain text attributes", :description, :title
     it_behaves_like "a block that has plain text emoji assignment", :description, :title

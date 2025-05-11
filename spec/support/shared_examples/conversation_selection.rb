@@ -3,6 +3,7 @@ require "spec_helper"
 RSpec.shared_examples_for "a conversation selector" do
   it { is_expected.to have_attribute(:default_to_current_conversation).with_type(:boolean) }
   it { is_expected.to have_attribute(:filter).with_type(:block_kit_conversation_filter) }
+  it { is_expected.to alias_attribute(:filter).as(:conversation_filter) }
 
   it_behaves_like "a block that has a DSL method",
     attribute: :filter,

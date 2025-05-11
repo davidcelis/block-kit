@@ -10,6 +10,8 @@ module BlockKit
         validates :confirm, "block_kit/validators/associated": true, allow_nil: true
         fixes :confirm, associated: true
 
+        alias_attribute :confirmation_dialog, :confirm
+
         dsl_method :confirm, required_fields: [:title, :text, :confirm, :deny], yields: false
       end
 

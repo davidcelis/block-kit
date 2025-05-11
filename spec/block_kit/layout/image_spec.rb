@@ -70,6 +70,8 @@ RSpec.describe BlockKit::Layout::Image, type: :model do
     it { is_expected.to have_attribute(:image_url).with_type(:string) }
     it { is_expected.to have_attribute(:slack_file).with_type(:block_kit_slack_file) }
 
+    it { is_expected.to alias_attribute(:image_url).as(:url) }
+
     it_behaves_like "a block with a block_id"
     it_behaves_like "a block that has plain text attributes", :title
     it_behaves_like "a block that has plain text emoji assignment", :title

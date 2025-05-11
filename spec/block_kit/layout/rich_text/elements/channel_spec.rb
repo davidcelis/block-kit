@@ -44,6 +44,8 @@ RSpec.describe BlockKit::Layout::RichText::Elements::Channel, type: :model do
   context "attributes" do
     it { is_expected.to have_attribute(:channel_id).with_type(:string) }
     it { is_expected.to have_attribute(:style).with_type(:block_kit_rich_text_element_mention_style) }
+
+    it { is_expected.to alias_attribute(:channel_id).as(:id) }
   end
 
   context "validations" do

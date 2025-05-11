@@ -8,6 +8,8 @@ module BlockKit
       attribute :user_id, :string
       attribute :style, Types::Generic.of_type(RichText::Elements::MentionStyle)
 
+      alias_attribute :id, :user_id
+
       validates :user_id, presence: true
 
       def as_json(*)

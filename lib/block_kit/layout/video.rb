@@ -24,6 +24,8 @@ module BlockKit
       attribute :thumbnail_url, :string
       attribute :video_url, :string
 
+      alias_attribute :url, :video_url
+
       include Concerns::PlainTextEmojiAssignment.new(:description, :title)
 
       validates :alt_text, presence: true, length: {maximum: MAX_ALT_TEXT_LENGTH}

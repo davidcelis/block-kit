@@ -35,27 +35,27 @@ RSpec.describe BlockKit::Layout::RichText, type: :model do
 
   it_behaves_like "a block that has a DSL method",
     attribute: :elements,
-    as: :list,
+    as: :rich_text_list,
     type: BlockKit::Layout::RichText::List,
     actual_fields: {elements: [BlockKit::Layout::RichText::Section.new]}
 
   it_behaves_like "a block that has a DSL method",
     attribute: :elements,
-    as: :preformatted,
+    as: :rich_text_preformatted,
     type: BlockKit::Layout::RichText::Preformatted,
     actual_fields: {elements: [{type: "text", text: "Some text"}]},
     expected_fields: {elements: [BlockKit::Layout::RichText::Elements::Text.new(text: "Some text")]}
 
   it_behaves_like "a block that has a DSL method",
     attribute: :elements,
-    as: :quote,
+    as: :rich_text_quote,
     type: BlockKit::Layout::RichText::Quote,
     actual_fields: {elements: [{type: "text", text: "Some text"}]},
     expected_fields: {elements: [BlockKit::Layout::RichText::Elements::Text.new(text: "Some text")]}
 
   it_behaves_like "a block that has a DSL method",
     attribute: :elements,
-    as: :section,
+    as: :rich_text_section,
     type: BlockKit::Layout::RichText::Section,
     actual_fields: {elements: [{type: "text", text: "Some text"}]},
     expected_fields: {elements: [BlockKit::Layout::RichText::Elements::Text.new(text: "Some text")]}

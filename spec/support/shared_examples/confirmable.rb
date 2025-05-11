@@ -2,6 +2,8 @@ require "spec_helper"
 
 RSpec.shared_examples_for "a block that is confirmable" do
   it { is_expected.to have_attribute(:confirm).with_type(:block_kit_confirmation_dialog) }
+  it { is_expected.to alias_attribute(:confirm).as(:confirmation_dialog) }
+
   it { is_expected.to validate_presence_of(:confirm).allow_nil }
 
   it_behaves_like "a block that has a DSL method",

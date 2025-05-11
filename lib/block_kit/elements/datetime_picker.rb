@@ -17,5 +17,7 @@ module BlockKit
         super.merge(initial_date_time: initial_date_time&.to_i).compact
       end
     end
+
+    Datetimepicker = DatetimePicker
   end
 end

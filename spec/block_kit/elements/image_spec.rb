@@ -67,6 +67,8 @@ RSpec.describe BlockKit::Elements::Image, type: :model do
     it { is_expected.to have_attribute(:alt_text).with_type(:string) }
     it { is_expected.to have_attribute(:image_url).with_type(:string) }
     it { is_expected.to have_attribute(:slack_file).with_type(:block_kit_slack_file) }
+
+    it { is_expected.to alias_attribute(:image_url).as(:url) }
   end
 
   context "validations" do

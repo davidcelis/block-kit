@@ -14,6 +14,8 @@ module BlockKit
       validates :trigger_actions_on, presence: true, "block_kit/validators/array_inclusion": {in: VALID_TRIGGERS}
       fixes :trigger_actions_on, null_value: {error_types: [:inclusion]}
 
+      alias_attribute :triggers, :trigger_actions_on
+
       VALID_TRIGGERS.each do |value|
         define_method(:"trigger_actions_on_#{value}?") do
           !!trigger_actions_on&.member?(value)
@@ -29,5 +31,7 @@ module BlockKit
         super().except(:type).merge(trigger_actions_on: trigger_actions_on&.to_a).compact
       end
     end
+
+    DispatchActionConfiguration = DispatchActionConfig
   end
 end
