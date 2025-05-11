@@ -24,14 +24,8 @@ RSpec.describe BlockKit::Base do
     end
   end
 
-  it "yields self" do
-    expect { |b| block_class.new(&b) }.to yield_with_args(block_class)
-  end
-
-  it "yields self when other args are passed" do
-    attribute = block_class.attribute_types.keys.sample
-
-    expect { |b| block_class.new(attribute => nil, &b) }.to yield_with_args(block_class)
+  it_behaves_like "a class that yields self on initialize" do
+    let(:described_class) { block_class }
   end
 
   context "fixers" do

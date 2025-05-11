@@ -141,6 +141,10 @@ module BlockKit
       plain_text_fields = type.block_class.attribute_types.select { |_, v| v.respond_to?(:block_class) && v.block_class == Composition::PlainText }.keys.map(&:to_sym)
 
       define_method(as || attribute) do |args = {}, &block|
+        # Convert any args that were passed as attribute aliases to the actual attribute name while keeping
+        # the original arg names in case we need to reference them in a later error message.
+        attribute_aliases = type.block_class.attribute_aliases
+        args = args.transform_keys { |arg| attribute_aliases[arg.to_s] || arg } if attribute_aliases.any?
         args = args.symbolize_keys
 
         # Return the existing attribute if no args or block are passed and we're not in a custom-named method
@@ -161,6 +165,10 @@ module BlockKit
 
         mutually_exclusive = mutually_exclusive_fields & args.keys
         if mutually_exclusive.length > 1
+          # This is the only error message that might need to show original arg names
+          # based on aliases; missing or unknown fields can't be affected.
+          mutually_exclusive = mutually_exclusive.map { |arg| attribute_aliases.key(arg) || arg }
+
           message = "mutually exclusive keywords: #{mutually_exclusive.map(&:inspect).join(", ")}"
           raise ArgumentError, message
         end

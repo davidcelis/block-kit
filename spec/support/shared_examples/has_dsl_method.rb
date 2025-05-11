@@ -37,6 +37,19 @@ RSpec.shared_examples_for "a block that has a DSL method" do |attribute:, type:,
         end
       end
 
+      type.attribute_aliases.each do |alias_name, original_name|
+        it "accepts #{alias_name} as an alias for #{original_name}" do
+          args = actual_fields.dup
+          args[alias_name.to_sym] = args.delete(original_name.to_sym)
+
+          field = -> { is_array_attribute ? subject.public_send(attribute).last : subject.public_send(attribute) }
+
+          expect { result }.to change(&field).to instance_of(type)
+
+          expect(field.call.public_send(original_name)).to eq(expected_fields[original_name.to_sym])
+        end
+      end
+
       context "when unknown fields are passed" do
         let(:args) { super().merge(unknown_field_1: "unknown_value_1", unknown_field_2: "unknown_value_2") }
 
