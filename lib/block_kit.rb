@@ -20,19 +20,19 @@ module BlockKit
 
   autoload :VERSION, "block_kit/version"
 
-  def self.blocks(&block)
-    Blocks.new(&block)
+  def self.blocks(attributes = {}, &block)
+    Blocks.new(attributes, &block)
   end
 
-  def self.home(&block)
-    Surfaces::Home.new(&block)
+  def self.home(attributes = {}, &block)
+    Surfaces::Home.new(attributes, &block)
   end
 
-  def self.modal(&block)
-    Surfaces::Modal.new(&block)
+  def self.modal(attributes = {}, &block)
+    Surfaces::Modal.new(attributes, &block)
   end
 
-  def self.message(&block)
-    Surfaces::Message.new(&block)
+  def self.message(attributes = {}, &block)
+    Surfaces::Message.new(attributes, &block)
   end
 end
