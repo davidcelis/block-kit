@@ -22,8 +22,14 @@ module BlockKit
     delegate_missing_to :blocks
 
     def initialize(attributes = {})
-      attributes = attributes.with_indifferent_access
-      attributes[:blocks] ||= []
+      attributes = case attributes
+      when Array
+        {blocks: attributes}
+      when Hash
+        attributes.with_indifferent_access.tap { |attrs| attrs[:blocks] ||= [] }
+      else
+        raise ArgumentError, "Expected a Hash of attributes or Array of blocks, instead got #{attributes_or_blocks.class}"
+      end
 
       super
     end

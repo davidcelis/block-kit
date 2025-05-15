@@ -7,6 +7,25 @@ RSpec.describe BlockKit::Blocks, type: :model do
 
   it_behaves_like "a class that yields self on initialize"
 
+  describe "#initialize" do
+    it "accepts a hash of attributes or an array of blocks" do
+      blocks = [
+        BlockKit::Layout::Header.new(text: "Hello, world!"),
+        BlockKit::Layout::Divider.new,
+        BlockKit::Layout::Section.new(text: "Some section text")
+      ]
+
+      builder = described_class.new(blocks: blocks)
+      expect(builder.blocks).to eq(blocks)
+
+      builder = described_class.new(blocks)
+      expect(builder.blocks).to eq(blocks)
+
+      builder = described_class.new
+      expect(builder.blocks).to eq([])
+    end
+  end
+
   it_behaves_like "a block that has a DSL method",
     attribute: :blocks,
     as: :actions,
