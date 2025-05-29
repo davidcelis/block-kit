@@ -42,6 +42,18 @@ RSpec.describe BlockKit::Layout::RichText::List, type: :model do
         ]
       })
     end
+
+    context "when elements are not specified" do
+      let(:attributes) { {style: :bullet} }
+
+      it "returns an empty elements array" do
+        expect(block.as_json).to eq({
+          type: described_class.type.to_s,
+          style: "bullet",
+          elements: []
+        })
+      end
+    end
   end
 
   context "attributes" do
