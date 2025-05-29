@@ -11,7 +11,7 @@ module BlockKit
       ].freeze
 
       attribute :style, :string
-      attribute :elements, Types::Array.of(RichText::Section)
+      attribute :elements, Types::Array.of(RichText::Section), default: []
       attribute :indent, :integer
       attribute :offset, :integer
       attribute :border, :integer
