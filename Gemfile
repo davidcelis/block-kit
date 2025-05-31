@@ -2,7 +2,7 @@
 
 source "https://rubygems.org"
 
-ruby "3.4.3"
+ruby file: ".tool-versions"
 
 # Specify your gem's dependencies in block-kit.gemspec
 gemspec
