@@ -530,7 +530,7 @@ RSpec.describe BlockKit::Layout::Actions, type: :model do
         :block_kit_timepicker,
         :block_kit_users_select,
         :block_kit_workflow_button
-      )
+      ).with_default_value([])
     end
 
     it_behaves_like "a block with a block_id"

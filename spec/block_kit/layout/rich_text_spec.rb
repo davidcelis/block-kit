@@ -75,7 +75,7 @@ RSpec.describe BlockKit::Layout::RichText, type: :model do
   end
 
   context "attributes" do
-    it { is_expected.to have_attribute(:elements).with_type(:array).containing(:block_kit_rich_text_list, :block_kit_rich_text_section, :block_kit_rich_text_preformatted, :block_kit_rich_text_quote) }
+    it { is_expected.to have_attribute(:elements).with_type(:array).containing(:block_kit_rich_text_list, :block_kit_rich_text_section, :block_kit_rich_text_preformatted, :block_kit_rich_text_quote).with_default_value([]) }
 
     it_behaves_like "a block with a block_id"
   end

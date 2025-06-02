@@ -40,7 +40,13 @@ RSpec::Matchers.define :have_attribute do |attribute_name|
       end
     end
 
-    @expected_type == @actual_type && (@expected_item_types.nil? || @expected_item_types.sort == @actual_item_types.sort)
+    if defined?(@expected_default_value)
+      @actual_default_value = described_class.new.public_send(attribute_name)
+    end
+
+    @expected_type == @actual_type &&
+      (@expected_item_types.nil? || @expected_item_types.sort == @actual_item_types.sort) &&
+      @expected_default_value == @actual_default_value
   end
 
   chain :with_type do |expected_type|
@@ -53,6 +59,10 @@ RSpec::Matchers.define :have_attribute do |attribute_name|
     @expected_item_types = item_types
   end
 
+  chain :with_default_value do |default_value|
+    @expected_default_value = default_value
+  end
+
   failure_message do |object|
     responder = get_class(object)
     active_model_type = get_active_model_type(responder)
@@ -60,10 +70,12 @@ RSpec::Matchers.define :have_attribute do |attribute_name|
     message = "expected #{responder} to have attribute `#{attribute_name}'"
     message += " with type `#{@expected_type}'" if @expected_type
     message += " containing `#{@expected_item_types}'" if @expected_item_types
+    message += " with default value `#{@expected_default_value}'" if defined?(@expected_default_value)
 
     message += if active_model_type.present?
       msg = ", but its type is `#{@actual_type}'"
       msg += " containing `#{@actual_item_types}'" if @actual_item_types
+      msg += " and default value `#{@actual_default_value}'" if @actual_default_value
       msg
     else
       ", but it doesn't"

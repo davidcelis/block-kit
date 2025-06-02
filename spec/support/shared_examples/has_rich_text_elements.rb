@@ -1,7 +1,7 @@
 require "spec_helper"
 
 RSpec.shared_examples_for "a block that has rich text elements" do
-  it { is_expected.to have_attribute(:elements).with_type(:array).containing(*BlockKit::Layout::RichText::Elements.all.map { |t| :"block_kit_#{t.type}" }) }
+  it { is_expected.to have_attribute(:elements).with_type(:array).containing(*BlockKit::Layout::RichText::Elements.all.map { |t| :"block_kit_#{t.type}" }).with_default_value([]) }
 
   describe "#broadcast" do
     it "adds a broadcast element" do

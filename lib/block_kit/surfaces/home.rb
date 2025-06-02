@@ -28,13 +28,6 @@ module BlockKit
         Elements::TimePicker,
         Elements::UsersSelect
       ].freeze
-
-      def initialize(attributes = {})
-        attributes = attributes.with_indifferent_access
-        attributes[:blocks] ||= []
-
-        super
-      end
     end
   end
 end

@@ -32,7 +32,7 @@ module BlockKit
       ].freeze
 
       attribute :text, :string
-      attribute :blocks, Types::Array.of(Types::Blocks.new(*Layout.all))
+      attribute :blocks, Types::Array.of(Types::Blocks.new(*Layout.all)), default: []
       attribute :thread_ts, :string
       attribute :mrkdwn, :boolean
 
@@ -52,13 +52,6 @@ module BlockKit
       dsl_method :blocks, as: :rich_text, type: Layout::RichText
       dsl_method :blocks, as: :section, type: Layout::Section
       dsl_method :blocks, as: :video, type: Layout::Video, required_fields: [:alt_text, :title, :thumbnail_url, :video_url], yields: false
-
-      def initialize(attributes = {})
-        attributes = attributes.with_indifferent_access
-        attributes[:blocks] ||= []
-
-        super
-      end
 
       def image(alt_text:, image_url: nil, slack_file: nil, title: nil, emoji: nil, block_id: nil)
         if (image_url.nil? && slack_file.nil?) || (image_url && slack_file)

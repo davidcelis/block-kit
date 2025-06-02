@@ -18,7 +18,7 @@ module BlockKit
         RichText::Section
       ].freeze
 
-      attribute :elements, Types::Array.of(Types::Blocks.new(*SUPPORTED_ELEMENTS))
+      attribute :elements, Types::Array.of(Types::Blocks.new(*SUPPORTED_ELEMENTS)), default: []
       validates :elements, presence: true, "block_kit/validators/associated": true
       fixes :elements, associated: true
 
@@ -31,13 +31,6 @@ module BlockKit
       alias_method :preformatted, :rich_text_preformatted
       alias_method :quote, :rich_text_quote
       alias_method :section, :rich_text_section
-
-      def initialize(attributes = {})
-        attributes = attributes.with_indifferent_access
-        attributes[:elements] ||= []
-
-        super
-      end
 
       def append(element)
         elements << element

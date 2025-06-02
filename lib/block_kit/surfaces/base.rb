@@ -20,7 +20,7 @@ module BlockKit
         Layout::Video
       ]
 
-      attribute :blocks, Types::Array.of(Types::Blocks.new(*SUPPORTED_BLOCKS))
+      attribute :blocks, Types::Array.of(Types::Blocks.new(*SUPPORTED_BLOCKS)), default: []
       attribute :private_metadata, :string
       attribute :callback_id, :string
       attribute :external_id, :string

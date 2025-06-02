@@ -118,7 +118,7 @@ RSpec.describe BlockKit::Layout::Context, type: :model do
   end
 
   context "attributes" do
-    it { is_expected.to have_attribute(:elements).with_type(:array).containing(:block_kit_image, :block_kit_mrkdwn, :block_kit_plain_text) }
+    it { is_expected.to have_attribute(:elements).with_type(:array).containing(:block_kit_image, :block_kit_mrkdwn, :block_kit_plain_text).with_default_value([]) }
 
     it_behaves_like "a block with a block_id"
 

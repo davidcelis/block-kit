@@ -6,7 +6,7 @@ module BlockKit
       extend ActiveSupport::Concern
 
       included do
-        attribute :elements, Types::Array.of(Types::Blocks.new(*Layout::RichText::Elements.all))
+        attribute :elements, Types::Array.of(Types::Blocks.new(*Layout::RichText::Elements.all)), default: []
         validates :elements, presence: true, "block_kit/validators/associated": true
         fixes :elements, associated: true
 
@@ -14,13 +14,6 @@ module BlockKit
         dsl_method :elements, as: :color, type: Layout::RichText::Elements::Color, required_fields: [:value], yields: false
         dsl_method :elements, as: :date, type: Layout::RichText::Elements::Date, required_fields: [:timestamp, :format], yields: false
         dsl_method :elements, as: :emoji, type: Layout::RichText::Elements::Emoji, required_fields: [:name], yields: false
-      end
-
-      def initialize(attributes = {})
-        attributes = attributes.with_indifferent_access
-        attributes[:elements] ||= []
-
-        super
       end
 
       def channel(channel_id:, styles: [])

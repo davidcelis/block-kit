@@ -10,7 +10,7 @@ module BlockKit
         ON_CHARACTER_ENTERED = "on_character_entered"
       ].freeze
 
-      attribute :trigger_actions_on, Types::Set.of(:string)
+      attribute :trigger_actions_on, Types::Set.of(:string), default: []
       validates :trigger_actions_on, presence: true, "block_kit/validators/array_inclusion": {in: VALID_TRIGGERS}
       fixes :trigger_actions_on, null_value: {error_types: [:inclusion]}
 
@@ -22,8 +22,7 @@ module BlockKit
         end
 
         define_method(:"trigger_actions_on_#{value}!") do
-          self.trigger_actions_on ||= []
-          self.trigger_actions_on.add(value)
+          trigger_actions_on.add(value)
         end
       end
 

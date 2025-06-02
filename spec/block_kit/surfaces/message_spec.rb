@@ -254,7 +254,7 @@ RSpec.describe BlockKit::Surfaces::Message, type: :model do
         :block_kit_rich_text,
         :block_kit_section,
         :block_kit_video
-      )
+      ).with_default_value([])
     end
   end
 

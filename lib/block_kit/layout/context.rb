@@ -12,19 +12,12 @@ module BlockKit
         Composition::PlainText
       ].freeze
 
-      attribute :elements, Types::Array.of(Types::Blocks.new(*SUPPORTED_ELEMENTS))
+      attribute :elements, Types::Array.of(Types::Blocks.new(*SUPPORTED_ELEMENTS)), default: []
       validates :elements, presence: true, length: {maximum: MAX_ELEMENTS, message: "is too long (maximum is %{count} elements)"}, "block_kit/validators/associated": true
       fixes :elements, truncate: {maximum: MAX_ELEMENTS, dangerous: true}, associated: true
 
       dsl_method :elements, as: :mrkdwn, type: Composition::Mrkdwn, required_fields: [:text], yields: false
       dsl_method :elements, as: :plain_text, type: Composition::PlainText, required_fields: [:text], yields: false
-
-      def initialize(attributes = {})
-        attributes = attributes.with_indifferent_access
-        attributes[:elements] ||= []
-
-        super
-      end
 
       def image(alt_text:, image_url: nil, slack_file: nil)
         if (image_url.nil? && slack_file.nil?) || (image_url && slack_file)

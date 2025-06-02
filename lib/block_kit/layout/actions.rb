@@ -28,14 +28,7 @@ module BlockKit
         Elements::WorkflowButton
       ]
 
-      def initialize(attributes = {})
-        attributes = attributes.with_indifferent_access
-        attributes[:elements] ||= []
-
-        super
-      end
-
-      attribute :elements, Types::Array.of(Types::Blocks.new(*SUPPORTED_ELEMENTS))
+      attribute :elements, Types::Array.of(Types::Blocks.new(*SUPPORTED_ELEMENTS)), default: []
       validates :elements, presence: true, length: {maximum: MAX_ELEMENTS, message: "is too long (maximum is %{count} elements)"}, "block_kit/validators/associated": true
       fixes :elements, truncate: {maximum: MAX_ELEMENTS, dangerous: true}, associated: true
 

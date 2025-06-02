@@ -27,7 +27,7 @@ RSpec.describe BlockKit::Composition::DispatchActionConfig, type: :model do
   end
 
   context "attributes" do
-    it { is_expected.to have_attribute(:trigger_actions_on).with_type(:set).containing(:string) }
+    it { is_expected.to have_attribute(:trigger_actions_on).with_type(:set).containing(:string).with_default_value(BlockKit::TypedSet.new(ActiveModel::Type::String.new)) }
     it { is_expected.to alias_attribute(:trigger_actions_on).as(:triggers) }
   end
 

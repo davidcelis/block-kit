@@ -4,7 +4,7 @@ require "active_support/core_ext/module/delegation"
 
 module BlockKit
   class Blocks < Base
-    attribute :blocks, Types::Array.of(Types::Blocks.new(*Layout.all))
+    attribute :blocks, Types::Array.of(Types::Blocks.new(*Layout.all)), default: []
     validates :blocks, "block_kit/validators/associated": true
     fixes :blocks, associated: true
 
@@ -22,14 +22,7 @@ module BlockKit
     delegate_missing_to :blocks
 
     def initialize(attributes = {})
-      attributes = case attributes
-      when Array
-        {blocks: attributes}
-      when Hash
-        attributes.with_indifferent_access.tap { |attrs| attrs[:blocks] ||= [] }
-      else
-        raise ArgumentError, "Expected a Hash of attributes or Array of blocks, instead got #{attributes_or_blocks.class}"
-      end
+      attributes = {blocks: attributes} if attributes.is_a?(Array)
 
       super
     end

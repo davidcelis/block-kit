@@ -54,13 +54,6 @@ module BlockKit
       fixes :submit, truncate: {maximum: MAX_BUTTON_LENGTH}, null_value: {error_types: [:blank]}
       fix :add_default_submit_button
 
-      def initialize(attributes = {})
-        attributes = attributes.with_indifferent_access
-        attributes[:blocks] ||= []
-
-        super
-      end
-
       def as_json(*)
         super.merge(
           title: title&.as_json,

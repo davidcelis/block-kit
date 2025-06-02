@@ -9,7 +9,7 @@ module BlockKit
 
       include Concerns::Confirmable
 
-      attribute :options, Types::Array.of(Composition::OverflowOption)
+      attribute :options, Types::Array.of(Composition::OverflowOption), default: []
       validates :options, presence: true, length: {maximum: MAX_OPTIONS, message: "is too long (maximum is %{count} options)"}, "block_kit/validators/associated": true
       fixes :options, truncate: {maximum: MAX_OPTIONS, dangerous: true}, associated: true
 
