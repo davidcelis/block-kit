@@ -4,7 +4,7 @@ module BlockKit
   module Concerns
     module HasInitialOption
       def initial_option
-        all_options&.rfind(&:initial?)
+        all_options&.reverse&.find(&:initial?) # rubocop:disable Style/ReverseFind -- `rfind` is only available as of Ruby 4.0+
       end
 
       def as_json(*)
