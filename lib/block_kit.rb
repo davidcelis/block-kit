@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 
-require "active_support/configurable"
+require "active_support/core_ext/module/attribute_accessors"
 
 module BlockKit
-  include ActiveSupport::Configurable
-
   autoload :Base, "block_kit/base"
   autoload :Blocks, "block_kit/blocks"
   autoload :Composition, "block_kit/composition"
@@ -18,7 +16,20 @@ module BlockKit
   autoload :Types, "block_kit/types"
   autoload :Validators, "block_kit/validators"
 
+  autoload :Configuration, "block_kit/configuration"
   autoload :VERSION, "block_kit/version"
+
+  mattr_reader :configuration, default: Configuration.new, instance_reader: false, instance_accessor: false
+
+  class << self
+    alias_method :config, :configuration
+  end
+
+  def self.configure(&block)
+    raise ArgumentError, "BlockKit.configure requires a block" unless block_given?
+
+    yield(configuration)
+  end
 
   def self.blocks(attributes = {}, &block)
     Blocks.new(attributes, &block)

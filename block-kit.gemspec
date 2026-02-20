@@ -33,7 +33,6 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "activemodel", ">= 7.0.0"
-  spec.add_dependency "activesupport", ">= 7.0.0"
 
   # For more information and examples about making a new gem, check out our
   # guide at: https://bundler.io/guides/creating_gem.html
