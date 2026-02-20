@@ -4,7 +4,7 @@ module BlockKit
   module Concerns
     module HasInitialOption
       def initial_option
-        all_options&.reverse&.find(&:initial?)
+        all_options&.rfind(&:initial?)
       end
 
       def as_json(*)
