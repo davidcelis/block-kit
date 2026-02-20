@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    block-kit (1.0.6)
+    block-kit (1.0.7)
       activemodel (>= 7.0.0)
 
 GEM
